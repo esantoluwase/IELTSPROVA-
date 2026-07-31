@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IELTSProva — Speaking Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.06);
+            border: 1px solid #f0e8f5;
+        }
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-header h1 {
+            font-size: 1.8rem;
+            color: #4A148C;
+        }
+        .test-header h1 i {
+            color: #7B1FA2;
+        }
+        .test-header .meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .timer-box {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .timer-box i {
+            margin-right: 0.5rem;
+        }
+        .plan-badge {
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+
+        .part-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 2px dashed #f0e8f5;
+        }
+        .part-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .part-label {
+            background: #4A148C;
+            color: white;
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .part-label.part2 {
+            background: #FFD700;
+            color: #4A148C;
+        }
+        .part-label.part3 {
+            background: #7B1FA2;
+            color: white;
+        }
+
+        .cue-card {
+            background: #faf7ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid #7B1FA2;
+            margin-bottom: 1rem;
+        }
+        .cue-card h3 {
+            color: #4A148C;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .cue-card .topic {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .cue-card .bullets {
+            list-style: none;
+            padding-left: 0;
+        }
+        .cue-card .bullets li {
+            padding: 0.2rem 0;
+            color: #3d2a4a;
+        }
+        .cue-card .bullets li::before {
+            content: "• ";
+            color: #7B1FA2;
+            font-weight: 700;
+        }
+        .cue-card .timer-note {
+            font-size: 0.85rem;
+            color: #7B6A8A;
+            margin-top: 0.5rem;
+        }
+        .cue-card .timer-note i {
+            color: #4A148C;
+        }
+
+        .speaking-area {
+            margin-top: 0.5rem;
+        }
+        .speaking-area label {
+            font-weight: 600;
+            color: #4A148C;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .speaking-area textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+            transition: 0.3s;
+            line-height: 1.6;
+        }
+        .speaking-area textarea:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .speaking-area .hint {
+            font-size: 0.85rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            padding: 0.8rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+        }
+        .btn-secondary:hover {
+            background: #e5d9ed;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+        }
+
+        .result {
+            margin-top: 2rem;
+            padding: 1.8rem;
+            border-radius: 20px;
+            background: #faf7ff;
+            border: 2px solid #7B1FA2;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result .score-big {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .result .feedback-text {
+            font-size: 1.05rem;
+            margin-top: 0.5rem;
+            line-height: 1.8;
+        }
+        .result .feedback-text .band {
+            display: inline-block;
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+        }
+        .result .save-status {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #2e7d32;
+        }
+        .result .part-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .result .part-breakdown .part-result {
+            background: white;
+            padding: 1rem;
+            border-radius: 14px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+        }
+        .result .part-breakdown .part-result .label {
+            font-size: 0.8rem;
+            color: #7B6A8A;
+        }
+        .result .part-breakdown .part-result .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .sample-answer {
+            background: #f3edf7;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #3d2a4a;
+            display: none;
+        }
+        .sample-answer.show {
+            display: block;
+        }
+        .toggle-sample {
+            background: none;
+            border: none;
+            color: #7B1FA2;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .toggle-sample:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .result .part-breakdown {
+                grid-template-columns: 1fr;
+            }
+            .speaking-area textarea {
+                min-height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="test-header">
+        <h1><i class="fas fa-microphone"></i> Speaking Test</h1>
+        <div class="meta">
+            <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">15:00</span></span>
+            <span class="plan-badge" id="planBadge">Free — Full Test</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PART 1: Introduction & Interview (4-5 minutes) -->
+    <!-- ============================================================ -->
+    <div class="part-section">
+        <div class="part-label">🗣️ Part 1</div>
+        <p style="margin-bottom: 0.8rem; color: #3d2a4a;">
+            <strong>Introduction &amp; Interview</strong> — Answer questions about yourself.
+            <span style="font-size:0.85rem; color:#7B6A8A; display:block; margin-top:0.2rem;">⏱️ 4-5 minutes recommended</span>
+        </p>
+
+        <div class="cue-card">
+            <h3>🎯 Topic: Hometown &amp; Daily Life</h3>
+            <ul class="bullets">
+                <li>Where do you live now?</li>
+                <li>What do you like about your hometown?</li>
+                <li>What do you usually do in your free time?</li>
+                <li>Do you prefer to spend time alone or with others?</li>
+            </ul>
+            <button class="toggle-sample" onclick="toggleSample('sample1')">📖 Show Sample Answers</button>
+            <div class="sample-answer" id="sample1">
+                <strong>Sample Response:</strong><br />
+                "I currently live in a small city called ______. I really like it because it's peaceful and the people are friendly. In my free time, I enjoy reading books and going for walks. I generally prefer spending time with close friends rather than being alone."
+            </div>
+        </div>
+
+        <div class="speaking-area">
+            <label for="part1Response">✏️ Write your answers (practice script):</label>
+            <textarea id="part1Response" placeholder="Write your Part 1 responses here..."></textarea>
+            <div class="hint">💡 Tip: Practice speaking your answers out loud first, then write them down.</div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PART 2: Individual Long Turn (3-4 minutes) -->
+    <!-- ============================================================ -->
+    <div class="part-section">
+        <div class="part-label part2">🎤 Part 2</div>
+        <p style="margin-bottom: 0.8rem; color: #3d2a4a;">
+            <strong>Long Turn</strong> — You will be given a topic. You have <strong>1 minute</strong> to prepare and <strong>2 minutes</strong> to speak.
+            <span style="font-size:0.85rem; color:#7B6A8A; display:block; margin-top:0.2rem;">⏱️ 1 min preparation + 2 min speaking</span>
+        </p>
+
+        <div class="cue-card">
+            <h3>📋 Cue Card</h3>
+            <div class="topic">Describe a memorable trip you have taken.</div>
+            <p style="font-weight:600; margin:0.5rem 0;">You should say:</p>
+            <ul class="bullets">
+                <li>Where you went</li>
+                <li>Who you went with</li>
+                <li>What you did there</li>
+                <li>And explain why it was memorable</li>
+            </ul>
+            <div class="timer-note">
+                <i class="fas fa-stopwatch"></i> You have 1 minute to prepare. Start speaking when ready.
+            </div>
+            <button class="toggle-sample" onclick="toggleSample('sample2')">📖 Show Sample Answer</button>
+            <div class="sample-answer" id="sample2">
+                <strong>Sample Response:</strong><br />
+                "I'd like to talk about a memorable trip I took to the mountains with my family a few years ago. We went to a small village in the countryside during the summer. The journey was long, but the scenery was breathtaking. We spent our days hiking, swimming in the river, and enjoying local food. What made this trip particularly special was that it was the first time my whole family had been together in years. The peaceful environment and quality time with my loved ones created memories that I still treasure today."
+            </div>
+        </div>
+
+        <div class="speaking-area">
+            <label for="part2Response">✏️ Write your speech (2-minute script):</label>
+            <textarea id="part2Response" placeholder="Write your Part 2 speech here..."></textarea>
+            <div class="hint">💡 Tip: Speak for 2 minutes without stopping. Practice with a timer!</div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PART 3: Two-Way Discussion (4-5 minutes) -->
+    <!-- ============================================================ -->
+    <div class="part-section">
+        <div class="part-label part3">💬 Part 3</div>
+        <p style="margin-bottom: 0.8rem; color: #3d2a4a;">
+            <strong>Two-Way Discussion</strong> — Deeper questions related to the Part 2 topic.
+            <span style="font-size:0.85rem; color:#7B6A8A; display:block; margin-top:0.2rem;">⏱️ 4-5 minutes recommended</span>
+        </p>
+
+        <div class="cue-card">
+            <h3>🎯 Discussion Questions</h3>
+            <ul class="bullets">
+                <li>Why do people enjoy travelling to new places?</li>
+                <li>What are the benefits of travelling with family versus friends?</li>
+                <li>How has technology changed the way people travel?</li>
+                <li>What are the advantages and disadvantages of tourism?</li>
+            </ul>
+            <button class="toggle-sample" onclick="toggleSample('sample3')">📖 Show Sample Answers</button>
+            <div class="sample-answer" id="sample3">
+                <strong>Sample Response:</strong><br />
+                "People enjoy travelling to new places because it allows them to experience different cultures and break away from their daily routine. Travelling with family can strengthen bonds and create shared memories, while travelling with friends often offers more freedom and adventure. Technology has made travel much easier with apps for navigation, translation, and booking. However, tourism can also have negative impacts, such as overcrowding and environmental damage."
+            </div>
+        </div>
+
+        <div class="speaking-area">
+            <label for="part3Response">✏️ Write your answers (discussion script):</label>
+            <textarea id="part3Response" placeholder="Write your Part 3 responses here..."></textarea>
+            <div class="hint">💡 Tip: Give extended answers. Explain your ideas with examples.</div>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+        <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit & Evaluate</button>
+        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Topic</button>
+        <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result" id="resultBox">
+        <h2>📊 Your Speaking Evaluation</h2>
+        <div class="part-breakdown">
+            <div class="part-result">
+                <div class="label">Part 1</div>
+                <div class="value" id="part1Score">-</div>
+            </div>
+            <div class="part-result">
+                <div class="label">Part 2</div>
+                <div class="value" id="part2Score">-</div>
+            </div>
+            <div class="part-result">
+                <div class="label">Part 3</div>
+                <div class="value" id="part3Score">-</div>
+            </div>
+        </div>
+        <div class="score-big">Overall: <span id="overallBand">-</span></div>
+        <div class="feedback-text" id="feedbackText"></div>
+        <div class="save-status" id="saveStatus"></div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // TOGGLE SAMPLE ANSWERS
+    // ============================================================
+    function toggleSample(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('show');
+    }
+
+    // ============================================================
+    // TIMER (15 minutes — Part 1 + 2 + 3)
+    // ============================================================
+    let timeLeft = 900;
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    function updateTimer() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('⏰ Time is up! Your test will be submitted automatically.');
+            submitTest();
+        }
+        timeLeft--;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // ============================================================
+    // EVALUATION FUNCTION
+    // ============================================================
+    function evaluateSpeaking(text, part) {
+        const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+        const avgWordLength = text.length / (words || 1);
+
+        let band = 5.0;
+
+        // Part 1: Short answers (fluency)
+        if (part === 1) {
+            if (words >= 50) band = 7.0;
+            else if (words >= 30) band = 6.5;
+            else if (words >= 20) band = 6.0;
+            else if (words >= 10) band = 5.5;
+            else band = 5.0;
+            if (sentences >= 4 && sentences <= 8) band += 0.5;
+        }
+
+        // Part 2: Long turn (structure + development)
+        if (part === 2) {
+            if (words >= 200) band = 7.5;
+            else if (words >= 150) band = 7.0;
+            else if (words >= 100) band = 6.5;
+            else if (words >= 60) band = 6.0;
+            else if (words >= 30) band = 5.5;
+            else band = 5.0;
+            if (sentences >= 8 && sentences <= 16) band += 0.5;
+            if (avgWordLength > 4.5 && avgWordLength < 7) band += 0.3;
+        }
+
+        // Part 3: Discussion (extended responses)
+        if (part === 3) {
+            if (words >= 150) band = 7.5;
+            else if (words >= 100) band = 7.0;
+            else if (words >= 70) band = 6.5;
+            else if (words >= 40) band = 6.0;
+            else if (words >= 20) band = 5.5;
+            else band = 5.0;
+            if (sentences >= 6 && sentences <= 14) band += 0.5;
+            if (avgWordLength > 4.5 && avgWordLength < 7.5) band += 0.3;
+        }
+
+        band = Math.min(band, 9.0);
+        band = Math.round(band * 2) / 2;
+
+        return { band, words, sentences };
+    }
+
+    function getSpeakingFeedback(part1, part2, part3) {
+        const avg = (part1 + part2 + part3) / 3;
+        const overall = Math.round(avg * 2) / 2;
+
+        let feedback = '';
+
+        if (overall >= 8.0) {
+            feedback = '🌟 Excellent speaking skills! You demonstrate fluency, coherence, and a wide range of vocabulary. Keep up the great work!';
+        } else if (overall >= 7.0) {
+            feedback = '👏 Great job! You are a confident speaker with good fluency and vocabulary. Practice extending your answers further.';
+        } else if (overall >= 6.0) {
+            feedback = '💪 Good effort! You have a solid foundation. Focus on developing your ideas more and using a wider range of vocabulary.';
+        } else if (overall >= 5.0) {
+            feedback = '📚 You are making progress! Practice speaking for longer periods and work on your pronunciation and fluency.';
+        } else {
+            feedback = '📝 Keep practicing! Start by speaking about familiar topics and gradually build your confidence.';
+        }
+
+        return {
+            overall: overall,
+            feedback: feedback
+        };
+    }
+
+    // ============================================================
+    // SUBMIT TEST
+    // ============================================================
+    async function submitTest() {
+        const part1Text = document.getElementById('part1Response').value;
+        const part2Text = document.getElementById('part2Response').value;
+        const part3Text = document.getElementById('part3Response').value;
+
+        // Evaluate each part
+        const result1 = evaluateSpeaking(part1Text, 1);
+        const result2 = evaluateSpeaking(part2Text, 2);
+        const result3 = evaluateSpeaking(part3Text, 3);
+
+        const overallResult = getSpeakingFeedback(result1.band, result2.band, result3.band);
+
+        // Show results
+        const resultBox = document.getElementById('resultBox');
+        resultBox.classList.add('show');
+
+        document.getElementById('part1Score').textContent = result1.band;
+        document.getElementById('part2Score').textContent = result2.band;
+        document.getElementById('part3Score').textContent = result3.band;
+        document.getElementById('overallBand').textContent = overallResult.overall;
+
+        const feedback = document.getElementById('feedbackText');
+        feedback.innerHTML = `
+            <div style="margin-bottom:1rem;">
+                <span class="band">Overall Band: ${overallResult.overall}</span>
+            </div>
+            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>🗣️ Part 1:</strong> Band ${result1.band} — ${result1.words} words, ${result1.sentences} sentences
+                <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Keep answers natural and fluent.</span>
+            </div>
+            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>🎤 Part 2:</strong> Band ${result2.band} — ${result2.words} words, ${result2.sentences} sentences
+                <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Aim for 150+ words for a strong response.</span>
+            </div>
+            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>💬 Part 3:</strong> Band ${result3.band} — ${result3.words} words, ${result3.sentences} sentences
+                <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Provide extended answers with examples.</span>
+            </div>
+            <div style="background:#f3edf7;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>📝 ${overallResult.feedback}</strong>
+            </div>
+            <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
+                💡 <strong>To improve your speaking band:</strong>
+                • Practice speaking for 2 minutes without stopping
+                • Record yourself and listen back
+                • Learn topic-specific vocabulary
+                • Use connectors (however, moreover, on the other hand)
+                • Work on your pronunciation and intonation
+            </div>
+        `;
+
+        // Disable submit button
+        document.querySelector('.btn-primary').disabled = true;
+        clearInterval(timerInterval);
+
+        // ============================================================
+        // SAVE TO LOCALSTORAGE
+        // ============================================================
+        const scoreData = {
+            module: 'speaking',
+            score: overallResult.overall,
+            total: 9,
+            part1: result1.band,
+            part2: result2.band,
+            part3: result3.band,
+            date: new Date().toISOString()
+        };
+
+        let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
+        savedScores.push(scoreData);
+        localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
+        console.log('✅ Speaking score saved to localStorage:', scoreData);
+
+        // ============================================================
+        // SAVE TO FIRESTORE
+        // ============================================================
+        const saveStatus = document.getElementById('saveStatus');
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    await db.collection('scores').add({
+                        userId: user.uid,
+                        module: 'speaking',
+                        score: overallResult.overall,
+                        total: 9,
+                        part1: result1.band,
+                        part2: result2.band,
+                        part3: result3.band,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
+                    saveStatus.style.color = '#2e7d32';
+                } catch (error) {
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed, but your data is safe!)';
+                    saveStatus.style.color = '#f57f17';
+                }
+            } else {
+                saveStatus.innerHTML = '✅ Score saved locally! Sign in to save to your account.';
+                saveStatus.style.color = '#7B6A8A';
+            }
+        });
+    }
+
+    // ============================================================
+    // RESET TEST
+    // ============================================================
+    function resetTest() {
+        location.reload();
+    }
+</script>
+
+</body>
+  </html>
