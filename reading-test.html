@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IELTSProva — Reading Test</title>
+    <style>
+        /* ---- RESET & BASE ---- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8faff;
+            color: #1a1a2e;
+            padding: 2rem 5%;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+        }
+        h1 {
+            font-size: 2rem;
+            color: #0a2463;
+            border-bottom: 4px solid #e63946;
+            padding-bottom: 0.7rem;
+            margin-bottom: 1.5rem;
+        }
+        .timer-box {
+            background: #0a2463;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .timer-box span {
+            color: #f9c74f;
+        }
+        .passage {
+            background: #f0f4ff;
+            padding: 1.8rem;
+            border-radius: 18px;
+            margin-bottom: 2rem;
+            border-left: 6px solid #e63946;
+        }
+        .passage h2 {
+            color: #0a2463;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+        .passage p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+        .question {
+            background: white;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 1.2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #eef2ff;
+            transition: 0.2s;
+        }
+        .question:hover {
+            border-color: #0a2463;
+        }
+        .question p {
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            color: #0a2463;
+        }
+        .question label {
+            display: block;
+            padding: 0.4rem 0;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .question label input {
+            margin-right: 0.7rem;
+            transform: scale(1.1);
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.8rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-right: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .btn-submit {
+            background: #e63946;
+            color: white;
+        }
+        .btn-submit:hover {
+            background: #c1121f;
+            transform: scale(1.03);
+        }
+        .btn-reset {
+            background: #eef2ff;
+            color: #0a2463;
+        }
+        .btn-reset:hover {
+            background: #dce3ff;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1.8rem;
+            border-radius: 18px;
+            background: #f0f7ff;
+            border: 2px solid #0a2463;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result h3 {
+            font-size: 1.8rem;
+            color: #0a2463;
+        }
+        .result .score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #e63946;
+        }
+        .result .feedback {
+            margin-top: 0.8rem;
+            font-size: 1.1rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #0a2463;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .back-link:hover {
+            border-bottom-color: #e63946;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .question {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📖 Reading Practice Test</h1>
+
+    <div class="timer-box">
+        ⏱️ Time: <span id="timerDisplay">15:00</span>
+    </div>
+
+    <!-- PASSAGE -->
+    <div class="passage">
+        <h2>The History of Glassmaking</h2>
+        <p>
+            Glassmaking is one of the oldest crafts in human history, dating back to around 3500 BCE in Mesopotamia. 
+            Early glass was used primarily for beads and decorative objects, as it was difficult to produce clear, 
+            flawless sheets. The discovery of glassblowing in the 1st century BCE in the Roman Empire revolutionised 
+            production, making glass cheaper and more widely available. This technique allowed artisans to create 
+            transparent vessels, which soon became popular across Europe and Asia.
+        </p>
+        <p>
+            During the Middle Ages, Venice emerged as a major centre for glass production, particularly on the island 
+            of Murano. Murano glassmakers developed crystalline glass and enamel decoration, and their techniques 
+            were closely guarded secrets. By the 17th century, lead crystal glass was invented in England, adding 
+            brilliance and weight to glassware, which became highly sought after by royalty.
+        </p>
+        <p>
+            The Industrial Revolution brought mechanisation to glass production. In 1887, the mass production of glass 
+            bottles began, and in the early 20th century, the invention of the float glass process made it possible to 
+            produce large, perfectly flat sheets of glass for windows and mirrors. Today, glass is used in everything 
+            from smartphone screens to fibre optics, proving that this ancient material remains at the forefront of 
+            modern technology.
+        </p>
+    </div>
+
+    <!-- QUESTIONS -->
+    <form id="testForm">
+        <!-- Question 1 -->
+        <div class="question">
+            <p>1. When did glassmaking first begin?</p>
+            <label><input type="radio" name="q1" value="A" /> A) 1500 BCE</label>
+            <label><input type="radio" name="q1" value="B" /> B) 3500 BCE</label>
+            <label><input type="radio" name="q1" value="C" /> C) 1st century BCE</label>
+            <label><input type="radio" name="q1" value="D" /> D) 17th century</label>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            <p>2. What invention made glass production cheaper and more widespread?</p>
+            <label><input type="radio" name="q2" value="A" /> A) Float glass process</label>
+            <label><input type="radio" name="q2" value="B" /> B) Lead crystal</label>
+            <label><input type="radio" name="q2" value="C" /> C) Glassblowing</label>
+            <label><input type="radio" name="q2" value="D" /> D) Enamel decoration</label>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            <p>3. Which city became a major centre for glassmaking in the Middle Ages?</p>
+            <label><input type="radio" name="q3" value="A" /> A) London</label>
+            <label><input type="radio" name="q3" value="B" /> B) Paris</label>
+            <label><input type="radio" name="q3" value="C" /> C) Venice</label>
+            <label><input type="radio" name="q3" value="D" /> D) Rome</label>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            <p>4. What was invented in England in the 17th century?</p>
+            <label><input type="radio" name="q4" value="A" /> A) Crystalline glass</label>
+            <label><input type="radio" name="q4" value="B" /> B) Lead crystal glass</label>
+            <label><input type="radio" name="q4" value="C" /> C) Float glass</label>
+            <label><input type="radio" name="q4" value="D" /> D) Glass bottles</label>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            <p>5. What did the Industrial Revolution bring to glass production?</p>
+            <label><input type="radio" name="q5" value="A" /> A) Mechanisation</label>
+            <label><input type="radio" name="q5" value="B" /> B) Glassblowing</label>
+            <label><input type="radio" name="q5" value="C" /> C) Enamel decoration</label>
+            <label><input type="radio" name="q5" value="D" /> D) Smartphone screens</label>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            <p>6. In which year did mass production of glass bottles begin?</p>
+            <label><input type="radio" name="q6" value="A" /> A) 1887</label>
+            <label><input type="radio" name="q6" value="B" /> B) 1901</label>
+            <label><input type="radio" name="q6" value="C" /> C) 1750</label>
+            <label><input type="radio" name="q6" value="D" /> D) 1923</label>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            <p>7. What is the float glass process used for?</p>
+            <label><input type="radio" name="q7" value="A" /> A) Making beads</label>
+            <label><input type="radio" name="q7" value="B" /> B) Producing flat glass sheets</label>
+            <label><input type="radio" name="q7" value="C" /> C) Creating enamel decoration</label>
+            <label><input type="radio" name="q7" value="D" /> D) Colouring glass</label>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            <p>8. Which of the following is NOT mentioned as a modern use of glass?</p>
+            <label><input type="radio" name="q8" value="A" /> A) Smartphone screens</label>
+            <label><input type="radio" name="q8" value="B" /> B) Fibre optics</label>
+            <label><input type="radio" name="q8" value="C" /> C) Aircraft windows</label>
+            <label><input type="radio" name="q8" value="D" /> D) Windows and mirrors</label>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            <p>9. The techniques of Murano glassmakers were...</p>
+            <label><input type="radio" name="q9" value="A" /> A) Widely published</label>
+            <label><input type="radio" name="q9" value="B" /> B) Closely guarded secrets</label>
+            <label><input type="radio" name="q9" value="C" /> C) Sold to other cities</label>
+            <label><input type="radio" name="q9" value="D" /> D) Lost over time</label>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            <p>10. What is the main idea of the passage?</p>
+            <label><input type="radio" name="q10" value="A" /> A) Glass is fragile</label>
+            <label><input type="radio" name="q10" value="B" /> B) Glassmaking has evolved significantly over time</label>
+            <label><input type="radio" name="q10" value="C" /> C) Venice was the only glassmaking centre</label>
+            <label><input type="radio" name="q10" value="D" /> D) Modern glass is better than ancient glass</label>
+        </div>
+
+        <button type="button" class="btn btn-submit" onclick="submitTest()">✅ Submit Test</button>
+        <button type="button" class="btn btn-reset" onclick="resetTest()">🔄 Reset</button>
+    </form>
+
+    <!-- RESULT -->
+    <div class="result" id="resultBox">
+        <h3>📊 Your Score</h3>
+        <div class="score" id="scoreDisplay">0 / 10</div>
+        <div class="feedback" id="feedbackText"></div>
+        <p style="margin-top: 1rem;">
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // ---- TIMER ----
+    let timeLeft = 900; // 15 minutes in seconds
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    function updateTimer() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.style.color = '#e63946';
+            alert('⏰ Time is up! Your test will be submitted automatically.');
+            submitTest();
+        }
+        timeLeft--;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // ---- ANSWER KEY ----
+    const answers = {
+        q1: 'B',
+        q2: 'C',
+        q3: 'C',
+        q4: 'B',
+        q5: 'A',
+        q6: 'A',
+        q7: 'B',
+        q8: 'C',
+        q9: 'B',
+        q10: 'B'
+    };
+
+    // ---- SUBMIT ----
+    function submitTest() {
+        let score = 0;
+        const total = Object.keys(answers).length;
+
+        for (let key in answers) {
+            const selected = document.querySelector(`input[name="${key}"]:checked`);
+            if (selected && selected.value === answers[key]) {
+                score++;
+            }
+        }
+
+        // Show result
+        const resultBox = document.getElementById('resultBox');
+        resultBox.classList.add('show');
+
+        document.getElementById('scoreDisplay').textContent = `${score} / ${total}`;
+
+        const feedback = document.getElementById('feedbackText');
+        if (score === total) {
+            feedback.innerHTML = '🌟 Perfect score! You\'re ready for the real IELTS!';
+        } else if (score >= 8) {
+            feedback.innerHTML = '👏 Great job! You\'re well on your way to a high band.';
+        } else if (score >= 6) {
+            feedback.innerHTML = '💪 Good effort! Review the passage and try again.';
+        } else {
+            feedback.innerHTML = '📚 Keep practicing! Read the passage more carefully and try again.';
+        }
+
+        // Disable form
+        document.querySelectorAll('input').forEach(input => input.disabled = true);
+        document.querySelector('.btn-submit').disabled = true;
+
+        // Stop timer
+        clearInterval(timerInterval);
+    }
+
+    // ---- RESET ----
+    function resetTest() {
+        document.getElementById('testForm').reset();
+        document.getElementById('resultBox').classList.remove('show');
+        document.querySelectorAll('input').forEach(input => input.disabled = false);
+        document.querySelector('.btn-submit').disabled = false;
+
+        // Reset timer
+        timeLeft = 900;
+        timerDisplay.style.color = 'white';
+        clearInterval(timerInterval);
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+  </html>
