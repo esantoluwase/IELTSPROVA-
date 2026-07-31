@@ -80,7 +80,7 @@
         }
         .audio-player {
             background: #f3edf7;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 18px;
             margin-bottom: 1.5rem;
             text-align: center;
@@ -90,7 +90,7 @@
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white;
             border: none;
-            padding: 0.8rem 2.5rem;
+            padding: 1rem 3rem;
             border-radius: 50px;
             font-weight: 700;
             font-size: 1.1rem;
@@ -104,26 +104,17 @@
         .audio-player .play-btn i {
             margin-right: 0.5rem;
         }
-        .audio-player .audio-script {
-            margin-top: 1rem;
-            background: white;
-            padding: 1.2rem;
-            border-radius: 14px;
-            text-align: left;
-            font-size: 0.95rem;
-            color: #3d2a4a;
-            display: none;
+        .audio-player .play-btn.playing {
+            background: linear-gradient(135deg, #FFD700, #f5c500);
+            color: #4A148C;
         }
-        .audio-player .audio-script.show {
-            display: block;
+        .audio-player .audio-status {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: #7B6A8A;
         }
-        .audio-player .toggle-script {
-            background: none;
-            border: none;
-            color: #7B1FA2;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 0.5rem;
+        .audio-player .audio-status i {
+            margin-right: 0.3rem;
         }
         .progress-indicator {
             background: #f3edf7;
@@ -187,19 +178,6 @@
             margin-right: 0.7rem;
             transform: scale(1.1);
             accent-color: #7B1FA2;
-        }
-        .question input[type="text"] {
-            width: 100%;
-            padding: 0.6rem 1rem;
-            border: 2px solid #f0e8f5;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: 0.3s;
-        }
-        .question input[type="text"]:focus {
-            outline: none;
-            border-color: #7B1FA2;
         }
         .actions {
             display: flex;
@@ -316,20 +294,9 @@
     <!-- AUDIO PLAYER -->
     <div class="audio-player">
         <button class="play-btn" id="playAudioBtn"><i class="fas fa-play"></i> Play Audio</button>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #7B6A8A;">
-            <i class="fas fa-info-circle"></i> For demo purposes, the audio is simulated. In a real test, you would hear recordings.
-        </p>
-        <button class="toggle-script" onclick="toggleScript()"><i class="fas fa-file-alt"></i> Show Audio Script</button>
-        <div class="audio-script" id="audioScript">
-            <strong>Audio Script — Section 1:</strong><br /><br />
-            <strong>Narrator:</strong> You will hear a conversation between a student and a university advisor.<br /><br />
-            <strong>Student:</strong> Hello, I'd like to register for the English Literature course.<br />
-            <strong>Advisor:</strong> Certainly. Have you completed the prerequisite course?<br />
-            <strong>Student:</strong> Yes, I completed Introduction to Literature last semester.<br />
-            <strong>Advisor:</strong> Great. And what's your student ID number?<br />
-            <strong>Student:</strong> It's 2025-4789.<br />
-            <strong>Advisor:</strong> Let me check... Yes, you're eligible. The course meets on Mondays and Wednesdays at 10 AM.<br />
-            <strong>Student:</strong> Perfect. I'll be there.
+        <div class="audio-status">
+            <i class="fas fa-info-circle"></i> 
+            <span id="audioStatusText">Click play to hear the recording. You will only hear it once.</span>
         </div>
     </div>
 
@@ -385,82 +352,58 @@
     // ============================================================
     const listeningQuestions = [
         // SECTION 1: Conversation — Student & Advisor (10 questions)
-        { id: 1, section: 1, type: 'mcq', text: "What course does the student want to register for?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "A" },
-        { id: 2, section: 1, type: 'mcq', text: "What is the student's student ID number?", options: ["2025-4789", "2025-4788", "2024-4789", "2025-4790"], answer: "A" },
-        { id: 3, section: 1, type: 'mcq', text: "What days does the course meet?", options: ["Mondays and Wednesdays", "Tuesdays and Thursdays", "Mondays and Fridays", "Wednesdays and Fridays"], answer: "A" },
-        { id: 4, section: 1, type: 'mcq', text: "What time does the course start?", options: ["9 AM", "10 AM", "11 AM", "1 PM"], answer: "B" },
-        { id: 5, section: 1, type: 'mcq', text: "What prerequisite did the student complete?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "C" },
-        { id: 6, section: 1, type: 'mcq', text: "Who is the student speaking to?", options: ["A professor", "A university advisor", "A librarian", "Another student"], answer: "B" },
-        { id: 7, section: 1, type: 'mcq', text: "What semester did the student take the prerequisite course?", options: ["Last semester", "Last year", "Two semesters ago", "Currently"], answer: "A" },
-        { id: 8, section: 1, type: 'mcq', text: "The advisor checks the student's...", options: ["Grades", "Student ID", "Eligibility", "Schedule"], answer: "C" },
-        { id: 9, section: 1, type: 'mcq', text: "How does the student feel about the course schedule?", options: ["Disappointed", "Confused", "Happy", "Indifferent"], answer: "C" },
-        { id: 10, section: 1, type: 'mcq', text: "What is the main purpose of this conversation?", options: ["To register for a course", "To change a course", "To ask about grades", "To cancel a registration"], answer: "A" },
+        { id: 1, section: 1, text: "What course does the student want to register for?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "A" },
+        { id: 2, section: 1, text: "What is the student's student ID number?", options: ["2025-4789", "2025-4788", "2024-4789", "2025-4790"], answer: "A" },
+        { id: 3, section: 1, text: "What days does the course meet?", options: ["Mondays and Wednesdays", "Tuesdays and Thursdays", "Mondays and Fridays", "Wednesdays and Fridays"], answer: "A" },
+        { id: 4, section: 1, text: "What time does the course start?", options: ["9 AM", "10 AM", "11 AM", "1 PM"], answer: "B" },
+        { id: 5, section: 1, text: "What prerequisite did the student complete?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "C" },
+        { id: 6, section: 1, text: "Who is the student speaking to?", options: ["A professor", "A university advisor", "A librarian", "Another student"], answer: "B" },
+        { id: 7, section: 1, text: "What semester did the student take the prerequisite course?", options: ["Last semester", "Last year", "Two semesters ago", "Currently"], answer: "A" },
+        { id: 8, section: 1, text: "The advisor checks the student's...", options: ["Grades", "Student ID", "Eligibility", "Schedule"], answer: "C" },
+        { id: 9, section: 1, text: "How does the student feel about the course schedule?", options: ["Disappointed", "Confused", "Happy", "Indifferent"], answer: "C" },
+        { id: 10, section: 1, text: "What is the main purpose of this conversation?", options: ["To register for a course", "To change a course", "To ask about grades", "To cancel a registration"], answer: "A" },
 
         // SECTION 2: Monologue — Museum Tour (10 questions)
-        { id: 11, section: 2, type: 'mcq', text: "What is the name of the museum?", options: ["City Museum", "Natural History Museum", "Art Gallery", "Science Museum"], answer: "B" },
-        { id: 12, section: 2, type: 'mcq', text: "What time does the museum open?", options: ["9 AM", "10 AM", "11 AM", "12 PM"], answer: "B" },
-        { id: 13, section: 2, type: 'mcq', text: "What is the admission fee for adults?", options: ["$5", "$10", "$15", "$20"], answer: "B" },
-        { id: 14, section: 2, type: 'mcq', text: "What exhibition is currently on display?", options: ["Ancient Egypt", "Dinosaurs", "Space Exploration", "Medieval Art"], answer: "A" },
-        { id: 15, section: 2, type: 'mcq', text: "How long does the guided tour last?", options: ["30 minutes", "45 minutes", "60 minutes", "90 minutes"], answer: "C" },
-        { id: 16, section: 2, type: 'mcq', text: "What is the museum's most popular exhibit?", options: ["The mummy room", "The dinosaur skeletons", "The space exhibit", "The art gallery"], answer: "A" },
-        { id: 17, section: 2, type: 'mcq', text: "What discount is available for students?", options: ["10% off", "20% off", "30% off", "Free entry"], answer: "B" },
-        { id: 18, section: 2, type: 'mcq', text: "Where is the museum located?", options: ["Near the train station", "In the city center", "On the university campus", "By the river"], answer: "B" },
-        { id: 19, section: 2, type: 'mcq', text: "What facilities does the museum have?", options: ["A cafe", "A gift shop", "A library", "All of the above"], answer: "D" },
-        { id: 20, section: 2, type: 'mcq', text: "What is the speaker's main purpose?", options: ["To promote the museum", "To explain the museum's history", "To give a tour", "To announce a new exhibit"], answer: "A" },
+        { id: 11, section: 2, text: "What is the name of the museum?", options: ["City Museum", "Natural History Museum", "Art Gallery", "Science Museum"], answer: "B" },
+        { id: 12, section: 2, text: "What time does the museum open?", options: ["9 AM", "10 AM", "11 AM", "12 PM"], answer: "B" },
+        { id: 13, section: 2, text: "What is the admission fee for adults?", options: ["$5", "$10", "$15", "$20"], answer: "B" },
+        { id: 14, section: 2, text: "What exhibition is currently on display?", options: ["Ancient Egypt", "Dinosaurs", "Space Exploration", "Medieval Art"], answer: "A" },
+        { id: 15, section: 2, text: "How long does the guided tour last?", options: ["30 minutes", "45 minutes", "60 minutes", "90 minutes"], answer: "C" },
+        { id: 16, section: 2, text: "What is the museum's most popular exhibit?", options: ["The mummy room", "The dinosaur skeletons", "The space exhibit", "The art gallery"], answer: "A" },
+        { id: 17, section: 2, text: "What discount is available for students?", options: ["10% off", "20% off", "30% off", "Free entry"], answer: "B" },
+        { id: 18, section: 2, text: "Where is the museum located?", options: ["Near the train station", "In the city center", "On the university campus", "By the river"], answer: "B" },
+        { id: 19, section: 2, text: "What facilities does the museum have?", options: ["A cafe", "A gift shop", "A library", "All of the above"], answer: "D" },
+        { id: 20, section: 2, text: "What is the speaker's main purpose?", options: ["To promote the museum", "To explain the museum's history", "To give a tour", "To announce a new exhibit"], answer: "A" },
 
         // SECTION 3: Academic Discussion — Group Project (10 questions)
-        { id: 21, section: 3, type: 'mcq', text: "What is the topic of the group project?", options: ["Climate Change", "Renewable Energy", "Ocean Pollution", "Urban Planning"], answer: "A" },
-        { id: 22, section: 3, type: 'mcq', text: "How many students are in the group?", options: ["2", "3", "4", "5"], answer: "B" },
-        { id: 23, section: 3, type: 'mcq', text: "What is the deadline for the project?", options: ["Next week", "In two weeks", "Next month", "In three weeks"], answer: "B" },
-        { id: 24, section: 3, type: 'mcq', text: "What role does Sarah have in the group?", options: ["Researcher", "Editor", "Presenter", "Team Leader"], answer: "D" },
-        { id: 25, section: 3, type: 'mcq', text: "What aspect of climate change are they focusing on?", options: ["Rising sea levels", "Extreme weather", "Melting glaciers", "All of the above"], answer: "D" },
-        { id: 26, section: 3, type: 'mcq', text: "Where will they conduct their research?", options: ["The library", "Online databases", "Government archives", "All of the above"], answer: "D" },
-        { id: 27, section: 3, type: 'mcq', text: "What is the presentation format?", options: ["PowerPoint", "Poster", "Video", "Interactive website"], answer: "A" },
-        { id: 28, section: 3, type: 'mcq', text: "What challenge do they face?", options: ["Time management", "Research materials", "Group conflict", "Technical issues"], answer: "A" },
-        { id: 29, section: 3, type: 'mcq', text: "What solution do they propose?", options: ["Meeting twice a week", "Using a shared calendar", "Dividing tasks clearly", "All of the above"], answer: "D" },
-        { id: 30, section: 3, type: 'mcq', text: "What grade do they hope to achieve?", options: ["A", "B", "C", "D"], answer: "A" },
+        { id: 21, section: 3, text: "What is the topic of the group project?", options: ["Climate Change", "Renewable Energy", "Ocean Pollution", "Urban Planning"], answer: "A" },
+        { id: 22, section: 3, text: "How many students are in the group?", options: ["2", "3", "4", "5"], answer: "B" },
+        { id: 23, section: 3, text: "What is the deadline for the project?", options: ["Next week", "In two weeks", "Next month", "In three weeks"], answer: "B" },
+        { id: 24, section: 3, text: "What role does Sarah have in the group?", options: ["Researcher", "Editor", "Presenter", "Team Leader"], answer: "D" },
+        { id: 25, section: 3, text: "What aspect of climate change are they focusing on?", options: ["Rising sea levels", "Extreme weather", "Melting glaciers", "All of the above"], answer: "D" },
+        { id: 26, section: 3, text: "Where will they conduct their research?", options: ["The library", "Online databases", "Government archives", "All of the above"], answer: "D" },
+        { id: 27, section: 3, text: "What is the presentation format?", options: ["PowerPoint", "Poster", "Video", "Interactive website"], answer: "A" },
+        { id: 28, section: 3, text: "What challenge do they face?", options: ["Time management", "Research materials", "Group conflict", "Technical issues"], answer: "A" },
+        { id: 29, section: 3, text: "What solution do they propose?", options: ["Meeting twice a week", "Using a shared calendar", "Dividing tasks clearly", "All of the above"], answer: "D" },
+        { id: 30, section: 3, text: "What grade do they hope to achieve?", options: ["A", "B", "C", "D"], answer: "A" },
 
         // SECTION 4: Lecture — Space Exploration (10 questions)
-        { id: 31, section: 4, type: 'mcq', text: "What is the lecture about?", options: ["The history of space exploration", "The future of space travel", "Life on Mars", "Space technology"], answer: "A" },
-        { id: 32, section: 4, type: 'mcq', text: "When was the first moon landing?", options: ["1965", "1969", "1972", "1980"], answer: "B" },
-        { id: 33, section: 4, type: 'mcq', text: "What country was the first to launch a satellite?", options: ["USA", "Russia", "China", "France"], answer: "B" },
-        { id: 34, section: 4, type: 'mcq', text: "What was the name of the first satellite?", options: ["Sputnik", "Apollo", "Voyager", "Explorer"], answer: "A" },
-        { id: 35, section: 4, type: 'mcq', text: "What year was the International Space Station launched?", options: ["1998", "2000", "2002", "2005"], answer: "A" },
-        { id: 36, section: 4, type: 'mcq', text: "What is the primary goal of space exploration?", options: ["Scientific discovery", "Commercial profit", "Military advantage", "Tourism"], answer: "A" },
-        { id: 37, section: 4, type: 'mcq', text: "Which planet has been explored the most?", options: ["Mars", "Venus", "Saturn", "Jupiter"], answer: "A" },
-        { id: 38, section: 4, type: 'mcq', text: "What are space probes used for?", options: ["To collect data", "To carry astronauts", "To build space stations", "To launch satellites"], answer: "A" },
-        { id: 39, section: 4, type: 'mcq', text: "What is a major challenge of space travel?", options: ["Cost", "Radiation", "Isolation", "All of the above"], answer: "D" },
-        { id: 40, section: 4, type: 'mcq', text: "What is the lecturer's main conclusion?", options: ["Space exploration is essential", "Space exploration is too expensive", "Space exploration is dangerous", "Space exploration is a waste of resources"], answer: "A" },
-
-        // SECTION 5: Extra — Travel Booking (10 questions)
-        { id: 41, section: 1, type: 'mcq', text: "What destination does the customer want to visit?", options: ["Paris", "Rome", "London", "Madrid"], answer: "A" },
-        { id: 42, section: 1, type: 'mcq', text: "How many nights will they stay?", options: ["2", "3", "4", "5"], answer: "C" },
-        { id: 43, section: 1, type: 'mcq', text: "What type of room do they prefer?", options: ["Single", "Double", "Suite", "Dormitory"], answer: "B" },
-        { id: 44, section: 1, type: 'mcq', text: "What is the total cost of the booking?", options: ["$300", "$450", "$600", "$750"], answer: "C" },
-        { id: 45, section: 1, type: 'mcq', text: "What additional service do they request?", options: ["Airport transfer", "Breakfast", "A tour", "A rental car"], answer: "B" },
-        { id: 46, section: 2, type: 'mcq', text: "What is the name of the hotel?", options: ["Grand Plaza", "City Central", "The Royal", "Ocean View"], answer: "A" },
-        { id: 47, section: 2, type: 'mcq', text: "When does the reservation start?", options: ["July 15", "July 16", "July 17", "July 18"], answer: "B" },
-        { id: 48, section: 2, type: 'mcq', text: "What payment method is used?", options: ["Credit card", "Debit card", "Cash", "Bank transfer"], answer: "A" },
-        { id: 49, section: 2, type: 'mcq', text: "What is the cancellation policy?", options: ["Free cancellation", "Partial refund", "No refund", "Voucher only"], answer: "A" },
-        { id: 50, section: 2, type: 'mcq', text: "What is the customer's confirmation number?", options: ["AB123", "CD456", "EF789", "GH012"], answer: "B" },
-
-        // SECTION 6: Extra — Job Interview (10 questions)
-        { id: 51, section: 3, type: 'mcq', text: "What position is the applicant applying for?", options: ["Marketing Manager", "Software Developer", "Data Analyst", "Sales Representative"], answer: "A" },
-        { id: 52, section: 3, type: 'mcq', text: "How many years of experience does the applicant have?", options: ["2", "3", "4", "5"], answer: "B" },
-        { id: 53, section: 3, type: 'mcq', text: "What qualification does the applicant have?", options: ["Bachelor's degree", "Master's degree", "PhD", "Certification"], answer: "B" },
-        { id: 54, section: 3, type: 'mcq', text: "What company did the applicant work for previously?", options: ["TechCorp", "Global Solutions", "Innovate Ltd", "Bright Future"], answer: "A" },
-        { id: 55, section: 3, type: 'mcq', text: "What is the applicant's salary expectation?", options: ["$50,000", "$60,000", "$70,000", "$80,000"], answer: "C" },
-        { id: 56, section: 4, type: 'mcq', text: "What skills does the applicant highlight?", options: ["Leadership", "Communication", "Problem-solving", "All of the above"], answer: "D" },
-        { id: 57, section: 4, type: 'mcq', text: "When can the applicant start?", options: ["Immediately", "In two weeks", "Next month", "After June"], answer: "A" },
-        { id: 58, section: 4, type: 'mcq', text: "What does the applicant like about the company?", options: ["Mission", "Culture", "Growth", "All of the above"], answer: "D" },
-        { id: 59, section: 4, type: 'mcq', text: "What question does the applicant ask at the end?", options: ["About team", "About promotion", "About training", "About hours"], answer: "C" },
-        { id: 60, section: 4, type: 'mcq', text: "What is the overall impression of the applicant?", options: ["Positive", "Neutral", "Negative", "Mixed"], answer: "A" }
+        { id: 31, section: 4, text: "What is the lecture about?", options: ["The history of space exploration", "The future of space travel", "Life on Mars", "Space technology"], answer: "A" },
+        { id: 32, section: 4, text: "When was the first moon landing?", options: ["1965", "1969", "1972", "1980"], answer: "B" },
+        { id: 33, section: 4, text: "What country was the first to launch a satellite?", options: ["USA", "Russia", "China", "France"], answer: "B" },
+        { id: 34, section: 4, text: "What was the name of the first satellite?", options: ["Sputnik", "Apollo", "Voyager", "Explorer"], answer: "A" },
+        { id: 35, section: 4, text: "What year was the International Space Station launched?", options: ["1998", "2000", "2002", "2005"], answer: "A" },
+        { id: 36, section: 4, text: "What is the primary goal of space exploration?", options: ["Scientific discovery", "Commercial profit", "Military advantage", "Tourism"], answer: "A" },
+        { id: 37, section: 4, text: "Which planet has been explored the most?", options: ["Mars", "Venus", "Saturn", "Jupiter"], answer: "A" },
+        { id: 38, section: 4, text: "What are space probes used for?", options: ["To collect data", "To carry astronauts", "To build space stations", "To launch satellites"], answer: "A" },
+        { id: 39, section: 4, text: "What is a major challenge of space travel?", options: ["Cost", "Radiation", "Isolation", "All of the above"], answer: "D" },
+        { id: 40, section: 4, text: "What is the lecturer's main conclusion?", options: ["Space exploration is essential", "Space exploration is too expensive", "Space exploration is dangerous", "Space exploration is a waste of resources"], answer: "A" }
     ];
 
     // ============================================================
     // SETTINGS
     // ============================================================
-    const PLAN = 'free'; // 'free' = 10 questions, 'pro' = all questions
+    const PLAN = 'free';
 
     // ============================================================
     // SHUFFLE & SELECT QUESTIONS
@@ -497,7 +440,7 @@
             planBadge.textContent = 'Free — 10 Qs';
             planBadge.className = 'plan-badge';
         } else {
-            planBadge.textContent = 'Pro — All 60 Qs';
+            planBadge.textContent = 'Pro — All 40 Qs';
             planBadge.className = 'plan-badge pro';
         }
 
@@ -505,13 +448,12 @@
 
         let html = '';
         let currentSection = 0;
+        const sectionLabels = ['', 'Section 1: Conversation', 'Section 2: Monologue', 'Section 3: Group Project', 'Section 4: Lecture'];
 
         selected.forEach((q, index) => {
-            // Show section label when section changes
             if (q.section !== currentSection) {
                 currentSection = q.section;
-                const labels = ['', 'Section 1: Conversation', 'Section 2: Monologue', 'Section 3: Group Project', 'Section 4: Lecture'];
-                html += `<div class="section-label" style="margin-top:1.5rem;">${labels[q.section]}</div>`;
+                html += `<div class="section-label" style="margin-top:1.5rem;">${sectionLabels[q.section]}</div>`;
             }
 
             const qNum = index + 1;
@@ -570,29 +512,51 @@
     updateTimer();
 
     // ============================================================
-    // AUDIO PLAYER (Simulated)
+    // AUDIO PLAYER (Simulated — No Script)
     // ============================================================
     let isPlaying = false;
-    document.getElementById('playAudioBtn').addEventListener('click', function() {
+    const playBtn = document.getElementById('playAudioBtn');
+    const audioStatus = document.getElementById('audioStatusText');
+
+    // Pre-defined audio messages for each section
+    const audioMessages = {
+        1: "🎧 Section 1: You will hear a conversation between a student and a university advisor. Listen carefully and answer questions 1 to 10.",
+        2: "🎧 Section 2: You will hear a museum guide giving a tour. Listen carefully and answer questions 11 to 20.",
+        3: "🎧 Section 3: You will hear a group of students discussing a project. Listen carefully and answer questions 21 to 30.",
+        4: "🎧 Section 4: You will hear a lecture about space exploration. Listen carefully and answer questions 31 to 40."
+    };
+
+    // Get the current section from the first question
+    const currentSection = selected.length > 0 ? selected[0].section : 1;
+
+    playBtn.addEventListener('click', function() {
         isPlaying = !isPlaying;
-        this.innerHTML = isPlaying ? '<i class="fas fa-pause"></i> Pause Audio' : '<i class="fas fa-play"></i> Play Audio';
+        
         if (isPlaying) {
-            this.style.background = 'linear-gradient(135deg, #FFD700, #f5c500)';
-            this.style.color = '#4A148C';
-            // Simulate audio playing — show the script after a moment
+            this.innerHTML = '<i class="fas fa-pause"></i> Playing...';
+            this.classList.add('playing');
+            audioStatus.textContent = audioMessages[currentSection] || '🎧 Audio is playing. Listen carefully — you will only hear it once.';
+            audioStatus.style.color = '#4A148C';
+            audioStatus.style.fontWeight = '600';
+            
+            // Auto-stop after 30 seconds (simulating audio length)
             setTimeout(() => {
-                document.getElementById('audioScript').classList.add('show');
-            }, 2000);
+                if (isPlaying) {
+                    isPlaying = false;
+                    this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
+                    this.classList.remove('playing');
+                    audioStatus.textContent = '✅ Audio finished. You can now answer the questions.';
+                    audioStatus.style.color = '#2e7d32';
+                }
+            }, 30000);
         } else {
-            this.style.background = '';
-            this.style.color = '';
+            this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
+            this.classList.remove('playing');
+            audioStatus.textContent = 'Click play to hear the recording. You will only hear it once.';
+            audioStatus.style.color = '#7B6A8A';
+            audioStatus.style.fontWeight = '400';
         }
     });
-
-    function toggleScript() {
-        const script = document.getElementById('audioScript');
-        script.classList.toggle('show');
-    }
 
     // ============================================================
     // SUBMIT TEST — SAVES TO FIRESTORE
@@ -620,7 +584,7 @@
         } else if (percentage >= 80) {
             feedback.innerHTML = '👏 Great job! You\'re well on your way to a high band.';
         } else if (percentage >= 60) {
-            feedback.innerHTML = '💪 Good effort! Review the audio script and try again.';
+            feedback.innerHTML = '💪 Good effort! Review the audio and try again.';
         } else {
             feedback.innerHTML = '📚 Keep practicing! Focus on understanding the main ideas.';
         }
@@ -667,4 +631,4 @@
 </script>
 
 </body>
-  </html>
+        </html>
