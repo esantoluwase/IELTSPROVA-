@@ -87,7 +87,6 @@
             color: #4A148C;
         }
 
-        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -121,7 +120,6 @@
             margin-bottom: 0.3rem;
         }
 
-        /* ===== PROGRESS ===== */
         .progress-section {
             background: white;
             border-radius: 24px;
@@ -160,7 +158,6 @@
             background: linear-gradient(90deg, #FFD700, #f5c500);
         }
 
-        /* ===== HISTORY ===== */
         .history-section {
             background: white;
             border-radius: 24px;
@@ -267,7 +264,7 @@
         Loading your progress...
     </div>
 
-    <!-- DASHBOARD CONTENT (hidden until loaded) -->
+    <!-- DASHBOARD CONTENT -->
     <div id="dashboardContent" style="display:none;">
 
         <!-- STATS -->
@@ -289,7 +286,7 @@
             </div>
             <div class="stat-card">
                 <span class="stat-icon">⏱️</span>
-                <div class="stat-number" id="totalTime">0h</div>
+                <div class="stat-number" id="totalTime">0m</div>
                 <div class="stat-label">Total Practice</div>
             </div>
         </div>
@@ -352,7 +349,7 @@
 
 <script>
     // ============================================================
-    // 🔥 FIREBASE CONFIG — YOUR CREDENTIALS
+    // 🔥 FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -372,16 +369,13 @@
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
-            // Not logged in — redirect to homepage
             window.location.href = 'index.html';
             return;
         }
 
-        // Show user info
         document.getElementById('userName').textContent = user.displayName || 'Student';
         document.getElementById('userAvatar').textContent = (user.displayName || 'S')[0].toUpperCase();
 
-        // Load user data from Firestore
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             if (userDoc.exists) {
@@ -389,10 +383,10 @@
                 document.getElementById('userPlan').textContent = data.plan === 'pro' ? '⭐ Pro Plan' : 'Free Plan';
             }
         } catch (e) {
-            console.log('User doc not found yet');
+            console.log('User doc not found');
         }
 
-        // Load test scores
+        // Load scores from Firestore
         try {
             const scoresSnapshot = await db.collection('scores')
                 .where('userId', '==', user.uid)
@@ -404,11 +398,20 @@
                 scores.push(doc.data());
             });
 
-            // Hide loading, show dashboard
+            console.log('Scores loaded:', scores);
+
             document.getElementById('loadingMessage').style.display = 'none';
             document.getElementById('dashboardContent').style.display = 'block';
 
-            // Update stats
+            if (scores.length === 0) {
+                // Show empty state
+                document.getElementById('totalTests').textContent = '0';
+                document.getElementById('avgScore').textContent = '—';
+                document.getElementById('streak').textContent = '0';
+                document.getElementById('totalTime').textContent = '0m';
+                return;
+            }
+
             updateStats(scores);
             updateProgress(scores);
             updateHistory(scores);
@@ -433,55 +436,41 @@
             const avg = scores.reduce((sum, s) => sum + s.score, 0) / total;
             const avgPercent = Math.round((avg / 10) * 100);
             document.getElementById('avgScore').textContent = `${avgPercent}%`;
-        } else {
-            document.getElementById('avgScore').textContent = '—';
         }
 
-        // Streak (simplified — counts days with at least one test)
-        if (total > 0) {
-            // Placeholder — we'll implement real streak later
-            document.getElementById('streak').textContent = '1';
-        } else {
-            document.getElementById('streak').textContent = '0';
-        }
+        // Streak (simplified)
+        document.getElementById('streak').textContent = total > 0 ? '1' : '0';
 
-        // Total time (placeholder)
-        document.getElementById('totalTime').textContent = `${total * 15}m`;
+        // Total time (estimate)
+        const totalMins = total * 15;
+        if (totalMins >= 60) {
+            document.getElementById('totalTime').textContent = `${Math.round(totalMins / 60)}h`;
+        } else {
+            document.getElementById('totalTime').textContent = `${totalMins}m`;
+        }
     }
 
     // ============================================================
     // UPDATE PROGRESS BARS
     // ============================================================
     function updateProgress(scores) {
-        // Filter by module
-        const reading = scores.filter(s => s.module === 'reading');
-        const listening = scores.filter(s => s.module === 'listening');
-        const writing = scores.filter(s => s.module === 'writing');
-        const speaking = scores.filter(s => s.module === 'speaking');
+        const modules = ['reading', 'listening', 'writing', 'speaking'];
+        const moduleLabels = ['Reading', 'Listening', 'Writing', 'Speaking'];
+        const elementIds = ['readingScore', 'listeningScore', 'writingScore', 'speakingScore'];
+        const fillIds = ['readingFill', 'listeningFill', 'writingFill', 'speakingFill'];
 
-        // Get best score for each module
-        const best = (arr) => {
-            if (arr.length === 0) return { score: 0, total: 10 };
-            const max = Math.max(...arr.map(s => s.score));
-            return { score: max, total: 10 };
-        };
-
-        const r = best(reading);
-        const l = best(listening);
-        const w = best(writing);
-        const s = best(speaking);
-
-        document.getElementById('readingScore').textContent = `${r.score} / ${r.total}`;
-        document.getElementById('readingFill').style.width = `${(r.score / r.total) * 100}%`;
-
-        document.getElementById('listeningScore').textContent = `${l.score} / ${l.total}`;
-        document.getElementById('listeningFill').style.width = `${(l.score / l.total) * 100}%`;
-
-        document.getElementById('writingScore').textContent = `${w.score} / ${w.total}`;
-        document.getElementById('writingFill').style.width = `${(w.score / w.total) * 100}%`;
-
-        document.getElementById('speakingScore').textContent = `${s.score} / ${s.total}`;
-        document.getElementById('speakingFill').style.width = `${(s.score / s.total) * 100}%`;
+        modules.forEach((module, index) => {
+            const moduleScores = scores.filter(s => s.module === module);
+            if (moduleScores.length > 0) {
+                const best = Math.max(...moduleScores.map(s => s.score));
+                const total = moduleScores[0].total || 10;
+                document.getElementById(elementIds[index]).textContent = `${best} / ${total}`;
+                document.getElementById(fillIds[index]).style.width = `${(best / total) * 100}%`;
+            } else {
+                document.getElementById(elementIds[index]).textContent = '0 / 10';
+                document.getElementById(fillIds[index]).style.width = '0%';
+            }
+        });
     }
 
     // ============================================================
@@ -496,16 +485,18 @@
         }
 
         let html = '';
-        scores.slice(0, 10).forEach(s => {
+        const sorted = scores.slice(0, 10);
+        sorted.forEach(s => {
             const scoreClass = s.score >= 8 ? 'high' : s.score >= 6 ? 'medium' : 'low';
+            const moduleName = s.module.charAt(0).toUpperCase() + s.module.slice(1);
             const date = s.date ? new Date(s.date.seconds * 1000).toLocaleDateString() : 'Recent';
             html += `
                 <div class="history-item">
                     <div>
-                        <div class="test-name">${s.module.charAt(0).toUpperCase() + s.module.slice(1)} Practice Test</div>
+                        <div class="test-name">${moduleName} Practice Test</div>
                         <div class="test-date">${date}</div>
                     </div>
-                    <span class="test-score ${scoreClass}">${s.score} / 10</span>
+                    <span class="test-score ${scoreClass}">${s.score} / ${s.total || 10}</span>
                 </div>
             `;
         });
@@ -515,4 +506,4 @@
 </script>
 
 </body>
-                                                                                       </html>
+    </html>
