@@ -7,17 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: #f5f0ff;
@@ -25,10 +20,7 @@
             padding: 2rem;
             line-height: 1.6;
         }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1100px; margin: 0 auto; }
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -37,14 +29,8 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .dashboard-header h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #4A148C;
-        }
-        .dashboard-header h1 span {
-            color: #FFD700;
-        }
+        .dashboard-header h1 { font-size: 2rem; font-weight: 800; color: #4A148C; }
+        .dashboard-header h1 span { color: #FFD700; }
         .dashboard-header .user-info {
             display: flex;
             align-items: center;
@@ -52,7 +38,7 @@
             background: white;
             padding: 0.5rem 1.5rem 0.5rem 1rem;
             border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         .dashboard-header .user-info .avatar {
             width: 40px;
@@ -86,7 +72,6 @@
             margin-bottom: 0.5rem;
             color: #4A148C;
         }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -101,25 +86,10 @@
             text-align: center;
             transition: 0.3s;
         }
-        .stat-card:hover {
-            border-color: #7B1FA2;
-            transform: translateY(-4px);
-        }
-        .stat-card .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #4A148C;
-        }
-        .stat-card .stat-label {
-            color: #7B6A8A;
-            font-size: 0.9rem;
-        }
-        .stat-card .stat-icon {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
+        .stat-card:hover { border-color: #7B1FA2; transform: translateY(-4px); }
+        .stat-card .stat-number { font-size: 2.5rem; font-weight: 800; color: #4A148C; }
+        .stat-card .stat-label { color: #7B6A8A; font-size: 0.9rem; }
+        .stat-card .stat-icon { font-size: 2rem; display: block; margin-bottom: 0.3rem; }
         .progress-section {
             background: white;
             border-radius: 24px;
@@ -127,14 +97,8 @@
             border: 1px solid #f0e8f5;
             margin-bottom: 2rem;
         }
-        .progress-section h2 {
-            font-size: 1.4rem;
-            color: #4A148C;
-            margin-bottom: 1.5rem;
-        }
-        .progress-item {
-            margin-bottom: 1.2rem;
-        }
+        .progress-section h2 { font-size: 1.4rem; color: #4A148C; margin-bottom: 1.5rem; }
+        .progress-item { margin-bottom: 1.2rem; }
         .progress-item .progress-label {
             display: flex;
             justify-content: space-between;
@@ -154,21 +118,14 @@
             transition: width 1s ease;
             width: 0%;
         }
-        .progress-bar .fill.gold {
-            background: linear-gradient(90deg, #FFD700, #f5c500);
-        }
-
+        .progress-bar .fill.gold { background: linear-gradient(90deg, #FFD700, #f5c500); }
         .history-section {
             background: white;
             border-radius: 24px;
             padding: 2rem;
             border: 1px solid #f0e8f5;
         }
-        .history-section h2 {
-            font-size: 1.4rem;
-            color: #4A148C;
-            margin-bottom: 1rem;
-        }
+        .history-section h2 { font-size: 1.4rem; color: #4A148C; margin-bottom: 1rem; }
         .history-item {
             display: flex;
             justify-content: space-between;
@@ -176,12 +133,8 @@
             padding: 0.8rem 0;
             border-bottom: 1px solid #f5f0ff;
         }
-        .history-item:last-child {
-            border-bottom: none;
-        }
-        .history-item .test-name {
-            font-weight: 600;
-        }
+        .history-item:last-child { border-bottom: none; }
+        .history-item .test-name { font-weight: 600; }
         .history-item .test-score {
             background: #f3edf7;
             padding: 0.2rem 1rem;
@@ -190,37 +143,40 @@
             color: #4A148C;
             font-size: 0.9rem;
         }
-        .history-item .test-score.high {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        .history-item .test-score.medium {
-            background: #fff8e1;
-            color: #f57f17;
-        }
-        .history-item .test-score.low {
-            background: #fce4ec;
-            color: #c62828;
-        }
-        .history-item .test-date {
-            color: #7B6A8A;
-            font-size: 0.85rem;
-        }
-        .no-history {
-            color: #7B6A8A;
-            text-align: center;
-            padding: 1.5rem;
-        }
-        .debug-info {
+        .history-item .test-score.high { background: #e8f5e9; color: #2e7d32; }
+        .history-item .test-score.medium { background: #fff8e1; color: #f57f17; }
+        .history-item .test-score.low { background: #fce4ec; color: #c62828; }
+        .history-item .test-date { color: #7B6A8A; font-size: 0.85rem; }
+        .no-history { color: #7B6A8A; text-align: center; padding: 1.5rem; }
+        .storage-info {
             background: #faf7ff;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-radius: 12px;
             margin: 1rem 0;
             font-size: 0.85rem;
-            color: #7B6A8A;
             border: 1px solid #f0e8f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
-
+        .storage-info .badge-local {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+        .storage-info .badge-firebase {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
         .back-link {
             display: inline-block;
             margin-top: 2rem;
@@ -230,32 +186,18 @@
             border-bottom: 2px solid transparent;
             transition: 0.3s;
         }
-        .back-link:hover {
-            border-bottom-color: #FFD700;
-        }
-
+        .back-link:hover { border-bottom-color: #FFD700; }
         @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .history-item {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
+            body { padding: 1rem; }
+            .dashboard-header { flex-direction: column; align-items: flex-start; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .history-item { flex-wrap: wrap; gap: 0.5rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- HEADER -->
     <div class="dashboard-header">
         <h1>📊 My <span>Dashboard</span></h1>
         <div class="user-info" id="userInfo">
@@ -267,21 +209,22 @@
         </div>
     </div>
 
-    <!-- LOADING -->
     <div id="loadingMessage" class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
         Loading your progress...
     </div>
 
-    <!-- DASHBOARD CONTENT -->
     <div id="dashboardContent" style="display:none;">
 
-        <!-- DEBUG INFO -->
-        <div class="debug-info" id="debugInfo">
-            🔍 Checking for scores in Firestore...
+        <!-- STORAGE INFO -->
+        <div class="storage-info" id="storageInfo">
+            <span>📊 Scores loaded from:</span>
+            <div>
+                <span class="badge-local" id="localBadge">💾 Local: 0</span>
+                <span class="badge-firebase" id="firebaseBadge">☁️ Firebase: 0</span>
+            </div>
         </div>
 
-        <!-- STATS -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
                 <span class="stat-icon">📝</span>
@@ -305,7 +248,6 @@
             </div>
         </div>
 
-        <!-- PROGRESS BARS -->
         <div class="progress-section">
             <h2>📈 Your Progress</h2>
             <div id="progressBars">
@@ -348,14 +290,12 @@
             </div>
         </div>
 
-        <!-- TEST HISTORY -->
         <div class="history-section">
             <h2>📋 Test History</h2>
             <div id="historyList">
                 <div class="no-history">No test attempts yet. Take your first test!</div>
             </div>
         </div>
-
     </div>
 
     <a href="index.html" class="back-link">← Back to Home</a>
@@ -363,7 +303,7 @@
 
 <script>
     // ============================================================
-    // 🔥 FIREBASE CONFIG
+    // FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -391,7 +331,6 @@
         document.getElementById('userAvatar').textContent = (user.displayName || 'S')[0].toUpperCase();
 
         try {
-            // Get user plan
             const userDoc = await db.collection('users').doc(user.uid).get();
             if (userDoc.exists) {
                 const data = userDoc.data();
@@ -402,58 +341,71 @@
         }
 
         // ============================================================
-        // LOAD SCORES — FIXED QUERY
+        // LOAD FROM LOCALSTORAGE (ALWAYS WORKS)
         // ============================================================
+        let allScores = [];
+        let localScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
+        console.log('📊 LocalStorage scores:', localScores);
+
+        // ============================================================
+        // LOAD FROM FIRESTORE (IF AVAILABLE)
+        // ============================================================
+        let firebaseScores = [];
         try {
-            console.log('🔍 Fetching scores for user:', user.uid);
-            
             const scoresSnapshot = await db.collection('scores')
                 .where('userId', '==', user.uid)
                 .get();
-
-            const scores = [];
+            
             scoresSnapshot.forEach(doc => {
                 const data = doc.data();
-                console.log('📊 Found score:', data);
-                scores.push(data);
+                console.log('📊 Firebase score:', data);
+                firebaseScores.push({
+                    module: data.module || 'reading',
+                    score: data.score || 0,
+                    total: data.total || 10,
+                    date: data.date ? new Date(data.date.seconds * 1000).toISOString() : new Date().toISOString()
+                });
             });
-
-            console.log('✅ Total scores found:', scores.length);
-
-            // Update debug info
-            const debugInfo = document.getElementById('debugInfo');
-            if (scores.length === 0) {
-                debugInfo.innerHTML = '🔍 No scores found in Firestore yet. Take a test to see your results here!';
-                debugInfo.style.borderColor = '#f57f17';
-            } else {
-                debugInfo.innerHTML = `✅ Found ${scores.length} score(s) in Firestore!`;
-                debugInfo.style.borderColor = '#2e7d32';
-            }
-
-            document.getElementById('loadingMessage').style.display = 'none';
-            document.getElementById('dashboardContent').style.display = 'block';
-
-            if (scores.length === 0) {
-                document.getElementById('totalTests').textContent = '0';
-                document.getElementById('avgScore').textContent = '—';
-                document.getElementById('streak').textContent = '0';
-                document.getElementById('totalTime').textContent = '0m';
-                return;
-            }
-
-            updateStats(scores);
-            updateProgress(scores);
-            updateHistory(scores);
-
+            console.log('✅ Firebase scores:', firebaseScores.length);
         } catch (error) {
-            console.error('❌ Error loading scores:', error);
-            document.getElementById('loadingMessage').innerHTML = `
-                <i class="fas fa-exclamation-circle" style="color:#e53935;"></i>
-                Error loading data: ${error.message}
-                <br /><br />
-                <button onclick="location.reload()" style="padding:0.5rem 2rem;border-radius:50px;border:none;background:#4A148C;color:white;cursor:pointer;font-weight:600;">Retry</button>
-            `;
+            console.error('❌ Firestore error:', error);
         }
+
+        // ============================================================
+        // MERGE SCORES (LocalStorage + Firebase, no duplicates)
+        // ============================================================
+        // Use localStorage as primary, add Firebase scores that aren't duplicates
+        const mergedScores = [...localScores];
+        const existingModules = new Set(localScores.map(s => `${s.module}_${s.date}`));
+        
+        firebaseScores.forEach(fs => {
+            const key = `${fs.module}_${fs.date}`;
+            if (!existingModules.has(key)) {
+                mergedScores.push(fs);
+                existingModules.add(key);
+            }
+        });
+
+        console.log('📊 Total merged scores:', mergedScores.length);
+
+        // Update storage info
+        document.getElementById('localBadge').textContent = `💾 Local: ${localScores.length}`;
+        document.getElementById('firebaseBadge').textContent = `☁️ Firebase: ${firebaseScores.length}`;
+
+        document.getElementById('loadingMessage').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+
+        if (mergedScores.length === 0) {
+            document.getElementById('totalTests').textContent = '0';
+            document.getElementById('avgScore').textContent = '—';
+            document.getElementById('streak').textContent = '0';
+            document.getElementById('totalTime').textContent = '0m';
+            return;
+        }
+
+        updateStats(mergedScores);
+        updateProgress(mergedScores);
+        updateHistory(mergedScores);
     });
 
     // ============================================================
@@ -470,13 +422,8 @@
         }
 
         document.getElementById('streak').textContent = total > 0 ? '1' : '0';
-
         const totalMins = total * 15;
-        if (totalMins >= 60) {
-            document.getElementById('totalTime').textContent = `${Math.round(totalMins / 60)}h`;
-        } else {
-            document.getElementById('totalTime').textContent = `${totalMins}m`;
-        }
+        document.getElementById('totalTime').textContent = totalMins >= 60 ? `${Math.round(totalMins / 60)}h` : `${totalMins}m`;
     }
 
     // ============================================================
@@ -484,14 +431,11 @@
     // ============================================================
     function updateProgress(scores) {
         const modules = ['reading', 'listening', 'writing', 'speaking'];
-        const moduleLabels = ['Reading', 'Listening', 'Writing', 'Speaking'];
         const elementIds = ['readingScore', 'listeningScore', 'writingScore', 'speakingScore'];
         const fillIds = ['readingFill', 'listeningFill', 'writingFill', 'speakingFill'];
 
         modules.forEach((module, index) => {
             const moduleScores = scores.filter(s => s.module === module);
-            console.log(`📊 ${module} scores:`, moduleScores);
-            
             if (moduleScores.length > 0) {
                 const best = Math.max(...moduleScores.map(s => s.score || 0));
                 const total = moduleScores[0].total || 10;
@@ -520,7 +464,7 @@
         sorted.forEach((s, index) => {
             const scoreClass = s.score >= 8 ? 'high' : s.score >= 6 ? 'medium' : 'low';
             const moduleName = (s.module || 'unknown').charAt(0).toUpperCase() + (s.module || 'unknown').slice(1);
-            const date = s.date ? new Date(s.date.seconds * 1000).toLocaleDateString() : `Attempt ${index + 1}`;
+            const date = s.date ? new Date(s.date).toLocaleDateString() : `Attempt ${index + 1}`;
             html += `
                 <div class="history-item">
                     <div>
