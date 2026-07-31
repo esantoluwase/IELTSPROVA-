@@ -3,20 +3,39 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IELTSProva — Prova Technologies</title>
+    
+    <!-- ===== SEO ===== -->
+    <title>IELTSProva — Ace Your IELTS with AI-Powered Practice</title>
+    <meta name="description" content="IELTSProva by Prova Technologies — Free IELTS practice tests for Reading, Writing, Listening, and Speaking. AI-powered evaluation and progress tracking." />
+    <meta name="keywords" content="IELTS, IELTS practice, IELTS test, IELTS preparation, Prova Technologies, IELTSProva" />
+    <meta name="author" content="Prova Technologies" />
+    <meta property="og:title" content="IELTSProva — Ace Your IELTS with AI-Powered Practice" />
+    <meta property="og:description" content="Free IELTS practice tests for Reading, Writing, Listening, and Speaking. AI-powered evaluation and progress tracking." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://esantoluwase.github.io/IELTSPROVA-/" />
+    <meta name="theme-color" content="#4A148C" />
+    
+    <!-- ===== Favicon ===== -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>" />
+    
+    <!-- ===== Fonts & Icons ===== -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
-    <!-- Firebase SDKs -->
+    <!-- ===== Firebase SDKs ===== -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -27,6 +46,7 @@
         }
         a {
             text-decoration: none;
+            color: inherit;
         }
         .container {
             max-width: 1200px;
@@ -113,6 +133,10 @@
         .nav-links a:hover {
             color: #7B1FA2;
         }
+        .nav-links a.active {
+            color: #4A148C;
+            border-bottom: 2px solid #FFD700;
+        }
         .nav-cta {
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white !important;
@@ -149,6 +173,9 @@
             font-weight: 600;
             color: #4A148C;
         }
+        .user-greeting i {
+            margin-right: 0.3rem;
+        }
 
         /* ===== MOBILE NAV ===== */
         @media (max-width: 768px) {
@@ -173,7 +200,8 @@
             .nav-links a {
                 font-size: 1rem;
             }
-            .nav-cta, .nav-cta-outline {
+            .nav-cta,
+            .nav-cta-outline {
                 width: 100%;
                 text-align: center;
             }
@@ -687,6 +715,46 @@
             font-size: 0.85rem;
             opacity: 0.6;
         }
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+        .footer-social a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .footer-social a:hover {
+            color: #FFD700;
+        }
+
+        /* ===== SCROLL TO TOP ===== */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(74, 20, 140, 0.3);
+            transition: 0.3s;
+            display: none;
+            z-index: 50;
+        }
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(74, 20, 140, 0.4);
+        }
+        .scroll-top.show {
+            display: block;
+        }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
@@ -733,6 +801,13 @@
                 justify-content: center;
                 gap: 1.5rem;
             }
+            .scroll-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -762,7 +837,7 @@
                     <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
                 </span>
                 <span id="userGreeting" style="display:none;">
-                    <span class="user-greeting" id="greetingText">👋 Hi, User</span>
+                    <span class="user-greeting" id="greetingText"><i class="fas fa-user-circle"></i> Hi, User</span>
                     <button class="nav-cta-outline" onclick="logoutUser()" style="padding:0.4rem 1.2rem; font-size:0.8rem;"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </span>
             </div>
@@ -781,7 +856,7 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <h3>60+</h3>
+                        <h3>150+</h3>
                         <p>Practice Questions</p>
                     </div>
                     <div class="stat">
@@ -805,44 +880,49 @@
     </section>
 
     <!-- ===== FEATURES ===== -->
-<div class="features-grid">
-    <!-- Reading — Clickable -->
-    <a href="reading-test.html" class="feature-card">
-        <span class="icon">📖</span>
-        <h3>Reading</h3>
-        <p>3 passages · 40 questions · 60 mins</p>
-        <span class="badge">Free: 10 Qs</span>
-        <span class="badge pro">Pro: Full</span>
-    </a>
-    
-    <!-- Writing — Clickable -->
-    <a href="writing-test.html" class="feature-card">
-        <span class="icon">✍️</span>
-        <h3>Writing</h3>
-        <p>Task 1 &amp; 2 · with AI evaluation</p>
-        <span class="badge">Free: 2 Tasks</span>
-        <span class="badge pro">Pro: Detailed Feedback</span>
-    </a>
-    
-    <!-- Listening — Clickable -->
-    <a href="listening-test.html" class="feature-card">
-        <span class="icon">🎧</span>
-        <h3>Listening</h3>
-        <p>4 sections · 40 questions · 30 mins</p>
-        <span class="badge">Free: 10 Qs</span>
-        <span class="badge pro">Pro: Full</span>
-    </a>
-    
-<!-- Speaking — Clickable -->
-<a href="speaking-test.html" class="feature-card">
-    <span class="icon">🗣️</span>
-    <h3>Speaking</h3>
-    <p>Part 1–3 · cue cards &amp; practice</p>
-    <span class="badge">Free: Full Test</span>
-    <span class="badge pro">Pro: Detailed Feedback</span>
-        </a>
-    </div>
-</div>
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>What You'll <span>Practice</span></h2>
+                <p>Full coverage of all 4 IELTS modules — designed to feel like the real exam.</p>
+            </div>
+            <div class="features-grid">
+                <!-- Reading -->
+                <a href="reading-test.html" class="feature-card">
+                    <span class="icon">📖</span>
+                    <h3>Reading</h3>
+                    <p>3 passages · 40 questions · 60 mins</p>
+                    <span class="badge">Free: 10 Qs</span>
+                    <span class="badge pro">Pro: Full</span>
+                </a>
+
+                <!-- Writing -->
+                <a href="writing-test.html" class="feature-card">
+                    <span class="icon">✍️</span>
+                    <h3>Writing</h3>
+                    <p>Task 1 &amp; 2 · with AI evaluation</p>
+                    <span class="badge">Free: 2 Tasks</span>
+                    <span class="badge pro">Pro: Detailed Feedback</span>
+                </a>
+
+                <!-- Listening -->
+                <a href="listening-test.html" class="feature-card">
+                    <span class="icon">🎧</span>
+                    <h3>Listening</h3>
+                    <p>4 sections · 40 questions · 30 mins</p>
+                    <span class="badge">Free: 10 Qs</span>
+                    <span class="badge pro">Pro: Full</span>
+                </a>
+
+                <!-- Speaking -->
+                <a href="speaking-test.html" class="feature-card">
+                    <span class="icon">🗣️</span>
+                    <h3>Speaking</h3>
+                    <p>Part 1–3 · AI voice examiner</p>
+                    <span class="badge">Free: Full Test</span>
+                    <span class="badge pro">Pro: Detailed Feedback</span>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -854,17 +934,20 @@
                 <p>Start for free, upgrade when you're ready.</p>
             </div>
             <div class="pricing-grid">
+                <!-- Free -->
                 <div class="pricing-card">
                     <div class="plan-name">Free</div>
                     <div class="price">$0 <small>/mo</small></div>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> 10 questions per test</li>
-                        <li><i class="fas fa-check-circle"></i> Reading &amp; Listening only</li>
+                        <li><i class="fas fa-check-circle"></i> All 4 modules</li>
                         <li><i class="fas fa-check-circle"></i> Basic score report</li>
                         <li><i class="fas fa-check-circle"></i> Limited access</li>
                     </ul>
                     <a href="reading-test.html" class="btn-plan">Start Free</a>
                 </div>
+
+                <!-- Pro -->
                 <div class="pricing-card popular">
                     <div class="popular-badge">⭐ Most Popular</div>
                     <div class="plan-name">Pro</div>
@@ -878,6 +961,8 @@
                     </ul>
                     <a href="#" class="btn-plan">Go Pro</a>
                 </div>
+
+                <!-- Pro+ -->
                 <div class="pricing-card">
                     <div class="plan-name">🚀 Pro+</div>
                     <div class="price">$19 <small>/mo</small></div>
@@ -904,8 +989,14 @@
                         <small>IELTSProva · TOEFLProva · SATProva · GREProva</small>
                     </div>
                     <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.7;">
-                        📧 provatech@gmail.com
+                        📧 <a href="mailto:provatech@gmail.com" style="color:rgba(255,255,255,0.7);">provatech@gmail.com</a>
                     </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
                 <div>
                     <h4>Product</h4>
@@ -931,6 +1022,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SCROLL TO TOP BUTTON ===== -->
+    <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <!-- ===== AUTH MODAL ===== -->
     <div class="modal-overlay" id="authModal">
@@ -964,7 +1060,7 @@
 
     <script>
         // ============================================================
-        // 🔥 FIREBASE CONFIG — YOUR CREDENTIALS
+        // 🔥 FIREBASE CONFIG
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -990,12 +1086,23 @@
             navLinks.classList.toggle('open');
         });
 
-        // Close menu when a link is clicked
         document.querySelectorAll('.nav-links a, .nav-links button').forEach(item => {
             item.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
             });
+        });
+
+        // ============================================================
+        // SCROLL TO TOP BUTTON
+        // ============================================================
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
         });
 
         // ============================================================
@@ -1005,8 +1112,8 @@
             if (user) {
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userGreeting').style.display = 'inline-flex';
-                document.getElementById('greetingText').textContent = `👋 Hi, ${user.displayName || 'Student'}`;
-                
+                document.getElementById('greetingText').innerHTML = `<i class="fas fa-user-circle"></i> Hi, ${user.displayName || 'Student'}`;
+
                 db.collection('users').doc(user.uid).set({
                     name: user.displayName || 'Student',
                     email: user.email,
