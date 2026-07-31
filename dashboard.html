@@ -6,6 +6,12 @@
     <title>Dashboard — IELTSProva</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -16,8 +22,8 @@
             font-family: 'Inter', sans-serif;
             background: #f5f0ff;
             color: #1a0a2e;
-            line-height: 1.6;
             padding: 2rem;
+            line-height: 1.6;
         }
         .container {
             max-width: 1100px;
@@ -58,6 +64,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
+            font-size: 1.2rem;
         }
         .dashboard-header .user-info .plan-badge {
             background: #FFD700;
@@ -67,8 +74,20 @@
             font-size: 0.7rem;
             font-weight: 700;
         }
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #7B6A8A;
+        }
+        .loading-spinner i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4A148C;
+        }
 
-        /* ===== STATS ROW ===== */
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -102,7 +121,7 @@
             margin-bottom: 0.3rem;
         }
 
-        /* ===== PROGRESS SECTION ===== */
+        /* ===== PROGRESS ===== */
         .progress-section {
             background: white;
             border-radius: 24px;
@@ -141,7 +160,7 @@
             background: linear-gradient(90deg, #FFD700, #f5c500);
         }
 
-        /* ===== TEST HISTORY ===== */
+        /* ===== HISTORY ===== */
         .history-section {
             background: white;
             border-radius: 24px;
@@ -182,9 +201,18 @@
             background: #fff8e1;
             color: #f57f17;
         }
+        .history-item .test-score.low {
+            background: #fce4ec;
+            color: #c62828;
+        }
         .history-item .test-date {
             color: #7B6A8A;
             font-size: 0.85rem;
+        }
+        .no-history {
+            color: #7B6A8A;
+            text-align: center;
+            padding: 1.5rem;
         }
 
         .back-link {
@@ -211,6 +239,10 @@
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
             }
+            .history-item {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -220,108 +252,267 @@
     <!-- HEADER -->
     <div class="dashboard-header">
         <h1>📊 My <span>Dashboard</span></h1>
-        <div class="user-info">
-            <div class="avatar">👤</div>
+        <div class="user-info" id="userInfo">
+            <div class="avatar" id="userAvatar">👤</div>
             <div>
-                <strong>Student</strong>
-                <span class="plan-badge">Free Plan</span>
+                <strong id="userName">Student</strong>
+                <span class="plan-badge" id="userPlan">Free Plan</span>
             </div>
         </div>
     </div>
 
-    <!-- STATS -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <span class="stat-icon">📝</span>
-            <div class="stat-number">3</div>
-            <div class="stat-label">Tests Completed</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-icon">📊</span>
-            <div class="stat-number">72%</div>
-            <div class="stat-label">Average Score</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-icon">🔥</span>
-            <div class="stat-number">5</div>
-            <div class="stat-label">Day Streak</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-icon">⏱️</span>
-            <div class="stat-number">2.5h</div>
-            <div class="stat-label">Total Practice</div>
-        </div>
+    <!-- LOADING -->
+    <div id="loadingMessage" class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading your progress...
     </div>
 
-    <!-- PROGRESS BARS -->
-    <div class="progress-section">
-        <h2>📈 Your Progress</h2>
-        <div class="progress-item">
-            <div class="progress-label">
-                <span>Reading</span>
-                <span>6 / 10</span>
-            </div>
-            <div class="progress-bar">
-                <div class="fill" style="width: 60%;"></div>
-            </div>
-        </div>
-        <div class="progress-item">
-            <div class="progress-label">
-                <span>Listening</span>
-                <span>4 / 10</span>
-            </div>
-            <div class="progress-bar">
-                <div class="fill" style="width: 40%;"></div>
-            </div>
-        </div>
-        <div class="progress-item">
-            <div class="progress-label">
-                <span>Writing</span>
-                <span>2 / 10</span>
-            </div>
-            <div class="progress-bar">
-                <div class="fill gold" style="width: 20%;"></div>
-            </div>
-        </div>
-        <div class="progress-item">
-            <div class="progress-label">
-                <span>Speaking</span>
-                <span>1 / 10</span>
-            </div>
-            <div class="progress-bar">
-                <div class="fill gold" style="width: 10%;"></div>
-            </div>
-        </div>
-    </div>
+    <!-- DASHBOARD CONTENT (hidden until loaded) -->
+    <div id="dashboardContent" style="display:none;">
 
-    <!-- TEST HISTORY -->
-    <div class="history-section">
-        <h2>📋 Test History</h2>
-        <div class="history-item">
-            <div>
-                <div class="test-name">Reading Practice #3</div>
-                <div class="test-date">Today, 2:30 PM</div>
+        <!-- STATS -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <span class="stat-icon">📝</span>
+                <div class="stat-number" id="totalTests">0</div>
+                <div class="stat-label">Tests Completed</div>
             </div>
-            <span class="test-score high">8 / 10</span>
-        </div>
-        <div class="history-item">
-            <div>
-                <div class="test-name">Reading Practice #2</div>
-                <div class="test-date">Yesterday, 4:15 PM</div>
+            <div class="stat-card">
+                <span class="stat-icon">📊</span>
+                <div class="stat-number" id="avgScore">0%</div>
+                <div class="stat-label">Average Score</div>
             </div>
-            <span class="test-score high">7 / 10</span>
-        </div>
-        <div class="history-item">
-            <div>
-                <div class="test-name">Reading Practice #1</div>
-                <div class="test-date">2 days ago, 10:00 AM</div>
+            <div class="stat-card">
+                <span class="stat-icon">🔥</span>
+                <div class="stat-number" id="streak">0</div>
+                <div class="stat-label">Day Streak</div>
             </div>
-            <span class="test-score medium">6 / 10</span>
+            <div class="stat-card">
+                <span class="stat-icon">⏱️</span>
+                <div class="stat-number" id="totalTime">0h</div>
+                <div class="stat-label">Total Practice</div>
+            </div>
         </div>
+
+        <!-- PROGRESS BARS -->
+        <div class="progress-section">
+            <h2>📈 Your Progress</h2>
+            <div id="progressBars">
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Reading</span>
+                        <span id="readingScore">0 / 10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="fill" id="readingFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Listening</span>
+                        <span id="listeningScore">0 / 10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="fill" id="listeningFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Writing</span>
+                        <span id="writingScore">0 / 10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="fill gold" id="writingFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Speaking</span>
+                        <span id="speakingScore">0 / 10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="fill gold" id="speakingFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEST HISTORY -->
+        <div class="history-section">
+            <h2>📋 Test History</h2>
+            <div id="historyList">
+                <div class="no-history">No test attempts yet. Take your first test!</div>
+            </div>
+        </div>
+
     </div>
 
     <a href="index.html" class="back-link">← Back to Home</a>
 </div>
 
+<script>
+    // ============================================================
+    // 🔥 FIREBASE CONFIG — YOUR CREDENTIALS
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // LOAD DASHBOARD DATA
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            // Not logged in — redirect to homepage
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // Show user info
+        document.getElementById('userName').textContent = user.displayName || 'Student';
+        document.getElementById('userAvatar').textContent = (user.displayName || 'S')[0].toUpperCase();
+
+        // Load user data from Firestore
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                document.getElementById('userPlan').textContent = data.plan === 'pro' ? '⭐ Pro Plan' : 'Free Plan';
+            }
+        } catch (e) {
+            console.log('User doc not found yet');
+        }
+
+        // Load test scores
+        try {
+            const scoresSnapshot = await db.collection('scores')
+                .where('userId', '==', user.uid)
+                .orderBy('date', 'desc')
+                .get();
+
+            const scores = [];
+            scoresSnapshot.forEach(doc => {
+                scores.push(doc.data());
+            });
+
+            // Hide loading, show dashboard
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+
+            // Update stats
+            updateStats(scores);
+            updateProgress(scores);
+            updateHistory(scores);
+
+        } catch (error) {
+            console.error('Error loading scores:', error);
+            document.getElementById('loadingMessage').innerHTML = `
+                <i class="fas fa-exclamation-circle" style="color:#e53935;"></i>
+                Error loading data. Please refresh.
+            `;
+        }
+    });
+
+    // ============================================================
+    // UPDATE STATS
+    // ============================================================
+    function updateStats(scores) {
+        const total = scores.length;
+        document.getElementById('totalTests').textContent = total;
+
+        if (total > 0) {
+            const avg = scores.reduce((sum, s) => sum + s.score, 0) / total;
+            const avgPercent = Math.round((avg / 10) * 100);
+            document.getElementById('avgScore').textContent = `${avgPercent}%`;
+        } else {
+            document.getElementById('avgScore').textContent = '—';
+        }
+
+        // Streak (simplified — counts days with at least one test)
+        if (total > 0) {
+            // Placeholder — we'll implement real streak later
+            document.getElementById('streak').textContent = '1';
+        } else {
+            document.getElementById('streak').textContent = '0';
+        }
+
+        // Total time (placeholder)
+        document.getElementById('totalTime').textContent = `${total * 15}m`;
+    }
+
+    // ============================================================
+    // UPDATE PROGRESS BARS
+    // ============================================================
+    function updateProgress(scores) {
+        // Filter by module
+        const reading = scores.filter(s => s.module === 'reading');
+        const listening = scores.filter(s => s.module === 'listening');
+        const writing = scores.filter(s => s.module === 'writing');
+        const speaking = scores.filter(s => s.module === 'speaking');
+
+        // Get best score for each module
+        const best = (arr) => {
+            if (arr.length === 0) return { score: 0, total: 10 };
+            const max = Math.max(...arr.map(s => s.score));
+            return { score: max, total: 10 };
+        };
+
+        const r = best(reading);
+        const l = best(listening);
+        const w = best(writing);
+        const s = best(speaking);
+
+        document.getElementById('readingScore').textContent = `${r.score} / ${r.total}`;
+        document.getElementById('readingFill').style.width = `${(r.score / r.total) * 100}%`;
+
+        document.getElementById('listeningScore').textContent = `${l.score} / ${l.total}`;
+        document.getElementById('listeningFill').style.width = `${(l.score / l.total) * 100}%`;
+
+        document.getElementById('writingScore').textContent = `${w.score} / ${w.total}`;
+        document.getElementById('writingFill').style.width = `${(w.score / w.total) * 100}%`;
+
+        document.getElementById('speakingScore').textContent = `${s.score} / ${s.total}`;
+        document.getElementById('speakingFill').style.width = `${(s.score / s.total) * 100}%`;
+    }
+
+    // ============================================================
+    // UPDATE HISTORY
+    // ============================================================
+    function updateHistory(scores) {
+        const container = document.getElementById('historyList');
+
+        if (scores.length === 0) {
+            container.innerHTML = '<div class="no-history">No test attempts yet. Take your first test!</div>';
+            return;
+        }
+
+        let html = '';
+        scores.slice(0, 10).forEach(s => {
+            const scoreClass = s.score >= 8 ? 'high' : s.score >= 6 ? 'medium' : 'low';
+            const date = s.date ? new Date(s.date.seconds * 1000).toLocaleDateString() : 'Recent';
+            html += `
+                <div class="history-item">
+                    <div>
+                        <div class="test-name">${s.module.charAt(0).toUpperCase() + s.module.slice(1)} Practice Test</div>
+                        <div class="test-date">${date}</div>
+                    </div>
+                    <span class="test-score ${scoreClass}">${s.score} / 10</span>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+</script>
+
 </body>
-  </html>
+                                                                                       </html>
