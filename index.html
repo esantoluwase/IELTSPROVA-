@@ -6,8 +6,13 @@
     <title>IELTSProva — Prova Technologies</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
-        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -44,6 +49,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         .logo {
             font-size: 1.6rem;
@@ -64,7 +71,8 @@
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
         .nav-links a {
             color: #2A004F;
@@ -83,6 +91,9 @@
             font-weight: 700;
             transition: 0.3s;
             box-shadow: 0 4px 15px rgba(74, 20, 140, 0.3);
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
         .nav-cta:hover {
             transform: translateY(-2px);
@@ -97,10 +108,16 @@
             border-radius: 50px;
             font-weight: 700;
             transition: 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
         .nav-cta-outline:hover {
             background: #4A148C;
             color: white !important;
+        }
+        .user-greeting {
+            font-weight: 600;
+            color: #4A148C;
         }
 
         /* ===== HERO ===== */
@@ -163,6 +180,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            border: none;
+            cursor: pointer;
         }
         .btn-primary:hover {
             transform: translateY(-3px);
@@ -179,6 +198,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            border: none;
+            cursor: pointer;
         }
         .btn-secondary:hover {
             transform: translateY(-3px);
@@ -231,7 +252,140 @@
             font-size: 0.95rem;
         }
 
-        /* ===== FEATURES / TEST CARDS ===== */
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 32px;
+            padding: 2.5rem;
+            max-width: 440px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            background: none;
+            border: none;
+        }
+        .modal-close:hover {
+            color: #4A148C;
+        }
+        .modal h2 {
+            font-size: 1.8rem;
+            color: #4A148C;
+            margin-bottom: 0.5rem;
+        }
+        .modal .subtitle {
+            color: #7B6A8A;
+            margin-bottom: 1.5rem;
+        }
+        .modal .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .modal .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #1a0a2e;
+        }
+        .modal .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .modal .form-group input:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .modal .btn-auth {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .modal .btn-auth:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .modal .btn-auth:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .modal .switch-auth {
+            text-align: center;
+            margin-top: 1.2rem;
+            color: #7B6A8A;
+        }
+        .modal .switch-auth a {
+            color: #4A148C;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .modal .switch-auth a:hover {
+            text-decoration: underline;
+        }
+        .modal .error-msg {
+            color: #e53935;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .modal .error-msg.show {
+            display: block;
+        }
+        .modal .success-msg {
+            color: #2e7d32;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .modal .success-msg.show {
+            display: block;
+        }
+
+        /* ===== FEATURES ===== */
         .features {
             padding: 4rem 0;
             background: white;
@@ -269,8 +423,6 @@
             text-align: center;
             border: 1px solid #f0e8f5;
             transition: 0.4s;
-            position: relative;
-            overflow: hidden;
         }
         .feature-card:hover {
             transform: translateY(-10px);
@@ -328,7 +480,6 @@
             text-align: center;
             border: 2px solid #f0e8f5;
             transition: 0.4s;
-            position: relative;
         }
         .pricing-card:hover {
             border-color: #7B1FA2;
@@ -481,7 +632,7 @@
         }
         @media (max-width: 600px) {
             .nav-links {
-                gap: 1rem;
+                gap: 0.8rem;
             }
             .nav-links a {
                 font-size: 0.8rem;
@@ -499,6 +650,9 @@
             .features-grid {
                 grid-template-columns: 1fr;
             }
+            .modal {
+                padding: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -514,8 +668,15 @@
             <div class="nav-links">
                 <a href="#features">Tests</a>
                 <a href="#pricing">Pricing</a>
-                <a href="dashboard.html" class="nav-cta-outline"><i class="fas fa-user"></i> Dashboard</a>
-                <a href="reading-test.html" class="nav-cta"><i class="fas fa-play"></i> Free Test</a>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <span id="authButtons">
+                    <button class="nav-cta-outline" onclick="openModal('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
+                </span>
+                <span id="userGreeting" style="display:none;">
+                    <span class="user-greeting" id="greetingText">👋 Hi, User</span>
+                    <button class="nav-cta-outline" onclick="logoutUser()" style="padding:0.4rem 1.2rem; font-size:0.8rem;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </span>
             </div>
         </div>
     </nav>
@@ -601,7 +762,6 @@
                 <p>Start for free, upgrade when you're ready.</p>
             </div>
             <div class="pricing-grid">
-                <!-- Free -->
                 <div class="pricing-card">
                     <div class="plan-name">Free</div>
                     <div class="price">$0 <small>/mo</small></div>
@@ -613,8 +773,6 @@
                     </ul>
                     <a href="reading-test.html" class="btn-plan">Start Free</a>
                 </div>
-
-                <!-- Pro -->
                 <div class="pricing-card popular">
                     <div class="popular-badge">⭐ Most Popular</div>
                     <div class="plan-name">Pro</div>
@@ -628,8 +786,6 @@
                     </ul>
                     <a href="#" class="btn-plan">Go Pro</a>
                 </div>
-
-                <!-- Pro+ -->
                 <div class="pricing-card">
                     <div class="plan-name">🚀 Pro+</div>
                     <div class="price">$19 <small>/mo</small></div>
@@ -683,6 +839,194 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== AUTH MODAL ===== -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle">Welcome Back</h2>
+            <p class="subtitle" id="modalSubtitle">Log in to continue your IELTS journey.</p>
+            <div class="error-msg" id="errorMsg"></div>
+            <div class="success-msg" id="successMsg"></div>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display:none;">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name" />
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" />
+                </div>
+                <button type="submit" class="btn-auth" id="authBtn">Continue</button>
+            </form>
+            <div class="switch-auth">
+                <span id="switchText">Don't have an account?</span>
+                <a id="switchLink" onclick="toggleAuthMode()">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 🔥 FIREBASE CONFIG — YOUR CREDENTIALS
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+            authDomain: "ieltsprova.firebaseapp.com",
+            projectId: "ieltsprova",
+            storageBucket: "ieltsprova.firebasestorage.app",
+            messagingSenderId: "812300970124",
+            appId: "1:812300970124:web:992398c08c151ae97df3a9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ============================================================
+        // AUTH STATE — Check if user is logged in
+        // ============================================================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is logged in
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userGreeting').style.display = 'inline-flex';
+                document.getElementById('greetingText').textContent = `👋 Hi, ${user.displayName || 'Student'}`;
+                
+                // Save user data to Firestore (if not exists)
+                db.collection('users').doc(user.uid).set({
+                    name: user.displayName || 'Student',
+                    email: user.email,
+                    plan: 'free',
+                    createdAt: new Date()
+                }, { merge: true });
+            } else {
+                // User is logged out
+                document.getElementById('authButtons').style.display = 'inline-flex';
+                document.getElementById('userGreeting').style.display = 'none';
+            }
+        });
+
+        // ============================================================
+        // MODAL CONTROLS
+        // ============================================================
+        let currentMode = 'login'; // 'login' or 'signup'
+
+        function openModal(mode) {
+            currentMode = mode;
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const btn = document.getElementById('authBtn');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+            const nameGroup = document.getElementById('nameGroup');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            document.getElementById('authForm').reset();
+
+            if (mode === 'login') {
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Log in to continue your IELTS journey.';
+                btn.textContent = 'Log In';
+                switchText.textContent = "Don't have an account?";
+                switchLink.textContent = 'Sign Up';
+                nameGroup.style.display = 'none';
+            } else {
+                title.textContent = 'Create Your Account';
+                subtitle.textContent = 'Start your IELTS journey today — it\'s free!';
+                btn.textContent = 'Sign Up';
+                switchText.textContent = "Already have an account?";
+                switchLink.textContent = 'Log In';
+                nameGroup.style.display = 'block';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            closeModal();
+            setTimeout(() => {
+                openModal(currentMode === 'login' ? 'signup' : 'login');
+            }, 300);
+        }
+
+        // ============================================================
+        // HANDLE AUTH (Login / Signup)
+        // ============================================================
+        async function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const fullName = document.getElementById('fullName').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const btn = document.getElementById('authBtn');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
+            try {
+                if (currentMode === 'login') {
+                    // LOGIN
+                    await auth.signInWithEmailAndPassword(email, password);
+                    successMsg.textContent = '✅ Logged in successfully!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => {
+                        closeModal();
+                        location.reload();
+                    }, 1500);
+                } else {
+                    // SIGNUP
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    await userCredential.user.updateProfile({
+                        displayName: fullName || 'Student'
+                    });
+                    successMsg.textContent = '✅ Account created! Welcome to IELTSProva!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => {
+                        closeModal();
+                        location.reload();
+                    }, 1500);
+                }
+            } catch (error) {
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = currentMode === 'login' ? 'Log In' : 'Sign Up';
+            }
+        }
+
+        // ============================================================
+        // LOGOUT
+        // ============================================================
+        function logoutUser() {
+            auth.signOut().then(() => {
+                location.reload();
+            });
+        }
+
+        // ============================================================
+        // CLOSE MODAL ON OUTSIDE CLICK
+        // ============================================================
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
 
 </body>
     </html>
