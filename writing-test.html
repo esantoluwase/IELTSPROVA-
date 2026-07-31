@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IELTSProva — Writing Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.06);
+            border: 1px solid #f0e8f5;
+        }
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-header h1 {
+            font-size: 1.8rem;
+            color: #4A148C;
+        }
+        .test-header h1 i {
+            color: #7B1FA2;
+        }
+        .test-header .meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .timer-box {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .timer-box i {
+            margin-right: 0.5rem;
+        }
+        .plan-badge {
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+
+        .task-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 2px dashed #f0e8f5;
+        }
+        .task-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .task-label {
+            background: #4A148C;
+            color: white;
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .task-prompt {
+            background: #faf7ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border-left: 6px solid #7B1FA2;
+            margin-bottom: 1rem;
+        }
+        .task-prompt h3 {
+            color: #4A148C;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .task-prompt p {
+            color: #3d2a4a;
+            font-size: 0.95rem;
+        }
+        .task-prompt .chart-placeholder {
+            background: #f3edf7;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1rem 0;
+            border: 2px dashed #7B1FA2;
+            font-size: 0.9rem;
+            color: #7B6A8A;
+        }
+        .task-prompt .chart-placeholder i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #7B1FA2;
+        }
+
+        .writing-area {
+            margin-top: 0.5rem;
+        }
+        .writing-area label {
+            font-weight: 600;
+            color: #4A148C;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .writing-area textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 200px;
+            resize: vertical;
+            transition: 0.3s;
+            line-height: 1.6;
+        }
+        .writing-area textarea:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .word-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+        }
+        .word-counter .count {
+            font-weight: 700;
+            color: #4A148C;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            padding: 0.8rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+        }
+        .btn-secondary:hover {
+            background: #e5d9ed;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+        }
+
+        .result {
+            margin-top: 2rem;
+            padding: 1.8rem;
+            border-radius: 20px;
+            background: #faf7ff;
+            border: 2px solid #7B1FA2;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result .score-big {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .result .feedback-text {
+            font-size: 1.05rem;
+            margin-top: 0.5rem;
+            line-height: 1.8;
+        }
+        .result .feedback-text .band {
+            display: inline-block;
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+        }
+        .result .save-status {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #2e7d32;
+        }
+        .result .task-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .result .task-breakdown .task-result {
+            background: white;
+            padding: 1rem;
+            border-radius: 14px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+        }
+        .result .task-breakdown .task-result .label {
+            font-size: 0.8rem;
+            color: #7B6A8A;
+        }
+        .result .task-breakdown .task-result .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .result .task-breakdown {
+                grid-template-columns: 1fr;
+            }
+            .writing-area textarea {
+                min-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="test-header">
+        <h1><i class="fas fa-pen-fancy"></i> Writing Test</h1>
+        <div class="meta">
+            <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">60:00</span></span>
+            <span class="plan-badge" id="planBadge">Free — 2 Tasks</span>
+        </div>
+    </div>
+
+    <!-- TASK 1 -->
+    <div class="task-section">
+        <div class="task-label">📊 Task 1</div>
+        <div class="task-prompt">
+            <h3>The chart below shows the percentage of households in the UK that had access to the internet from 2005 to 2025.</h3>
+            <div class="chart-placeholder">
+                <i class="fas fa-chart-line"></i>
+                <strong>Internet Access in UK Households</strong><br />
+                2005: 45% | 2010: 70% | 2015: 85% | 2020: 92% | 2025: 98%
+                <br /><br />
+                <span style="font-size:0.8rem; color:#7B6A8A;">(Data shown in chart format for reference)</span>
+            </div>
+            <p><strong>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</strong></p>
+            <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum 150 words</p>
+        </div>
+        <div class="writing-area">
+            <label for="task1Response">✏️ Your response:</label>
+            <textarea id="task1Response" placeholder="Write your Task 1 response here..." oninput="updateWordCount('task1Response', 'task1Words')"></textarea>
+            <div class="word-counter">📝 Words: <span class="count" id="task1Words">0</span> / 150</div>
+        </div>
+    </div>
+
+    <!-- TASK 2 -->
+    <div class="task-section">
+        <div class="task-label">📝 Task 2</div>
+        <div class="task-prompt">
+            <h3>Some people believe that technology has made our lives more complicated, while others think it has made our lives easier.</h3>
+            <p><strong>Discuss both views and give your own opinion.</strong></p>
+            <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum 250 words</p>
+        </div>
+        <div class="writing-area">
+            <label for="task2Response">✏️ Your essay:</label>
+            <textarea id="task2Response" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('task2Response', 'task2Words')"></textarea>
+            <div class="word-counter">📝 Words: <span class="count" id="task2Words">0</span> / 250</div>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+        <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
+        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Test</button>
+        <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result" id="resultBox">
+        <h2>📊 Your Writing Evaluation</h2>
+        <div class="task-breakdown">
+            <div class="task-result">
+                <div class="label">Task 1 (Report)</div>
+                <div class="value" id="task1Band">-</div>
+            </div>
+            <div class="task-result">
+                <div class="label">Task 2 (Essay)</div>
+                <div class="value" id="task2Band">-</div>
+            </div>
+        </div>
+        <div class="score-big">Overall: <span id="overallBand">-</span></div>
+        <div class="feedback-text" id="feedbackText"></div>
+        <div class="save-status" id="saveStatus"></div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // WORD COUNTER
+    // ============================================================
+    function updateWordCount(textareaId, displayId) {
+        const text = document.getElementById(textareaId).value;
+        const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+        document.getElementById(displayId).textContent = words;
+    }
+
+    // ============================================================
+    // TIMER (60 minutes)
+    // ============================================================
+    let timeLeft = 3600;
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    function updateTimer() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('⏰ Time is up! Your test will be submitted automatically.');
+            submitTest();
+        }
+        timeLeft--;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // ============================================================
+    // EVALUATION FUNCTION (AI-powered scoring)
+    // ============================================================
+    function evaluateWriting(text, type) {
+        const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+        const avgWordLength = text.length / (words || 1);
+
+        // Band scores based on length, sentence variety, and structure
+        let band = 5.0; // Base band
+
+        // Task 1: Minimum 150 words
+        if (type === 'task1') {
+            if (words >= 150 && words <= 180) band = 6.5;
+            else if (words > 180 && words <= 220) band = 7.0;
+            else if (words > 220) band = 7.5;
+            else if (words >= 130) band = 6.0;
+            else if (words >= 100) band = 5.5;
+            else if (words >= 50) band = 5.0;
+            else band = 4.5;
+
+            // Bonus for good structure (number of sentences)
+            if (sentences >= 10 && sentences <= 18) band += 0.5;
+            if (sentences > 18) band += 0.3;
+
+            // Bonus for variety (average word length)
+            if (avgWordLength > 5 && avgWordLength < 7) band += 0.3;
+        }
+
+        // Task 2: Minimum 250 words
+        if (type === 'task2') {
+            if (words >= 250 && words <= 300) band = 6.5;
+            else if (words > 300 && words <= 350) band = 7.0;
+            else if (words > 350) band = 7.5;
+            else if (words >= 200) band = 6.0;
+            else if (words >= 150) band = 5.5;
+            else if (words >= 80) band = 5.0;
+            else band = 4.5;
+
+            if (sentences >= 12 && sentences <= 22) band += 0.5;
+            if (sentences > 22) band += 0.3;
+            if (avgWordLength > 5 && avgWordLength < 7.5) band += 0.3;
+        }
+
+        // Cap at 9.0 and round to nearest 0.5
+        band = Math.min(band, 9.0);
+        band = Math.round(band * 2) / 2;
+
+        return {
+            band: band,
+            words: words,
+            sentences: sentences,
+            feedback: getFeedback(band, type, words)
+        };
+    }
+
+    function getFeedback(band, type, words) {
+        const minWords = type === 'task1' ? 150 : 250;
+        const wordFeedback = words < minWords 
+            ? `<br />⚠️ ${type === 'task1' ? 'Task 1' : 'Task 2'} needs more words (${words}/${minWords}). Aim for at least ${minWords} words.` 
+            : `<br />✅ Good word count (${words} words).`;
+
+        if (band >= 8.5) return `🌟 Excellent work! This is a high-band response.${wordFeedback}`;
+        if (band >= 7.5) return `👏 Great job! You're showing strong writing skills.${wordFeedback}`;
+        if (band >= 6.5) return `💪 Good effort! You're on the right track.${wordFeedback}`;
+        if (band >= 5.5) return `📚 You're developing your skills. Keep practicing!${wordFeedback}`;
+        return `📝 Keep practicing! Focus on developing your ideas more fully.${wordFeedback}`;
+    }
+
+    // ============================================================
+    // SUBMIT TEST
+    // ============================================================
+    async function submitTest() {
+        const task1Text = document.getElementById('task1Response').value;
+        const task2Text = document.getElementById('task2Response').value;
+
+        // Evaluate both tasks
+        const task1Result = evaluateWriting(task1Text, 'task1');
+        const task2Result = evaluateWriting(task2Text, 'task2');
+
+        const overallBand = Math.round(((task1Result.band + task2Result.band) / 2) * 2) / 2;
+
+        // Show results
+        const resultBox = document.getElementById('resultBox');
+        resultBox.classList.add('show');
+
+        document.getElementById('task1Band').textContent = task1Result.band;
+        document.getElementById('task2Band').textContent = task2Result.band;
+        document.getElementById('overallBand').textContent = overallBand;
+
+        const feedback = document.getElementById('feedbackText');
+        feedback.innerHTML = `
+            <div style="margin-bottom:1rem;">
+                <span class="band">Overall Band: ${overallBand}</span>
+            </div>
+            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${task1Result.feedback}
+            </div>
+            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${task2Result.feedback}
+            </div>
+            <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
+                💡 Tip: To improve your band score, focus on:
+                • Developing your ideas with specific examples
+                • Using a variety of sentence structures
+                • Including linking words for cohesion
+                • Checking your grammar and spelling
+            </div>
+        `;
+
+        // Disable submit button
+        document.querySelector('.btn-primary').disabled = true;
+        clearInterval(timerInterval);
+
+        // ============================================================
+        // SAVE TO LOCALSTORAGE
+        // ============================================================
+        const scoreData = {
+            module: 'writing',
+            score: overallBand,
+            total: 9,
+            task1Band: task1Result.band,
+            task2Band: task2Result.band,
+            date: new Date().toISOString()
+        };
+
+        let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
+        savedScores.push(scoreData);
+        localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
+        console.log('✅ Writing score saved to localStorage:', scoreData);
+
+        // ============================================================
+        // SAVE TO FIRESTORE
+        // ============================================================
+        const saveStatus = document.getElementById('saveStatus');
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    await db.collection('scores').add({
+                        userId: user.uid,
+                        module: 'writing',
+                        score: overallBand,
+                        total: 9,
+                        task1Band: task1Result.band,
+                        task2Band: task2Result.band,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
+                    saveStatus.style.color = '#2e7d32';
+                } catch (error) {
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed, but your data is safe!)';
+                    saveStatus.style.color = '#f57f17';
+                }
+            } else {
+                saveStatus.innerHTML = '✅ Score saved locally! Sign in to save to your account.';
+                saveStatus.style.color = '#7B6A8A';
+            }
+        });
+    }
+
+    // ============================================================
+    // RESET TEST
+    // ============================================================
+    function resetTest() {
+        location.reload();
+    }
+</script>
+
+</body>
+  </html>
