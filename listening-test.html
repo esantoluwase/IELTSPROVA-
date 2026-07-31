@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -115,6 +114,13 @@
         }
         .audio-player .audio-status i {
             margin-right: 0.3rem;
+        }
+        .audio-player .volume-control {
+            margin-top: 0.5rem;
+        }
+        .audio-player .volume-control input {
+            width: 150px;
+            accent-color: #7B1FA2;
         }
         .progress-indicator {
             background: #f3edf7;
@@ -282,7 +288,6 @@
 
 <div class="container">
 
-    <!-- HEADER -->
     <div class="test-header">
         <h1><i class="fas fa-headphones"></i> Listening Test</h1>
         <div class="meta">
@@ -291,35 +296,35 @@
         </div>
     </div>
 
-    <!-- AUDIO PLAYER -->
+    <!-- AUDIO PLAYER WITH TEXT-TO-SPEECH -->
     <div class="audio-player">
         <button class="play-btn" id="playAudioBtn"><i class="fas fa-play"></i> Play Audio</button>
-        <div class="audio-status">
+        <div class="audio-status" id="audioStatus">
             <i class="fas fa-info-circle"></i> 
-            <span id="audioStatusText">Click play to hear the recording. You will only hear it once.</span>
+            <span>Click play to hear the recording. You will only hear it once.</span>
+        </div>
+        <div class="volume-control">
+            <i class="fas fa-volume-down"></i>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" />
+            <i class="fas fa-volume-up"></i>
         </div>
     </div>
 
-    <!-- PROGRESS -->
     <div class="progress-indicator">
         <span id="progressText">Question 0 of 10</span>
         <div class="bar"><div class="fill" id="progressFill"></div></div>
     </div>
 
-    <!-- SECTION LABEL -->
     <div class="section-label" id="sectionLabel">Section 1: Conversation</div>
 
-    <!-- QUESTIONS -->
     <form id="testForm"></form>
 
-    <!-- ACTIONS -->
     <div class="actions">
         <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
         <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Test</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
-    <!-- RESULT -->
     <div class="result" id="resultBox">
         <h2>📊 Your Score</h2>
         <div class="score-big"><span id="scoreDisplay">0</span> / <span id="totalQuestions">10</span></div>
@@ -332,7 +337,7 @@
 
 <script>
     // ============================================================
-    // 🔥 FIREBASE CONFIG
+    // FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -348,10 +353,9 @@
     const db = firebase.firestore();
 
     // ============================================================
-    // LISTENING QUESTION BANK — 60+ Original Questions
+    // LISTENING QUESTION BANK
     // ============================================================
     const listeningQuestions = [
-        // SECTION 1: Conversation — Student & Advisor (10 questions)
         { id: 1, section: 1, text: "What course does the student want to register for?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "A" },
         { id: 2, section: 1, text: "What is the student's student ID number?", options: ["2025-4789", "2025-4788", "2024-4789", "2025-4790"], answer: "A" },
         { id: 3, section: 1, text: "What days does the course meet?", options: ["Mondays and Wednesdays", "Tuesdays and Thursdays", "Mondays and Fridays", "Wednesdays and Fridays"], answer: "A" },
@@ -362,8 +366,6 @@
         { id: 8, section: 1, text: "The advisor checks the student's...", options: ["Grades", "Student ID", "Eligibility", "Schedule"], answer: "C" },
         { id: 9, section: 1, text: "How does the student feel about the course schedule?", options: ["Disappointed", "Confused", "Happy", "Indifferent"], answer: "C" },
         { id: 10, section: 1, text: "What is the main purpose of this conversation?", options: ["To register for a course", "To change a course", "To ask about grades", "To cancel a registration"], answer: "A" },
-
-        // SECTION 2: Monologue — Museum Tour (10 questions)
         { id: 11, section: 2, text: "What is the name of the museum?", options: ["City Museum", "Natural History Museum", "Art Gallery", "Science Museum"], answer: "B" },
         { id: 12, section: 2, text: "What time does the museum open?", options: ["9 AM", "10 AM", "11 AM", "12 PM"], answer: "B" },
         { id: 13, section: 2, text: "What is the admission fee for adults?", options: ["$5", "$10", "$15", "$20"], answer: "B" },
@@ -374,8 +376,6 @@
         { id: 18, section: 2, text: "Where is the museum located?", options: ["Near the train station", "In the city center", "On the university campus", "By the river"], answer: "B" },
         { id: 19, section: 2, text: "What facilities does the museum have?", options: ["A cafe", "A gift shop", "A library", "All of the above"], answer: "D" },
         { id: 20, section: 2, text: "What is the speaker's main purpose?", options: ["To promote the museum", "To explain the museum's history", "To give a tour", "To announce a new exhibit"], answer: "A" },
-
-        // SECTION 3: Academic Discussion — Group Project (10 questions)
         { id: 21, section: 3, text: "What is the topic of the group project?", options: ["Climate Change", "Renewable Energy", "Ocean Pollution", "Urban Planning"], answer: "A" },
         { id: 22, section: 3, text: "How many students are in the group?", options: ["2", "3", "4", "5"], answer: "B" },
         { id: 23, section: 3, text: "What is the deadline for the project?", options: ["Next week", "In two weeks", "Next month", "In three weeks"], answer: "B" },
@@ -386,8 +386,6 @@
         { id: 28, section: 3, text: "What challenge do they face?", options: ["Time management", "Research materials", "Group conflict", "Technical issues"], answer: "A" },
         { id: 29, section: 3, text: "What solution do they propose?", options: ["Meeting twice a week", "Using a shared calendar", "Dividing tasks clearly", "All of the above"], answer: "D" },
         { id: 30, section: 3, text: "What grade do they hope to achieve?", options: ["A", "B", "C", "D"], answer: "A" },
-
-        // SECTION 4: Lecture — Space Exploration (10 questions)
         { id: 31, section: 4, text: "What is the lecture about?", options: ["The history of space exploration", "The future of space travel", "Life on Mars", "Space technology"], answer: "A" },
         { id: 32, section: 4, text: "When was the first moon landing?", options: ["1965", "1969", "1972", "1980"], answer: "B" },
         { id: 33, section: 4, text: "What country was the first to launch a satellite?", options: ["USA", "Russia", "China", "France"], answer: "B" },
@@ -400,14 +398,8 @@
         { id: 40, section: 4, text: "What is the lecturer's main conclusion?", options: ["Space exploration is essential", "Space exploration is too expensive", "Space exploration is dangerous", "Space exploration is a waste of resources"], answer: "A" }
     ];
 
-    // ============================================================
-    // SETTINGS
-    // ============================================================
     const PLAN = 'free';
 
-    // ============================================================
-    // SHUFFLE & SELECT QUESTIONS
-    // ============================================================
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -420,17 +412,11 @@
     const limit = PLAN === 'free' ? 10 : listeningQuestions.length;
     const selected = shuffled.slice(0, limit);
 
-    // ============================================================
-    // ANSWER KEY
-    // ============================================================
     const answers = {};
     selected.forEach(q => {
         answers[`q${q.id}`] = q.answer;
     });
 
-    // ============================================================
-    // RENDER TEST
-    // ============================================================
     function renderTest() {
         const container = document.getElementById('testForm');
         const totalSpan = document.getElementById('totalQuestions');
@@ -476,9 +462,6 @@
 
     renderTest();
 
-    // ============================================================
-    // PROGRESS
-    // ============================================================
     function updateProgress() {
         const total = selected.length;
         let answered = 0;
@@ -491,7 +474,7 @@
     }
 
     // ============================================================
-    // TIMER (30 minutes for Listening)
+    // TIMER
     // ============================================================
     let timeLeft = 1800;
     const timerDisplay = document.getElementById('timerDisplay');
@@ -512,54 +495,99 @@
     updateTimer();
 
     // ============================================================
-    // AUDIO PLAYER (Simulated — No Script)
+    // TEXT-TO-SPEECH AUDIO
     // ============================================================
     let isPlaying = false;
-    const playBtn = document.getElementById('playAudioBtn');
-    const audioStatus = document.getElementById('audioStatusText');
+    let speechSynth = window.speechSynthesis;
+    let currentUtterance = null;
 
-    // Pre-defined audio messages for each section
-    const audioMessages = {
-        1: "🎧 Section 1: You will hear a conversation between a student and a university advisor. Listen carefully and answer questions 1 to 10.",
-        2: "🎧 Section 2: You will hear a museum guide giving a tour. Listen carefully and answer questions 11 to 20.",
-        3: "🎧 Section 3: You will hear a group of students discussing a project. Listen carefully and answer questions 21 to 30.",
-        4: "🎧 Section 4: You will hear a lecture about space exploration. Listen carefully and answer questions 31 to 40."
+    // Audio scripts for each section
+    const audioScripts = {
+        1: "Section 1. You will hear a conversation between a student and a university advisor. Student says: Hello, I'd like to register for the English Literature course. Advisor says: Certainly. Have you completed the prerequisite course? Student says: Yes, I completed Introduction to Literature last semester. Advisor says: Great. And what's your student ID number? Student says: It's 2025-4789. Advisor says: Let me check... Yes, you're eligible. The course meets on Mondays and Wednesdays at 10 AM. Student says: Perfect. I'll be there.",
+        2: "Section 2. You will hear a museum guide giving a tour. Welcome to the Natural History Museum. We open at 10 AM every day. Admission for adults is $10. Our current exhibition is Ancient Egypt. The guided tour lasts approximately 60 minutes. Our most popular exhibit is the mummy room. Students get a 20 percent discount. We are located in the city center. We have a cafe, a gift shop, and a library. We hope you enjoy your visit.",
+        3: "Section 3. You will hear a group of students discussing a project. Our group project is about climate change. There are three students in our group. The deadline is in two weeks. Sarah is our team leader. We are focusing on rising sea levels, extreme weather, and melting glaciers. We will conduct research in the library and online. Our presentation will be in PowerPoint. Our main challenge is time management. We plan to meet twice a week and use a shared calendar. We hope to achieve an A grade.",
+        4: "Section 4. You will hear a lecture about space exploration. Today we will discuss the history of space exploration. The first moon landing was in 1969. Russia was the first country to launch a satellite. The first satellite was called Sputnik. The International Space Station was launched in 1998. The primary goal of space exploration is scientific discovery. Mars has been explored the most. Space probes collect data from distant planets. Major challenges include cost, radiation, and isolation. In conclusion, space exploration is essential for human progress."
     };
 
-    // Get the current section from the first question
+    // Get current section
     const currentSection = selected.length > 0 ? selected[0].section : 1;
 
+    const playBtn = document.getElementById('playAudioBtn');
+    const audioStatus = document.getElementById('audioStatus');
+    const volumeSlider = document.getElementById('volumeSlider');
+
     playBtn.addEventListener('click', function() {
-        isPlaying = !isPlaying;
-        
         if (isPlaying) {
-            this.innerHTML = '<i class="fas fa-pause"></i> Playing...';
-            this.classList.add('playing');
-            audioStatus.textContent = audioMessages[currentSection] || '🎧 Audio is playing. Listen carefully — you will only hear it once.';
-            audioStatus.style.color = '#4A148C';
-            audioStatus.style.fontWeight = '600';
-            
-            // Auto-stop after 30 seconds (simulating audio length)
-            setTimeout(() => {
-                if (isPlaying) {
-                    isPlaying = false;
-                    this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
-                    this.classList.remove('playing');
-                    audioStatus.textContent = '✅ Audio finished. You can now answer the questions.';
-                    audioStatus.style.color = '#2e7d32';
-                }
-            }, 30000);
-        } else {
+            // Stop playback
+            speechSynth.cancel();
+            isPlaying = false;
             this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
             this.classList.remove('playing');
-            audioStatus.textContent = 'Click play to hear the recording. You will only hear it once.';
-            audioStatus.style.color = '#7B6A8A';
-            audioStatus.style.fontWeight = '400';
+            audioStatus.innerHTML = '<i class="fas fa-info-circle"></i> <span>Audio paused. Click play to restart.</span>';
+            return;
+        }
+
+        // Start playback
+        const script = audioScripts[currentSection] || audioScripts[1];
+        
+        // Cancel any ongoing speech
+        speechSynth.cancel();
+
+        // Create new utterance
+        currentUtterance = new SpeechSynthesisUtterance(script);
+        currentUtterance.rate = 0.9;
+        currentUtterance.pitch = 1;
+        currentUtterance.volume = parseFloat(volumeSlider.value);
+        currentUtterance.lang = 'en-US';
+
+        // Select a voice (prefer female voice if available)
+        const voices = speechSynth.getVoices();
+        const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google UK') || v.name.includes('Zira'));
+        if (femaleVoice) {
+            currentUtterance.voice = femaleVoice;
+        }
+
+        // Update UI
+        isPlaying = true;
+        this.innerHTML = '<i class="fas fa-stop"></i> Stop Audio';
+        this.classList.add('playing');
+        audioStatus.innerHTML = '<i class="fas fa-volume-up"></i> <span style="color:#4A148C;font-weight:600;">🔊 Audio is playing... Listen carefully.</span>';
+
+        // Speak
+        speechSynth.speak(currentUtterance);
+
+        // When finished
+        currentUtterance.onend = function() {
+            isPlaying = false;
+            playBtn.innerHTML = '<i class="fas fa-play"></i> Play Audio';
+            playBtn.classList.remove('playing');
+            audioStatus.innerHTML = '<i class="fas fa-check-circle" style="color:#2e7d32;"></i> <span style="color:#2e7d32;font-weight:600;">✅ Audio finished. You can now answer the questions.</span>';
+        };
+
+        currentUtterance.onerror = function() {
+            isPlaying = false;
+            playBtn.innerHTML = '<i class="fas fa-play"></i> Play Audio';
+            playBtn.classList.remove('playing');
+            audioStatus.innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#f57f17;"></i> <span>Audio playback error. Please try again.</span>';
+        };
+    });
+
+    // Load voices when available
+    if (speechSynth.getVoices().length === 0) {
+        speechSynth.onvoiceschanged = function() {
+            speechSynth.getVoices();
+        };
+    }
+
+    // Volume control
+    volumeSlider.addEventListener('input', function() {
+        if (currentUtterance) {
+            currentUtterance.volume = parseFloat(this.value);
         }
     });
 
     // ============================================================
-    // SUBMIT TEST — SAVES TO FIRESTORE
+    // SUBMIT TEST
     // ============================================================
     async function submitTest() {
         let score = 0;
@@ -592,10 +620,8 @@
         document.querySelectorAll('input').forEach(input => input.disabled = true);
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
+        speechSynth.cancel();
 
-        // ============================================================
-        // SAVE TO FIRESTORE
-        // ============================================================
         const saveStatus = document.getElementById('saveStatus');
 
         auth.onAuthStateChanged(async (user) => {
@@ -611,7 +637,6 @@
                     saveStatus.innerHTML = '✅ Score saved to your account! Check your dashboard.';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
-                    console.error('Error saving score:', error);
                     saveStatus.innerHTML = '⚠️ Score saved locally, but failed to sync to account.';
                     saveStatus.style.color = '#f57f17';
                 }
@@ -622,13 +647,11 @@
         });
     }
 
-    // ============================================================
-    // RESET
-    // ============================================================
     function resetTest() {
+        speechSynth.cancel();
         location.reload();
     }
 </script>
 
 </body>
-        </html>
+    </html>
