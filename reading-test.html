@@ -6,6 +6,12 @@
     <title>IELTSProva — Reading Test</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -201,6 +207,11 @@
             font-size: 1.1rem;
             margin-top: 0.5rem;
         }
+        .result .save-status {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #2e7d32;
+        }
         .back-link {
             display: inline-block;
             margin-top: 1.5rem;
@@ -272,6 +283,7 @@
         <h2>📊 Your Score</h2>
         <div class="score-big"><span id="scoreDisplay">0</span> / <span id="totalQuestions">10</span></div>
         <div class="feedback-text" id="feedbackText"></div>
+        <div class="save-status" id="saveStatus"></div>
         <a href="index.html" class="back-link">← Back to Home</a>
     </div>
 
@@ -279,7 +291,23 @@
 
 <script>
     // ============================================================
-    // COMPLETE QUESTION BANK — 60 QUESTIONS (6 PASSAGES × 10)
+    // 🔥 FIREBASE CONFIG — YOUR CREDENTIALS
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // COMPLETE QUESTION BANK — 60 QUESTIONS
     // ============================================================
     const questionBank = [
         // PASSAGE 1: History of Glassmaking
@@ -383,10 +411,10 @@
     // ============================================================
     // SETTINGS — Change 'free' to 'pro' to unlock all 60 questions
     // ============================================================
-    const PLAN = 'free'; // 'free' = 10 questions, 'pro' = 60 questions
+    const PLAN = 'free';
 
     // ============================================================
-    // SHUFFLE FUNCTION
+    // SHUFFLE & SELECT QUESTIONS
     // ============================================================
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -396,9 +424,6 @@
         return array;
     }
 
-    // ============================================================
-    // SELECT QUESTIONS BASED ON PLAN
-    // ============================================================
     let allQuestions = [];
     questionBank.forEach(passage => {
         passage.questions.forEach(q => {
@@ -431,7 +456,6 @@
         const planBadge = document.getElementById('planBadge');
         const totalSpan = document.getElementById('totalQuestions');
 
-        // Update badge
         if (PLAN === 'free') {
             planBadge.textContent = 'Free — 10 Questions';
             planBadge.className = 'plan-badge';
@@ -442,7 +466,6 @@
 
         totalSpan.textContent = selectedQuestions.length;
 
-        // Show passage of the first question
         if (selectedQuestions.length > 0) {
             const first = selectedQuestions[0];
             passageContainer.innerHTML = `
@@ -453,7 +476,6 @@
             `;
         }
 
-        // Build questions
         let html = '';
         selectedQuestions.forEach((q, index) => {
             const qNum = index + 1;
@@ -513,9 +535,9 @@
     updateTimer();
 
     // ============================================================
-    // SUBMIT TEST
+    // SUBMIT TEST — SAVES TO FIRESTORE
     // ============================================================
-    function submitTest() {
+    async function submitTest() {
         let score = 0;
         const total = selectedQuestions.length;
 
@@ -546,6 +568,34 @@
         document.querySelectorAll('input').forEach(input => input.disabled = true);
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
+
+        // ============================================================
+        // SAVE SCORE TO FIRESTORE
+        // ============================================================
+        const saveStatus = document.getElementById('saveStatus');
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    await db.collection('scores').add({
+                        userId: user.uid,
+                        module: 'reading',
+                        score: score,
+                        total: total,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    saveStatus.innerHTML = '✅ Score saved to your account! Check your dashboard.';
+                    saveStatus.style.color = '#2e7d32';
+                } catch (error) {
+                    console.error('Error saving score:', error);
+                    saveStatus.innerHTML = '⚠️ Score saved locally, but failed to sync to account.';
+                    saveStatus.style.color = '#f57f17';
+                }
+            } else {
+                saveStatus.innerHTML = '🔒 Sign in to save your scores to your account.';
+                saveStatus.style.color = '#7B6A8A';
+            }
+        });
     }
 
     // ============================================================
@@ -557,4 +607,4 @@
 </script>
 
 </body>
-            </html>
+    </html>
