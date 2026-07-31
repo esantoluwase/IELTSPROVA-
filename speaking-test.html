@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IELTSProva — Speaking Test</title>
+    <title>IELTSProva — AI Speaking Test</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
@@ -58,9 +58,6 @@
             font-weight: 700;
             font-size: 1rem;
         }
-        .timer-box i {
-            margin-right: 0.5rem;
-        }
         .plan-badge {
             padding: 0.3rem 1.2rem;
             border-radius: 50px;
@@ -69,14 +66,94 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
-        .plan-badge.pro {
-            background: #fff8e1;
+
+        /* ===== AI EXAMINER ===== */
+        .ai-examiner {
+            background: linear-gradient(135deg, #f3edf7, #faf7ff);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid #7B1FA2;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ai-examiner .avatar {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .ai-examiner .status {
+            font-size: 1rem;
+            color: #4A148C;
+            font-weight: 600;
+            min-height: 2rem;
+        }
+        .ai-examiner .status .listening {
+            color: #2e7d32;
+        }
+        .ai-examiner .status .speaking {
             color: #f57f17;
+        }
+        .ai-examiner .status .thinking {
+            color: #7B1FA2;
+        }
+        .ai-examiner .transcript-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 14px;
+            margin: 1rem 0;
+            text-align: left;
+            min-height: 60px;
+            border: 1px solid #f0e8f5;
+            font-size: 0.95rem;
+            color: #3d2a4a;
+        }
+        .ai-examiner .transcript-box .label {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .ai-examiner .transcript-box .label i {
+            margin-right: 0.3rem;
+        }
+
+        .mic-btn {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(74, 20, 140, 0.3);
+        }
+        .mic-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 35px rgba(74, 20, 140, 0.4);
+        }
+        .mic-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .mic-btn.recording {
+            background: linear-gradient(135deg, #e53935, #c62828);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .part-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
             border-bottom: 2px dashed #f0e8f5;
         }
         .part-section:last-child {
@@ -134,52 +211,7 @@
             color: #7B1FA2;
             font-weight: 700;
         }
-        .cue-card .timer-note {
-            font-size: 0.85rem;
-            color: #7B6A8A;
-            margin-top: 0.5rem;
-        }
-        .cue-card .timer-note i {
-            color: #4A148C;
-        }
 
-        .speaking-area {
-            margin-top: 0.5rem;
-        }
-        .speaking-area label {
-            font-weight: 600;
-            color: #4A148C;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-        .speaking-area textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #f0e8f5;
-            border-radius: 16px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            min-height: 120px;
-            resize: vertical;
-            transition: 0.3s;
-            line-height: 1.6;
-        }
-        .speaking-area textarea:focus {
-            outline: none;
-            border-color: #7B1FA2;
-        }
-        .speaking-area .hint {
-            font-size: 0.85rem;
-            color: #7B6A8A;
-            margin-top: 0.3rem;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
         .btn {
             padding: 0.8rem 2.5rem;
             border: none;
@@ -218,10 +250,6 @@
             background: linear-gradient(135deg, #2e7d32, #43a047);
             color: white;
         }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
-        }
 
         .result {
             margin-top: 2rem;
@@ -255,7 +283,6 @@
         .result .save-status {
             margin-top: 0.8rem;
             font-size: 0.95rem;
-            color: #2e7d32;
         }
         .result .part-breakdown {
             display: grid;
@@ -290,53 +317,22 @@
         .back-link:hover {
             text-decoration: underline;
         }
-        .sample-answer {
-            background: #f3edf7;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #3d2a4a;
-            display: none;
-        }
-        .sample-answer.show {
-            display: block;
-        }
-        .toggle-sample {
-            background: none;
-            border: none;
-            color: #7B1FA2;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        .toggle-sample:hover {
-            text-decoration: underline;
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            .container {
-                padding: 1.5rem;
-            }
-            .test-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .actions {
-                flex-direction: column;
-            }
-            .btn {
-                justify-content: center;
-            }
-            .result .part-breakdown {
-                grid-template-columns: 1fr;
-            }
-            .speaking-area textarea {
-                min-height: 100px;
-            }
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            .test-header { flex-direction: column; align-items: flex-start; }
+            .actions { flex-direction: column; }
+            .btn { justify-content: center; }
+            .result .part-breakdown { grid-template-columns: 1fr; }
+            .mic-btn { width: 100%; }
         }
     </style>
 </head>
@@ -346,55 +342,58 @@
 
     <!-- HEADER -->
     <div class="test-header">
-        <h1><i class="fas fa-microphone"></i> Speaking Test</h1>
+        <h1><i class="fas fa-robot"></i> AI Speaking Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">15:00</span></span>
-            <span class="plan-badge" id="planBadge">Free — Full Test</span>
+            <span class="plan-badge">Free — AI Examiner</span>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- PART 1: Introduction & Interview (4-5 minutes) -->
+    <!-- AI EXAMINER -->
+    <!-- ============================================================ -->
+    <div class="ai-examiner">
+        <span class="avatar">🤖</span>
+        <div class="status" id="aiStatus">
+            <i class="fas fa-circle" style="color:#2e7d32; font-size:0.6rem;"></i> 
+            <span id="statusText">AI Examiner ready. Click "Start Speaking" to begin.</span>
+        </div>
+        <div class="transcript-box" id="transcriptBox">
+            <span class="label"><i class="fas fa-comment"></i> AI Examiner says:</span>
+            <span id="aiMessage">Hello! I'm your AI IELTS examiner. Click the button below to start the test.</span>
+        </div>
+        <div class="transcript-box" id="userTranscriptBox" style="border-color:#FFD700;">
+            <span class="label"><i class="fas fa-user"></i> You said:</span>
+            <span id="userMessage"><em>Your speech will appear here...</em></span>
+        </div>
+        <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
+            <i class="fas fa-microphone"></i> Start Speaking
+        </button>
+        <div style="margin-top:0.5rem; font-size:0.8rem; color:#7B6A8A;">
+            <i class="fas fa-info-circle"></i> Click and speak into your microphone. AI will evaluate your fluency, vocabulary, and pronunciation.
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PART 1: Interview -->
     <!-- ============================================================ -->
     <div class="part-section">
         <div class="part-label">🗣️ Part 1</div>
-        <p style="margin-bottom: 0.8rem; color: #3d2a4a;">
-            <strong>Introduction &amp; Interview</strong> — Answer questions about yourself.
-            <span style="font-size:0.85rem; color:#7B6A8A; display:block; margin-top:0.2rem;">⏱️ 4-5 minutes recommended</span>
-        </p>
-
         <div class="cue-card">
             <h3>🎯 Topic: Hometown &amp; Daily Life</h3>
             <ul class="bullets">
                 <li>Where do you live now?</li>
                 <li>What do you like about your hometown?</li>
                 <li>What do you usually do in your free time?</li>
-                <li>Do you prefer to spend time alone or with others?</li>
             </ul>
-            <button class="toggle-sample" onclick="toggleSample('sample1')">📖 Show Sample Answers</button>
-            <div class="sample-answer" id="sample1">
-                <strong>Sample Response:</strong><br />
-                "I currently live in a small city called ______. I really like it because it's peaceful and the people are friendly. In my free time, I enjoy reading books and going for walks. I generally prefer spending time with close friends rather than being alone."
-            </div>
-        </div>
-
-        <div class="speaking-area">
-            <label for="part1Response">✏️ Write your answers (practice script):</label>
-            <textarea id="part1Response" placeholder="Write your Part 1 responses here..."></textarea>
-            <div class="hint">💡 Tip: Practice speaking your answers out loud first, then write them down.</div>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- PART 2: Individual Long Turn (3-4 minutes) -->
+    <!-- PART 2: Long Turn -->
     <!-- ============================================================ -->
     <div class="part-section">
         <div class="part-label part2">🎤 Part 2</div>
-        <p style="margin-bottom: 0.8rem; color: #3d2a4a;">
-            <strong>Long Turn</strong> — You will be given a topic. You have <strong>1 minute</strong> to prepare and <strong>2 minutes</strong> to speak.
-            <span style="font-size:0.85rem; color:#7B6A8A; display:block; margin-top:0.2rem;">⏱️ 1 min preparation + 2 min speaking</span>
-        </p>
-
         <div class="cue-card">
             <h3>📋 Cue Card</h3>
             <div class="topic">Describe a memorable trip you have taken.</div>
@@ -405,65 +404,37 @@
                 <li>What you did there</li>
                 <li>And explain why it was memorable</li>
             </ul>
-            <div class="timer-note">
-                <i class="fas fa-stopwatch"></i> You have 1 minute to prepare. Start speaking when ready.
+            <div style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">
+                <i class="fas fa-stopwatch"></i> Prepare for 1 minute, then speak for 2 minutes.
             </div>
-            <button class="toggle-sample" onclick="toggleSample('sample2')">📖 Show Sample Answer</button>
-            <div class="sample-answer" id="sample2">
-                <strong>Sample Response:</strong><br />
-                "I'd like to talk about a memorable trip I took to the mountains with my family a few years ago. We went to a small village in the countryside during the summer. The journey was long, but the scenery was breathtaking. We spent our days hiking, swimming in the river, and enjoying local food. What made this trip particularly special was that it was the first time my whole family had been together in years. The peaceful environment and quality time with my loved ones created memories that I still treasure today."
-            </div>
-        </div>
-
-        <div class="speaking-area">
-            <label for="part2Response">✏️ Write your speech (2-minute script):</label>
-            <textarea id="part2Response" placeholder="Write your Part 2 speech here..."></textarea>
-            <div class="hint">💡 Tip: Speak for 2 minutes without stopping. Practice with a timer!</div>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- PART 3: Two-Way Discussion (4-5 minutes) -->
+    <!-- PART 3: Discussion -->
     <!-- ============================================================ -->
     <div class="part-section">
         <div class="part-label part3">💬 Part 3</div>
-        <p style="margin-bottom: 0.8rem; color: #3d2a4a;">
-            <strong>Two-Way Discussion</strong> — Deeper questions related to the Part 2 topic.
-            <span style="font-size:0.85rem; color:#7B6A8A; display:block; margin-top:0.2rem;">⏱️ 4-5 minutes recommended</span>
-        </p>
-
         <div class="cue-card">
             <h3>🎯 Discussion Questions</h3>
             <ul class="bullets">
                 <li>Why do people enjoy travelling to new places?</li>
                 <li>What are the benefits of travelling with family versus friends?</li>
                 <li>How has technology changed the way people travel?</li>
-                <li>What are the advantages and disadvantages of tourism?</li>
             </ul>
-            <button class="toggle-sample" onclick="toggleSample('sample3')">📖 Show Sample Answers</button>
-            <div class="sample-answer" id="sample3">
-                <strong>Sample Response:</strong><br />
-                "People enjoy travelling to new places because it allows them to experience different cultures and break away from their daily routine. Travelling with family can strengthen bonds and create shared memories, while travelling with friends often offers more freedom and adventure. Technology has made travel much easier with apps for navigation, translation, and booking. However, tourism can also have negative impacts, such as overcrowding and environmental damage."
-            </div>
-        </div>
-
-        <div class="speaking-area">
-            <label for="part3Response">✏️ Write your answers (discussion script):</label>
-            <textarea id="part3Response" placeholder="Write your Part 3 responses here..."></textarea>
-            <div class="hint">💡 Tip: Give extended answers. Explain your ideas with examples.</div>
         </div>
     </div>
 
     <!-- ACTIONS -->
     <div class="actions">
-        <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit & Evaluate</button>
+        <button type="button" class="btn btn-success" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit & Evaluate</button>
         <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Topic</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
     <!-- RESULT -->
     <div class="result" id="resultBox">
-        <h2>📊 Your Speaking Evaluation</h2>
+        <h2>📊 Your AI Speaking Evaluation</h2>
         <div class="part-breakdown">
             <div class="part-result">
                 <div class="label">Part 1</div>
@@ -504,15 +475,217 @@
     const db = firebase.firestore();
 
     // ============================================================
-    // TOGGLE SAMPLE ANSWERS
+    // SPEECH RECOGNITION
     // ============================================================
-    function toggleSample(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle('show');
+    let isRecording = false;
+    let recognition = null;
+    let userSpeech = '';
+    let aiResponses = [];
+
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechSynthesis = window.speechSynthesis;
+
+    if (!SpeechRecognition) {
+        document.getElementById('micBtn').disabled = true;
+        document.getElementById('statusText').textContent = '❌ Speech recognition not supported in this browser. Please use Chrome or Edge.';
+    }
+
+    function toggleRecording() {
+        if (isRecording) {
+            stopRecording();
+        } else {
+            startRecording();
+        }
+    }
+
+    function startRecording() {
+        if (!SpeechRecognition) return;
+
+        recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        const micBtn = document.getElementById('micBtn');
+        const statusText = document.getElementById('statusText');
+        const aiMessage = document.getElementById('aiMessage');
+        const userMessage = document.getElementById('userMessage');
+
+        micBtn.classList.add('recording');
+        micBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Speaking';
+        isRecording = true;
+
+        statusText.innerHTML = '<span style="color:#e53935;">🔴 Listening... Speak now!</span>';
+        userMessage.textContent = '...';
+
+        // Speak the first question
+        speakText("Hello! I'm your AI IELTS examiner. Let's start with Part 1. Where do you live now?");
+
+        recognition.onresult = function(event) {
+            let finalTranscript = '';
+            let interimTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript;
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+
+            if (finalTranscript) {
+                userSpeech += finalTranscript + ' ';
+                userMessage.textContent = userSpeech;
+                aiMessage.textContent = '🤔 Processing your answer...';
+                
+                // Auto-respond after a pause in speaking
+                clearTimeout(recognition.timeout);
+                recognition.timeout = setTimeout(() => {
+                    if (isRecording) {
+                        handleAIResponse(userSpeech);
+                    }
+                }, 2000);
+            } else if (interimTranscript) {
+                userMessage.textContent = interimTranscript + '...';
+            }
+        };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+            if (event.error === 'not-allowed') {
+                alert('Please allow microphone access to use this feature.');
+            }
+            stopRecording();
+        };
+
+        recognition.onend = function() {
+            if (isRecording) {
+                // Auto-restart if still recording
+                recognition.start();
+            }
+        };
+
+        recognition.start();
+    }
+
+    function stopRecording() {
+        isRecording = false;
+        const micBtn = document.getElementById('micBtn');
+        const statusText = document.getElementById('statusText');
+
+        micBtn.classList.remove('recording');
+        micBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Speaking';
+        statusText.innerHTML = '<span style="color:#2e7d32;">⏸️ Paused. Click "Start Speaking" to continue.</span>';
+
+        if (recognition) {
+            recognition.stop();
+        }
     }
 
     // ============================================================
-    // TIMER (15 minutes — Part 1 + 2 + 3)
+    // TEXT TO SPEECH (AI Examiner)
+    // ============================================================
+    function speakText(text) {
+        if (!SpeechSynthesis) return;
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
+        utterance.volume = 1;
+        utterance.lang = 'en-US';
+
+        // Try to use a female voice
+        const voices = SpeechSynthesis.getVoices();
+        const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google UK') || v.name.includes('Zira'));
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+        }
+
+        // Update UI
+        document.getElementById('aiMessage').textContent = text;
+        document.getElementById('statusText').innerHTML = '<span style="color:#4A148C;">🗣️ AI Examiner is speaking...</span>';
+
+        utterance.onend = function() {
+            document.getElementById('statusText').innerHTML = '<span style="color:#2e7d32;">✅ Waiting for your response...</span>';
+        };
+
+        SpeechSynthesis.speak(utterance);
+    }
+
+    // Load voices
+    if (SpeechSynthesis) {
+        SpeechSynthesis.getVoices();
+        SpeechSynthesis.onvoiceschanged = function() {
+            SpeechSynthesis.getVoices();
+        };
+    }
+
+    // ============================================================
+    // AI RESPONSE LOGIC
+    // ============================================================
+    let currentPart = 1;
+    let part1Answers = '';
+    let part2Answers = '';
+    let part3Answers = '';
+
+    function handleAIResponse(text) {
+        const lowerText = text.toLowerCase();
+
+        // Simple response logic based on what the student said
+        if (currentPart === 1) {
+            if (lowerText.includes('live') || lowerText.includes('hometown')) {
+                speakText("That's interesting! What do you usually do in your free time?");
+                part1Answers += text + ' ';
+                currentPart = 2;
+            } else if (lowerText.includes('free time') || lowerText.includes('hobbies')) {
+                speakText("Great! Now let's move to Part 2. Describe a memorable trip you have taken. You have 1 minute to prepare. I'll start the timer.");
+                part1Answers += text + ' ';
+                currentPart = 3;
+                // Auto-start Part 2
+                setTimeout(() => {
+                    speakText("Please describe a memorable trip you have taken. Where did you go, who did you go with, what did you do, and why was it memorable?");
+                }, 5000);
+            } else {
+                speakText("Tell me more about where you live or what you like to do in your free time.");
+            }
+        } else if (currentPart === 3) {
+            // Part 2 is being spoken
+            if (text.length > 20) {
+                part2Answers += text + ' ';
+                speakText("Thank you. Now let's move to Part 3 discussion. Why do people enjoy travelling to new places?");
+                currentPart = 4;
+            } else {
+                speakText("Try to speak for a bit longer about your trip. Where did you go and what made it memorable?");
+            }
+        } else if (currentPart === 4) {
+            // Part 3
+            if (text.length > 20) {
+                part3Answers += text + ' ';
+                speakText("Thank you! You have completed the speaking test. Click 'Submit & Evaluate' for your results.");
+                currentPart = 5;
+                document.getElementById('statusText').innerHTML = '<span style="color:#2e7d32;">✅ Test complete!</span>';
+            } else {
+                speakText("Can you tell me more? What are the benefits of travelling with family versus friends?");
+            }
+        } else {
+            speakText("Test complete! Click 'Submit & Evaluate' for your results.");
+        }
+
+        // Store the response
+        if (currentPart === 2) part1Answers += text + ' ';
+        if (currentPart === 3) part1Answers += text + ' ';
+        if (currentPart === 4) part2Answers += text + ' ';
+        if (currentPart === 5) part3Answers += text + ' ';
+
+        // Clear the user speech for next input
+        userSpeech = '';
+    }
+
+    // ============================================================
+    // TIMER (15 minutes)
     // ============================================================
     let timeLeft = 900;
     const timerDisplay = document.getElementById('timerDisplay');
@@ -524,6 +697,7 @@
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             alert('⏰ Time is up! Your test will be submitted automatically.');
+            stopRecording();
             submitTest();
         }
         timeLeft--;
@@ -533,46 +707,44 @@
     updateTimer();
 
     // ============================================================
-    // EVALUATION FUNCTION
+    // EVALUATE SPEAKING
     // ============================================================
-    function evaluateSpeaking(text, part) {
+    function evaluateSpeakingAI(text, part) {
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
         const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
         const avgWordLength = text.length / (words || 1);
 
         let band = 5.0;
 
-        // Part 1: Short answers (fluency)
+        // Fluency: words per response
         if (part === 1) {
-            if (words >= 50) band = 7.0;
-            else if (words >= 30) band = 6.5;
-            else if (words >= 20) band = 6.0;
-            else if (words >= 10) band = 5.5;
+            if (words >= 30) band = 7.0;
+            else if (words >= 20) band = 6.5;
+            else if (words >= 10) band = 6.0;
+            else if (words >= 5) band = 5.5;
             else band = 5.0;
-            if (sentences >= 4 && sentences <= 8) band += 0.5;
+            if (sentences >= 3 && sentences <= 6) band += 0.5;
         }
 
-        // Part 2: Long turn (structure + development)
         if (part === 2) {
-            if (words >= 200) band = 7.5;
-            else if (words >= 150) band = 7.0;
-            else if (words >= 100) band = 6.5;
-            else if (words >= 60) band = 6.0;
-            else if (words >= 30) band = 5.5;
+            if (words >= 150) band = 7.5;
+            else if (words >= 100) band = 7.0;
+            else if (words >= 60) band = 6.5;
+            else if (words >= 30) band = 6.0;
+            else if (words >= 15) band = 5.5;
             else band = 5.0;
             if (sentences >= 8 && sentences <= 16) band += 0.5;
             if (avgWordLength > 4.5 && avgWordLength < 7) band += 0.3;
         }
 
-        // Part 3: Discussion (extended responses)
         if (part === 3) {
-            if (words >= 150) band = 7.5;
-            else if (words >= 100) band = 7.0;
-            else if (words >= 70) band = 6.5;
-            else if (words >= 40) band = 6.0;
-            else if (words >= 20) band = 5.5;
+            if (words >= 80) band = 7.5;
+            else if (words >= 50) band = 7.0;
+            else if (words >= 30) band = 6.5;
+            else if (words >= 15) band = 6.0;
+            else if (words >= 8) band = 5.5;
             else band = 5.0;
-            if (sentences >= 6 && sentences <= 14) band += 0.5;
+            if (sentences >= 4 && sentences <= 10) band += 0.5;
             if (avgWordLength > 4.5 && avgWordLength < 7.5) band += 0.3;
         }
 
@@ -582,27 +754,34 @@
         return { band, words, sentences };
     }
 
-    function getSpeakingFeedback(part1, part2, part3) {
-        const avg = (part1 + part2 + part3) / 3;
+    function getSpeakingFeedbackAI(p1, p2, p3) {
+        const avg = (p1 + p2 + p3) / 3;
         const overall = Math.round(avg * 2) / 2;
 
         let feedback = '';
+        let tips = [];
 
         if (overall >= 8.0) {
-            feedback = '🌟 Excellent speaking skills! You demonstrate fluency, coherence, and a wide range of vocabulary. Keep up the great work!';
+            feedback = '🌟 Excellent! You are a fluent and confident speaker with strong vocabulary and pronunciation.';
+            tips = ['Continue practicing with advanced topics', 'Focus on using idiomatic expressions', 'Work on subtle pronunciation nuances'];
         } else if (overall >= 7.0) {
-            feedback = '👏 Great job! You are a confident speaker with good fluency and vocabulary. Practice extending your answers further.';
+            feedback = '👏 Great job! You are a capable speaker with good fluency.';
+            tips = ['Expand your vocabulary', 'Practice speaking for longer periods', 'Work on using more complex sentence structures'];
         } else if (overall >= 6.0) {
-            feedback = '💪 Good effort! You have a solid foundation. Focus on developing your ideas more and using a wider range of vocabulary.';
+            feedback = '💪 Good effort! You have a solid foundation.';
+            tips = ['Practice speaking on a variety of topics', 'Work on your pronunciation', 'Use more linking words'];
         } else if (overall >= 5.0) {
-            feedback = '📚 You are making progress! Practice speaking for longer periods and work on your pronunciation and fluency.';
+            feedback = '📚 You are making progress!';
+            tips = ['Practice speaking for 2 minutes without stopping', 'Listen to English content daily', 'Record yourself and listen back'];
         } else {
-            feedback = '📝 Keep practicing! Start by speaking about familiar topics and gradually build your confidence.';
+            feedback = '📝 Keep practicing! Start with familiar topics and gradually build confidence.';
+            tips = ['Practice speaking daily', 'Learn topic-specific vocabulary', 'Try to think in English'];
         }
 
         return {
             overall: overall,
-            feedback: feedback
+            feedback: feedback,
+            tips: tips
         };
     }
 
@@ -610,16 +789,19 @@
     // SUBMIT TEST
     // ============================================================
     async function submitTest() {
-        const part1Text = document.getElementById('part1Response').value;
-        const part2Text = document.getElementById('part2Response').value;
-        const part3Text = document.getElementById('part3Response').value;
+        // Use the collected speech data
+        const p1Text = part1Answers || 'No Part 1 response recorded.';
+        const p2Text = part2Answers || 'No Part 2 response recorded.';
+        const p3Text = part3Answers || 'No Part 3 response recorded.';
 
-        // Evaluate each part
-        const result1 = evaluateSpeaking(part1Text, 1);
-        const result2 = evaluateSpeaking(part2Text, 2);
-        const result3 = evaluateSpeaking(part3Text, 3);
+        const result1 = evaluateSpeakingAI(p1Text, 1);
+        const result2 = evaluateSpeakingAI(p2Text, 2);
+        const result3 = evaluateSpeakingAI(p3Text, 3);
 
-        const overallResult = getSpeakingFeedback(result1.band, result2.band, result3.band);
+        const overallResult = getSpeakingFeedbackAI(result1.band, result2.band, result3.band);
+
+        // Stop recording if active
+        stopRecording();
 
         // Show results
         const resultBox = document.getElementById('resultBox');
@@ -636,15 +818,15 @@
                 <span class="band">Overall Band: ${overallResult.overall}</span>
             </div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>🗣️ Part 1:</strong> Band ${result1.band} — ${result1.words} words, ${result1.sentences} sentences
+                <strong>🗣️ Part 1:</strong> Band ${result1.band} — ${result1.words} words
                 <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Keep answers natural and fluent.</span>
             </div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>🎤 Part 2:</strong> Band ${result2.band} — ${result2.words} words, ${result2.sentences} sentences
+                <strong>🎤 Part 2:</strong> Band ${result2.band} — ${result2.words} words
                 <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Aim for 150+ words for a strong response.</span>
             </div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>💬 Part 3:</strong> Band ${result3.band} — ${result3.words} words, ${result3.sentences} sentences
+                <strong>💬 Part 3:</strong> Band ${result3.band} — ${result3.words} words
                 <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Provide extended answers with examples.</span>
             </div>
             <div style="background:#f3edf7;padding:1rem;border-radius:14px;margin:0.5rem 0;">
@@ -652,23 +834,21 @@
             </div>
             <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
                 💡 <strong>To improve your speaking band:</strong>
-                • Practice speaking for 2 minutes without stopping
-                • Record yourself and listen back
-                • Learn topic-specific vocabulary
-                • Use connectors (however, moreover, on the other hand)
-                • Work on your pronunciation and intonation
+                ${overallResult.tips.map(t => `• ${t}`).join('<br />')}
+            </div>
+            <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
+                📊 <strong>Fluency:</strong> ${result1.words + result2.words + result3.words} total words spoken
             </div>
         `;
 
-        // Disable submit button
-        document.querySelector('.btn-primary').disabled = true;
+        document.querySelector('.btn-success').disabled = true;
         clearInterval(timerInterval);
 
         // ============================================================
         // SAVE TO LOCALSTORAGE
         // ============================================================
         const scoreData = {
-            module: 'speaking',
+            module: 'speaking_ai',
             score: overallResult.overall,
             total: 9,
             part1: result1.band,
@@ -680,7 +860,7 @@
         let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         savedScores.push(scoreData);
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
-        console.log('✅ Speaking score saved to localStorage:', scoreData);
+        console.log('✅ AI Speaking score saved to localStorage:', scoreData);
 
         // ============================================================
         // SAVE TO FIRESTORE
@@ -692,7 +872,7 @@
                 try {
                     await db.collection('scores').add({
                         userId: user.uid,
-                        module: 'speaking',
+                        module: 'speaking_ai',
                         score: overallResult.overall,
                         total: 9,
                         part1: result1.band,
@@ -717,9 +897,10 @@
     // RESET TEST
     // ============================================================
     function resetTest() {
+        stopRecording();
         location.reload();
     }
 </script>
 
 </body>
-  </html>
+    </html>
