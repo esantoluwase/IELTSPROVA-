@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IELTSProva — Ace Your IELTS</title>
+    <style>
+        /* ---- RESET & BASE ---- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8faff;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ---- HEADER / NAV ---- */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0a2463;
+        }
+        .logo span {
+            color: #e63946;
+        }
+        nav a {
+            margin-left: 2rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #e63946;
+        }
+        .nav-cta {
+            background: #e63946;
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+        }
+        .nav-cta:hover {
+            background: #c1121f;
+            color: white !important;
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            text-align: center;
+            padding: 4rem 5% 3rem;
+            background: linear-gradient(135deg, #0a2463 0%, #1e3a8a 100%);
+            color: white;
+            border-radius: 0 0 40px 40px;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .hero h1 span {
+            color: #f9c74f;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        .hero-buttons a {
+            display: inline-block;
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin: 0 0.5rem;
+            transition: 0.3s;
+        }
+        .btn-primary {
+            background: #f9c74f;
+            color: #0a2463;
+        }
+        .btn-primary:hover {
+            background: #f8961e;
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        .btn-secondary:hover {
+            background: white;
+            color: #0a2463;
+        }
+
+        /* ---- SECTIONS ---- */
+        section {
+            padding: 3.5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #0a2463;
+        }
+        .section-sub {
+            text-align: center;
+            color: #555;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* ---- TEST CARDS ---- */
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+        .test-card {
+            background: white;
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            transition: 0.3s;
+            border-bottom: 5px solid #e63946;
+        }
+        .test-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        .test-card .icon {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .test-card h3 {
+            font-size: 1.3rem;
+            color: #0a2463;
+        }
+        .test-card p {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        /* ---- PRICING ---- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem 1.8rem;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 2px solid #eef2ff;
+            transition: 0.3s;
+        }
+        .pricing-card:hover {
+            border-color: #0a2463;
+        }
+        .pricing-card.popular {
+            border-color: #e63946;
+            background: #fff8f7;
+        }
+        .pricing-card .plan {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0a2463;
+        }
+        .pricing-card .price {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin: 0.5rem 0;
+        }
+        .pricing-card .price small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #777;
+        }
+        .pricing-card ul {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+            padding-left: 0.5rem;
+        }
+        .pricing-card ul li {
+            padding: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+        .pricing-card ul li::before {
+            content: "✅ ";
+        }
+        .pricing-card .btn-plan {
+            display: inline-block;
+            padding: 0.7rem 2.5rem;
+            border-radius: 50px;
+            background: #0a2463;
+            color: white;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .pricing-card .btn-plan:hover {
+            background: #e63946;
+        }
+        .pricing-card.popular .btn-plan {
+            background: #e63946;
+        }
+        .pricing-card.popular .btn-plan:hover {
+            background: #c1121f;
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            background: #0a2463;
+            color: white;
+            margin-top: 3rem;
+        }
+        footer a {
+            color: #f9c74f;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            nav a {
+                margin-left: 1rem;
+                font-size: 0.9rem;
+            }
+            .hero-buttons a {
+                display: block;
+                margin: 0.7rem auto;
+                max-width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">IELTS<span>Prova</span></div>
+        <nav>
+            <a href="#tests">Tests</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#pricing" class="nav-cta">Get Started</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Ace Your IELTS <span>With Confidence</span></h1>
+        <p>Practice with real-style tests, track your progress, and get the band score you deserve — all in one place.</p>
+        <div class="hero-buttons">
+            <a href="#tests" class="btn-primary">Start Free Test</a>
+            <a href="#pricing" class="btn-secondary">View Plans</a>
+        </div>
+    </section>
+
+    <!-- TEST SECTIONS -->
+    <section id="tests">
+        <h2 class="section-title">What You'll Practice</h2>
+        <p class="section-sub">Full coverage of all 4 IELTS modules — designed to feel like the real exam.</p>
+        <div class="test-grid">
+            <div class="test-card">
+                <div class="icon">📖</div>
+                <h3>Reading</h3>
+                <p>3 passages · 40 questions · 60 mins</p>
+            </div>
+            <div class="test-card">
+                <div class="icon">✍️</div>
+                <h3>Writing</h3>
+                <p>Task 1 &amp; 2 · with sample answers</p>
+            </div>
+            <div class="test-card">
+                <div class="icon">🎧</div>
+                <h3>Listening</h3>
+                <p>4 sections · 40 questions · 30 mins</p>
+            </div>
+            <div class="test-card">
+                <div class="icon">🗣️</div>
+                <h3>Speaking</h3>
+                <p>Part 1–3 · cue cards &amp; follow-ups</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing">
+        <h2 class="section-title">Choose Your Plan</h2>
+        <p class="section-sub">Start for free, upgrade when you're ready.</p>
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="pricing-card">
+                <div class="plan">Free</div>
+                <div class="price">$0 <small>/mo</small></div>
+                <ul>
+                    <li>1 full practice test</li>
+                    <li>Basic score report</li>
+                    <li>Limited questions</li>
+                </ul>
+                <a href="#" class="btn-plan">Start Free</a>
+            </div>
+            <!-- Pro -->
+            <div class="pricing-card popular">
+                <div class="plan">⭐ Pro</div>
+                <div class="price">$9 <small>/mo</small></div>
+                <ul>
+                    <li>15+ full tests</li>
+                    <li>Detailed feedback</li>
+                    <li>Progress dashboard</li>
+                    <li>All 4 modules</li>
+                </ul>
+                <a href="#" class="btn-plan">Go Pro</a>
+            </div>
+            <!-- Pro+ -->
+            <div class="pricing-card">
+                <div class="plan">🚀 Pro+</div>
+                <div class="price">$19 <small>/mo</small></div>
+                <ul>
+                    <li>Everything in Pro</li>
+                    <li>Writing evaluation</li>
+                    <li>Speaking mock exams</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="btn-plan">Go Pro+</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 IELTSProva — Built with ❤️ for IELTS candidates worldwide.</p>
+        <p style="margin-top:0.5rem; font-size:0.9rem; opacity:0.7;">
+            ✉️ support@ieltsprova.com
+        </p>
+    </footer>
+
+</body>
+                                        </html>
