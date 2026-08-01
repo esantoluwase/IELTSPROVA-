@@ -37,13 +37,8 @@
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-        .test-header h1 {
-            font-size: 1.8rem;
-            color: #4A148C;
-        }
-        .test-header h1 i {
-            color: #7B1FA2;
-        }
+        .test-header h1 { font-size: 1.8rem; color: #4A148C; }
+        .test-header h1 i { color: #7B1FA2; }
         .test-header .meta {
             display: flex;
             align-items: center;
@@ -66,8 +61,6 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
-
-        /* ===== AI EXAMINER ===== */
         .ai-examiner {
             background: linear-gradient(135deg, #f3edf7, #faf7ff);
             border-radius: 20px;
@@ -75,29 +68,9 @@
             text-align: center;
             border: 2px solid #7B1FA2;
             margin-bottom: 1.5rem;
-            position: relative;
-            overflow: hidden;
         }
-        .ai-examiner .avatar {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .ai-examiner .status {
-            font-size: 1rem;
-            color: #4A148C;
-            font-weight: 600;
-            min-height: 2rem;
-        }
-        .ai-examiner .status .listening {
-            color: #2e7d32;
-        }
-        .ai-examiner .status .speaking {
-            color: #f57f17;
-        }
-        .ai-examiner .status .thinking {
-            color: #7B1FA2;
-        }
+        .ai-examiner .avatar { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .ai-examiner .status { font-size: 1rem; color: #4A148C; font-weight: 600; min-height: 2rem; }
         .ai-examiner .transcript-box {
             background: white;
             padding: 1rem;
@@ -109,17 +82,7 @@
             font-size: 0.95rem;
             color: #3d2a4a;
         }
-        .ai-examiner .transcript-box .label {
-            font-weight: 700;
-            color: #4A148C;
-            font-size: 0.8rem;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-        .ai-examiner .transcript-box .label i {
-            margin-right: 0.3rem;
-        }
-
+        .ai-examiner .transcript-box .label { font-weight: 700; color: #4A148C; font-size: 0.8rem; display: block; margin-bottom: 0.3rem; }
         .mic-btn {
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white;
@@ -132,15 +95,8 @@
             transition: 0.3s;
             box-shadow: 0 4px 20px rgba(74, 20, 140, 0.3);
         }
-        .mic-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 35px rgba(74, 20, 140, 0.4);
-        }
-        .mic-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .mic-btn:hover { transform: scale(1.05); box-shadow: 0 8px 35px rgba(74, 20, 140, 0.4); }
+        .mic-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .mic-btn.recording {
             background: linear-gradient(135deg, #e53935, #c62828);
             animation: pulse 1.5s infinite;
@@ -150,17 +106,12 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-
         .part-section {
             margin-bottom: 2rem;
             padding-bottom: 2rem;
             border-bottom: 2px dashed #f0e8f5;
         }
-        .part-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+        .part-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .part-label {
             background: #4A148C;
             color: white;
@@ -171,15 +122,8 @@
             display: inline-block;
             margin-bottom: 0.8rem;
         }
-        .part-label.part2 {
-            background: #FFD700;
-            color: #4A148C;
-        }
-        .part-label.part3 {
-            background: #7B1FA2;
-            color: white;
-        }
-
+        .part-label.part2 { background: #FFD700; color: #4A148C; }
+        .part-label.part3 { background: #7B1FA2; color: white; }
         .cue-card {
             background: #faf7ff;
             padding: 1.5rem;
@@ -187,31 +131,11 @@
             border: 2px solid #7B1FA2;
             margin-bottom: 1rem;
         }
-        .cue-card h3 {
-            color: #4A148C;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        .cue-card .topic {
-            font-weight: 700;
-            color: #4A148C;
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-        .cue-card .bullets {
-            list-style: none;
-            padding-left: 0;
-        }
-        .cue-card .bullets li {
-            padding: 0.2rem 0;
-            color: #3d2a4a;
-        }
-        .cue-card .bullets li::before {
-            content: "• ";
-            color: #7B1FA2;
-            font-weight: 700;
-        }
-
+        .cue-card h3 { color: #4A148C; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .cue-card .topic { font-weight: 700; color: #4A148C; font-size: 1.2rem; margin: 0.5rem 0; }
+        .cue-card .bullets { list-style: none; padding-left: 0; }
+        .cue-card .bullets li { padding: 0.2rem 0; color: #3d2a4a; }
+        .cue-card .bullets li::before { content: "• "; color: #7B1FA2; font-weight: 700; }
         .btn {
             padding: 0.8rem 2.5rem;
             border: none;
@@ -234,23 +158,10 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
         }
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .btn-secondary {
-            background: #f3edf7;
-            color: #4A148C;
-        }
-        .btn-secondary:hover {
-            background: #e5d9ed;
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #2e7d32, #43a047);
-            color: white;
-        }
-
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-secondary { background: #f3edf7; color: #4A148C; }
+        .btn-secondary:hover { background: #e5d9ed; }
+        .btn-success { background: linear-gradient(135deg, #2e7d32, #43a047); color: white; }
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -259,19 +170,9 @@
             border: 2px solid #7B1FA2;
             display: none;
         }
-        .result.show {
-            display: block;
-        }
-        .result .score-big {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #4A148C;
-        }
-        .result .feedback-text {
-            font-size: 1.05rem;
-            margin-top: 0.5rem;
-            line-height: 1.8;
-        }
+        .result.show { display: block; }
+        .result .score-big { font-size: 3rem; font-weight: 900; color: #4A148C; }
+        .result .feedback-text { font-size: 1.05rem; margin-top: 0.5rem; line-height: 1.8; }
         .result .feedback-text .band {
             display: inline-block;
             background: #FFD700;
@@ -280,10 +181,7 @@
             border-radius: 50px;
             font-weight: 700;
         }
-        .result .save-status {
-            margin-top: 0.8rem;
-            font-size: 0.95rem;
-        }
+        .result .save-status { margin-top: 0.8rem; font-size: 0.95rem; }
         .result .part-breakdown {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -297,16 +195,8 @@
             border: 1px solid #f0e8f5;
             text-align: center;
         }
-        .result .part-breakdown .part-result .label {
-            font-size: 0.8rem;
-            color: #7B6A8A;
-        }
-        .result .part-breakdown .part-result .value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #4A148C;
-        }
-
+        .result .part-breakdown .part-result .label { font-size: 0.8rem; color: #7B6A8A; }
+        .result .part-breakdown .part-result .value { font-size: 1.8rem; font-weight: 800; color: #4A148C; }
         .back-link {
             display: inline-block;
             margin-top: 1.5rem;
@@ -314,15 +204,76 @@
             font-weight: 600;
             text-decoration: none;
         }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
+        .back-link:hover { text-decoration: underline; }
         .actions {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
             margin-top: 1.5rem;
+        }
+
+        /* ===== LOGIN OVERLAY ===== */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-overlay.active { display: flex; }
+        .login-overlay .modal-box {
+            background: white;
+            border-radius: 32px;
+            padding: 3rem;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        .login-overlay .modal-box .icon { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box h2 { color: #4A148C; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box p { color: #7B6A8A; margin-bottom: 1.5rem; }
+        .login-overlay .modal-box .btn-login {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 0 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .login-overlay .modal-box .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-secondary:hover { background: #e5d9ed; }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @media (max-width: 600px) {
@@ -333,14 +284,30 @@
             .btn { justify-content: center; }
             .result .part-breakdown { grid-template-columns: 1fr; }
             .mic-btn { width: 100%; }
+            .login-overlay .modal-box { padding: 2rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="modal-box">
+        <span class="icon">🔒</span>
+        <h2>Login Required</h2>
+        <p>You need to be logged in to take this test.</p>
+        <div>
+            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
+            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
+        </p>
+    </div>
+</div>
 
-    <!-- HEADER -->
+<!-- ===== TEST CONTENT ===== -->
+<div class="container" id="testContent" style="display:none;">
     <div class="test-header">
         <h1><i class="fas fa-robot"></i> AI Speaking Test</h1>
         <div class="meta">
@@ -349,20 +316,17 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- AI EXAMINER -->
-    <!-- ============================================================ -->
     <div class="ai-examiner">
         <span class="avatar">🤖</span>
         <div class="status" id="aiStatus">
             <i class="fas fa-circle" style="color:#2e7d32; font-size:0.6rem;"></i> 
             <span id="statusText">AI Examiner ready. Click "Start Speaking" to begin.</span>
         </div>
-        <div class="transcript-box" id="transcriptBox">
+        <div class="transcript-box">
             <span class="label"><i class="fas fa-comment"></i> AI Examiner says:</span>
             <span id="aiMessage">Hello! I'm your AI IELTS examiner. Click the button below to start the test.</span>
         </div>
-        <div class="transcript-box" id="userTranscriptBox" style="border-color:#FFD700;">
+        <div class="transcript-box" style="border-color:#FFD700;">
             <span class="label"><i class="fas fa-user"></i> You said:</span>
             <span id="userMessage"><em>Your speech will appear here...</em></span>
         </div>
@@ -374,9 +338,6 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- PART 1: Interview -->
-    <!-- ============================================================ -->
     <div class="part-section">
         <div class="part-label">🗣️ Part 1</div>
         <div class="cue-card">
@@ -389,9 +350,6 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- PART 2: Long Turn -->
-    <!-- ============================================================ -->
     <div class="part-section">
         <div class="part-label part2">🎤 Part 2</div>
         <div class="cue-card">
@@ -410,9 +368,6 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- PART 3: Discussion -->
-    <!-- ============================================================ -->
     <div class="part-section">
         <div class="part-label part3">💬 Part 3</div>
         <div class="cue-card">
@@ -425,14 +380,12 @@
         </div>
     </div>
 
-    <!-- ACTIONS -->
     <div class="actions">
         <button type="button" class="btn btn-success" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit & Evaluate</button>
         <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Topic</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
-    <!-- RESULT -->
     <div class="result" id="resultBox">
         <h2>📊 Your AI Speaking Evaluation</h2>
         <div class="part-breakdown">
@@ -454,13 +407,9 @@
         <div class="save-status" id="saveStatus"></div>
         <a href="index.html" class="back-link">← Back to Home</a>
     </div>
-
 </div>
 
 <script>
-    // ============================================================
-    // FIREBASE CONFIG
-    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
         authDomain: "ieltsprova.firebaseapp.com",
@@ -469,182 +418,125 @@
         messagingSenderId: "812300970124",
         appId: "1:812300970124:web:992398c08c151ae97df3a9"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // ============================================================
+    // 🔒 LOGIN CHECK
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            document.getElementById('loginOverlay').classList.add('active');
+            document.getElementById('testContent').style.display = 'none';
+            return;
+        }
+        document.getElementById('loginOverlay').classList.remove('active');
+        document.getElementById('testContent').style.display = 'block';
+    });
+
     // SPEECH RECOGNITION
-    // ============================================================
     let isRecording = false;
     let recognition = null;
     let userSpeech = '';
-    let aiResponses = [];
+    let part1Answers = '';
+    let part2Answers = '';
+    let part3Answers = '';
+    let currentPart = 1;
 
-    // Check for browser support
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const SpeechSynthesis = window.speechSynthesis;
 
     if (!SpeechRecognition) {
         document.getElementById('micBtn').disabled = true;
-        document.getElementById('statusText').textContent = '❌ Speech recognition not supported in this browser. Please use Chrome or Edge.';
+        document.getElementById('statusText').textContent = '❌ Speech recognition not supported. Please use Chrome.';
     }
 
     function toggleRecording() {
-        if (isRecording) {
-            stopRecording();
-        } else {
-            startRecording();
-        }
+        if (isRecording) { stopRecording(); } 
+        else { startRecording(); }
     }
 
     function startRecording() {
         if (!SpeechRecognition) return;
-
         recognition = new SpeechRecognition();
         recognition.lang = 'en-US';
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.maxAlternatives = 1;
-
         const micBtn = document.getElementById('micBtn');
         const statusText = document.getElementById('statusText');
-        const aiMessage = document.getElementById('aiMessage');
         const userMessage = document.getElementById('userMessage');
-
         micBtn.classList.add('recording');
         micBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Speaking';
         isRecording = true;
-
         statusText.innerHTML = '<span style="color:#e53935;">🔴 Listening... Speak now!</span>';
         userMessage.textContent = '...';
-
-        // Speak the first question
         speakText("Hello! I'm your AI IELTS examiner. Let's start with Part 1. Where do you live now?");
 
         recognition.onresult = function(event) {
             let finalTranscript = '';
-            let interimTranscript = '';
-
             for (let i = event.resultIndex; i < event.results.length; i++) {
-                const transcript = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
-                    finalTranscript += transcript;
-                } else {
-                    interimTranscript += transcript;
+                    finalTranscript += event.results[i][0].transcript;
                 }
             }
-
             if (finalTranscript) {
                 userSpeech += finalTranscript + ' ';
                 userMessage.textContent = userSpeech;
-                aiMessage.textContent = '🤔 Processing your answer...';
-                
-                // Auto-respond after a pause in speaking
                 clearTimeout(recognition.timeout);
                 recognition.timeout = setTimeout(() => {
-                    if (isRecording) {
-                        handleAIResponse(userSpeech);
-                    }
+                    if (isRecording) handleAIResponse(userSpeech);
                 }, 2000);
-            } else if (interimTranscript) {
-                userMessage.textContent = interimTranscript + '...';
             }
         };
-
         recognition.onerror = function(event) {
-            console.error('Speech recognition error:', event.error);
-            if (event.error === 'not-allowed') {
-                alert('Please allow microphone access to use this feature.');
-            }
+            if (event.error === 'not-allowed') alert('Please allow microphone access.');
             stopRecording();
         };
-
-        recognition.onend = function() {
-            if (isRecording) {
-                // Auto-restart if still recording
-                recognition.start();
-            }
-        };
-
         recognition.start();
     }
 
     function stopRecording() {
         isRecording = false;
         const micBtn = document.getElementById('micBtn');
-        const statusText = document.getElementById('statusText');
-
         micBtn.classList.remove('recording');
         micBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Speaking';
-        statusText.innerHTML = '<span style="color:#2e7d32;">⏸️ Paused. Click "Start Speaking" to continue.</span>';
-
-        if (recognition) {
-            recognition.stop();
-        }
+        document.getElementById('statusText').innerHTML = '<span style="color:#2e7d32;">⏸️ Paused. Click "Start Speaking" to continue.</span>';
+        if (recognition) recognition.stop();
     }
 
-    // ============================================================
-    // TEXT TO SPEECH (AI Examiner)
-    // ============================================================
     function speakText(text) {
         if (!SpeechSynthesis) return;
-
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 0.9;
         utterance.pitch = 1.1;
         utterance.volume = 1;
         utterance.lang = 'en-US';
-
-        // Try to use a female voice
         const voices = SpeechSynthesis.getVoices();
-        const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google UK') || v.name.includes('Zira'));
-        if (femaleVoice) {
-            utterance.voice = femaleVoice;
-        }
-
-        // Update UI
+        const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google UK'));
+        if (femaleVoice) utterance.voice = femaleVoice;
         document.getElementById('aiMessage').textContent = text;
         document.getElementById('statusText').innerHTML = '<span style="color:#4A148C;">🗣️ AI Examiner is speaking...</span>';
-
         utterance.onend = function() {
             document.getElementById('statusText').innerHTML = '<span style="color:#2e7d32;">✅ Waiting for your response...</span>';
         };
-
         SpeechSynthesis.speak(utterance);
     }
 
-    // Load voices
     if (SpeechSynthesis) {
         SpeechSynthesis.getVoices();
-        SpeechSynthesis.onvoiceschanged = function() {
-            SpeechSynthesis.getVoices();
-        };
+        SpeechSynthesis.onvoiceschanged = function() { SpeechSynthesis.getVoices(); };
     }
-
-    // ============================================================
-    // AI RESPONSE LOGIC
-    // ============================================================
-    let currentPart = 1;
-    let part1Answers = '';
-    let part2Answers = '';
-    let part3Answers = '';
 
     function handleAIResponse(text) {
         const lowerText = text.toLowerCase();
-
-        // Simple response logic based on what the student said
         if (currentPart === 1) {
             if (lowerText.includes('live') || lowerText.includes('hometown')) {
                 speakText("That's interesting! What do you usually do in your free time?");
                 part1Answers += text + ' ';
                 currentPart = 2;
             } else if (lowerText.includes('free time') || lowerText.includes('hobbies')) {
-                speakText("Great! Now let's move to Part 2. Describe a memorable trip you have taken. You have 1 minute to prepare. I'll start the timer.");
+                speakText("Great! Now let's move to Part 2. Describe a memorable trip you have taken. You have 1 minute to prepare.");
                 part1Answers += text + ' ';
                 currentPart = 3;
-                // Auto-start Part 2
                 setTimeout(() => {
                     speakText("Please describe a memorable trip you have taken. Where did you go, who did you go with, what did you do, and why was it memorable?");
                 }, 5000);
@@ -652,7 +544,6 @@
                 speakText("Tell me more about where you live or what you like to do in your free time.");
             }
         } else if (currentPart === 3) {
-            // Part 2 is being spoken
             if (text.length > 20) {
                 part2Answers += text + ' ';
                 speakText("Thank you. Now let's move to Part 3 discussion. Why do people enjoy travelling to new places?");
@@ -661,7 +552,6 @@
                 speakText("Try to speak for a bit longer about your trip. Where did you go and what made it memorable?");
             }
         } else if (currentPart === 4) {
-            // Part 3
             if (text.length > 20) {
                 part3Answers += text + ' ';
                 speakText("Thank you! You have completed the speaking test. Click 'Submit & Evaluate' for your results.");
@@ -673,50 +563,25 @@
         } else {
             speakText("Test complete! Click 'Submit & Evaluate' for your results.");
         }
-
-        // Store the response
-        if (currentPart === 2) part1Answers += text + ' ';
-        if (currentPart === 3) part1Answers += text + ' ';
-        if (currentPart === 4) part2Answers += text + ' ';
-        if (currentPart === 5) part3Answers += text + ' ';
-
-        // Clear the user speech for next input
         userSpeech = '';
     }
 
-    // ============================================================
-    // TIMER (15 minutes)
-    // ============================================================
     let timeLeft = 900;
     const timerDisplay = document.getElementById('timerDisplay');
-
     function updateTimer() {
         const mins = Math.floor(timeLeft / 60);
         const secs = timeLeft % 60;
         timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up! Your test will be submitted automatically.');
-            stopRecording();
-            submitTest();
-        }
+        if (timeLeft <= 0) { clearInterval(timerInterval); alert('⏰ Time is up!'); stopRecording(); submitTest(); }
         timeLeft--;
     }
-
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
-    // ============================================================
-    // EVALUATE SPEAKING
-    // ============================================================
     function evaluateSpeakingAI(text, part) {
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
         const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-        const avgWordLength = text.length / (words || 1);
-
         let band = 5.0;
-
-        // Fluency: words per response
         if (part === 1) {
             if (words >= 30) band = 7.0;
             else if (words >= 20) band = 6.5;
@@ -724,9 +589,7 @@
             else if (words >= 5) band = 5.5;
             else band = 5.0;
             if (sentences >= 3 && sentences <= 6) band += 0.5;
-        }
-
-        if (part === 2) {
+        } else if (part === 2) {
             if (words >= 150) band = 7.5;
             else if (words >= 100) band = 7.0;
             else if (words >= 60) band = 6.5;
@@ -734,10 +597,7 @@
             else if (words >= 15) band = 5.5;
             else band = 5.0;
             if (sentences >= 8 && sentences <= 16) band += 0.5;
-            if (avgWordLength > 4.5 && avgWordLength < 7) band += 0.3;
-        }
-
-        if (part === 3) {
+        } else {
             if (words >= 80) band = 7.5;
             else if (words >= 50) band = 7.0;
             else if (words >= 30) band = 6.5;
@@ -745,78 +605,42 @@
             else if (words >= 8) band = 5.5;
             else band = 5.0;
             if (sentences >= 4 && sentences <= 10) band += 0.5;
-            if (avgWordLength > 4.5 && avgWordLength < 7.5) band += 0.3;
         }
-
         band = Math.min(band, 9.0);
         band = Math.round(band * 2) / 2;
-
         return { band, words, sentences };
     }
 
     function getSpeakingFeedbackAI(p1, p2, p3) {
         const avg = (p1 + p2 + p3) / 3;
         const overall = Math.round(avg * 2) / 2;
-
         let feedback = '';
         let tips = [];
-
-        if (overall >= 8.0) {
-            feedback = '🌟 Excellent! You are a fluent and confident speaker with strong vocabulary and pronunciation.';
-            tips = ['Continue practicing with advanced topics', 'Focus on using idiomatic expressions', 'Work on subtle pronunciation nuances'];
-        } else if (overall >= 7.0) {
-            feedback = '👏 Great job! You are a capable speaker with good fluency.';
-            tips = ['Expand your vocabulary', 'Practice speaking for longer periods', 'Work on using more complex sentence structures'];
-        } else if (overall >= 6.0) {
-            feedback = '💪 Good effort! You have a solid foundation.';
-            tips = ['Practice speaking on a variety of topics', 'Work on your pronunciation', 'Use more linking words'];
-        } else if (overall >= 5.0) {
-            feedback = '📚 You are making progress!';
-            tips = ['Practice speaking for 2 minutes without stopping', 'Listen to English content daily', 'Record yourself and listen back'];
-        } else {
-            feedback = '📝 Keep practicing! Start with familiar topics and gradually build confidence.';
-            tips = ['Practice speaking daily', 'Learn topic-specific vocabulary', 'Try to think in English'];
-        }
-
-        return {
-            overall: overall,
-            feedback: feedback,
-            tips: tips
-        };
+        if (overall >= 8.0) { feedback = '🌟 Excellent! Fluent and confident speaker.'; tips = ['Practice advanced topics', 'Use idiomatic expressions']; }
+        else if (overall >= 7.0) { feedback = '👏 Great job! Capable speaker with good fluency.'; tips = ['Expand vocabulary', 'Practice longer responses']; }
+        else if (overall >= 6.0) { feedback = '💪 Good effort! Solid foundation.'; tips = ['Practice variety of topics', 'Work on pronunciation']; }
+        else if (overall >= 5.0) { feedback = '📚 You are making progress!'; tips = ['Practice speaking for 2 minutes', 'Listen to English daily']; }
+        else { feedback = '📝 Keep practicing! Start with familiar topics.'; tips = ['Practice daily', 'Learn topic vocabulary']; }
+        return { overall, feedback, tips };
     }
 
-    // ============================================================
-    // SUBMIT TEST
-    // ============================================================
     async function submitTest() {
-        // Use the collected speech data
         const p1Text = part1Answers || 'No Part 1 response recorded.';
         const p2Text = part2Answers || 'No Part 2 response recorded.';
         const p3Text = part3Answers || 'No Part 3 response recorded.';
-
         const result1 = evaluateSpeakingAI(p1Text, 1);
         const result2 = evaluateSpeakingAI(p2Text, 2);
         const result3 = evaluateSpeakingAI(p3Text, 3);
-
         const overallResult = getSpeakingFeedbackAI(result1.band, result2.band, result3.band);
-
-        // Stop recording if active
         stopRecording();
-
-        // Show results
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
-
         document.getElementById('part1Score').textContent = result1.band;
         document.getElementById('part2Score').textContent = result2.band;
         document.getElementById('part3Score').textContent = result3.band;
         document.getElementById('overallBand').textContent = overallResult.overall;
-
-        const feedback = document.getElementById('feedbackText');
-        feedback.innerHTML = `
-            <div style="margin-bottom:1rem;">
-                <span class="band">Overall Band: ${overallResult.overall}</span>
-            </div>
+        document.getElementById('feedbackText').innerHTML = `
+            <div style="margin-bottom:1rem;"><span class="band">Overall Band: ${overallResult.overall}</span></div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
                 <strong>🗣️ Part 1:</strong> Band ${result1.band} — ${result1.words} words
                 <br /><span style="font-size:0.85rem;color:#7B6A8A;">💡 Tip: Keep answers natural and fluent.</span>
@@ -833,57 +657,26 @@
                 <strong>📝 ${overallResult.feedback}</strong>
             </div>
             <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
-                💡 <strong>To improve your speaking band:</strong>
-                ${overallResult.tips.map(t => `• ${t}`).join('<br />')}
-            </div>
-            <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
-                📊 <strong>Fluency:</strong> ${result1.words + result2.words + result3.words} total words spoken
+                💡 <strong>To improve:</strong> ${overallResult.tips.map(t => `• ${t}`).join('<br />')}
             </div>
         `;
-
         document.querySelector('.btn-success').disabled = true;
         clearInterval(timerInterval);
 
-        // ============================================================
-        // SAVE TO LOCALSTORAGE
-        // ============================================================
-        const scoreData = {
-            module: 'speaking_ai',
-            score: overallResult.overall,
-            total: 9,
-            part1: result1.band,
-            part2: result2.band,
-            part3: result3.band,
-            date: new Date().toISOString()
-        };
-
+        const scoreData = { module: 'speaking_ai', score: overallResult.overall, total: 9, part1: result1.band, part2: result2.band, part3: result3.band, date: new Date().toISOString() };
         let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         savedScores.push(scoreData);
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
-        console.log('✅ AI Speaking score saved to localStorage:', scoreData);
 
-        // ============================================================
-        // SAVE TO FIRESTORE
-        // ============================================================
         const saveStatus = document.getElementById('saveStatus');
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
-                    await db.collection('scores').add({
-                        userId: user.uid,
-                        module: 'speaking_ai',
-                        score: overallResult.overall,
-                        total: 9,
-                        part1: result1.band,
-                        part2: result2.band,
-                        part3: result3.band,
-                        date: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    await db.collection('scores').add({ userId: user.uid, module: 'speaking_ai', score: overallResult.overall, total: 9, part1: result1.band, part2: result2.band, part3: result3.band, date: firebase.firestore.FieldValue.serverTimestamp() });
                     saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
-                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed, but your data is safe!)';
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed).';
                     saveStatus.style.color = '#f57f17';
                 }
             } else {
@@ -893,14 +686,7 @@
         });
     }
 
-    // ============================================================
-    // RESET TEST
-    // ============================================================
-    function resetTest() {
-        stopRecording();
-        location.reload();
-    }
+    function resetTest() { stopRecording(); location.reload(); }
 </script>
-
 </body>
-    </html>
+                </html>
