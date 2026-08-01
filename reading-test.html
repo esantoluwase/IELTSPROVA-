@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
     <meta name="google-site-verification" content="DoXFd_K1WOpsk5zd76X9pKWmgYydvjzabfgC0L-nMo4" />
+    
     <title>IELTSProva — Reading Test</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
@@ -180,8 +184,7 @@
             text-decoration: none;
         }
         .back-link:hover { text-decoration: underline; }
-        
-        /* ===== LOGIN OVERLAY ===== */
+
         .login-overlay {
             display: none;
             position: fixed;
@@ -195,9 +198,7 @@
             justify-content: center;
             align-items: center;
         }
-        .login-overlay.active {
-            display: flex;
-        }
+        .login-overlay.active { display: flex; }
         .login-overlay .modal-box {
             background: white;
             border-radius: 32px;
@@ -207,20 +208,9 @@
             text-align: center;
             animation: slideUp 0.3s ease;
         }
-        .login-overlay .modal-box .icon {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .login-overlay .modal-box h2 {
-            color: #4A148C;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-        .login-overlay .modal-box p {
-            color: #7B6A8A;
-            margin-bottom: 1.5rem;
-        }
+        .login-overlay .modal-box .icon { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box h2 { color: #4A148C; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box p { color: #7B6A8A; margin-bottom: 1.5rem; }
         .login-overlay .modal-box .btn-login {
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white;
@@ -252,9 +242,7 @@
             text-decoration: none;
             display: inline-block;
         }
-        .login-overlay .modal-box .btn-secondary:hover {
-            background: #e5d9ed;
-        }
+        .login-overlay .modal-box .btn-secondary:hover { background: #e5d9ed; }
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -323,9 +311,6 @@
 </div>
 
 <script>
-    // ============================================================
-    // FIREBASE CONFIG
-    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
         authDomain: "ieltsprova.firebaseapp.com",
@@ -339,9 +324,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // ============================================================
-    // 🔒 CHECK IF USER IS LOGGED IN
-    // ============================================================
+    // ===== LOGIN CHECK =====
     auth.onAuthStateChanged(user => {
         if (!user) {
             document.getElementById('loginOverlay').classList.add('active');
@@ -353,9 +336,7 @@
         renderTest();
     });
 
-    // ============================================================
-    // COMPLETE QUESTION BANK — 60 QUESTIONS
-    // ============================================================
+    // ===== QUESTION BANK (60 QUESTIONS) =====
     const questionBank = [
         {
             passage: "Glassmaking is one of the oldest crafts in human history, dating back to around 3500 BCE in Mesopotamia. Early glass was used primarily for beads and decorative objects, as it was difficult to produce clear, flawless sheets. The discovery of glassblowing in the 1st century BCE in the Roman Empire revolutionised production, making glass cheaper and more widely available. This technique allowed artisans to create transparent vessels, which soon became popular across Europe and Asia. During the Middle Ages, Venice emerged as a major centre for glass production, particularly on the island of Murano. Murano glassmakers developed crystalline glass and enamel decoration, and their techniques were closely guarded secrets. By the 17th century, lead crystal glass was invented in England, adding brilliance and weight to glassware, which became highly sought after by royalty. The Industrial Revolution brought mechanisation to glass production. In 1887, the mass production of glass bottles began, and in the early 20th century, the invention of the float glass process made it possible to produce large, perfectly flat sheets of glass for windows and mirrors. Today, glass is used in everything from smartphone screens to fibre optics, proving that this ancient material remains at the forefront of modern technology.",
@@ -449,9 +430,6 @@
         }
     ];
 
-    // ============================================================
-    // SETTINGS
-    // ============================================================
     const PLAN = 'free';
 
     function shuffle(array) {
@@ -538,9 +516,6 @@
         document.getElementById('progressFill').style.width = `${(answered / total) * 100}%`;
     }
 
-    // ============================================================
-    // TIMER
-    // ============================================================
     let timeLeft = 900;
     const timerDisplay = document.getElementById('timerDisplay');
 
@@ -559,9 +534,6 @@
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
-    // ============================================================
-    // SUBMIT TEST
-    // ============================================================
     async function submitTest() {
         let score = 0;
         const total = selectedQuestions.length;
