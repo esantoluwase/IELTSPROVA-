@@ -37,13 +37,8 @@
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-        .test-header h1 {
-            font-size: 1.8rem;
-            color: #4A148C;
-        }
-        .test-header h1 i {
-            color: #7B1FA2;
-        }
+        .test-header h1 { font-size: 1.8rem; color: #4A148C; }
+        .test-header h1 i { color: #7B1FA2; }
         .test-header .meta {
             display: flex;
             align-items: center;
@@ -58,9 +53,6 @@
             font-weight: 700;
             font-size: 1rem;
         }
-        .timer-box i {
-            margin-right: 0.5rem;
-        }
         .plan-badge {
             padding: 0.3rem 1.2rem;
             border-radius: 50px;
@@ -69,11 +61,6 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
-        .plan-badge.pro {
-            background: #fff8e1;
-            color: #f57f17;
-        }
-
         .task-section {
             margin-bottom: 2.5rem;
             padding-bottom: 2.5rem;
@@ -106,10 +93,7 @@
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
-        .task-prompt p {
-            color: #3d2a4a;
-            font-size: 0.95rem;
-        }
+        .task-prompt p { color: #3d2a4a; font-size: 0.95rem; }
         .task-prompt .chart-placeholder {
             background: #f3edf7;
             padding: 1.5rem;
@@ -126,10 +110,7 @@
             margin-bottom: 0.5rem;
             color: #7B1FA2;
         }
-
-        .writing-area {
-            margin-top: 0.5rem;
-        }
+        .writing-area { margin-top: 0.5rem; }
         .writing-area label {
             font-weight: 600;
             color: #4A148C;
@@ -158,11 +139,7 @@
             color: #7B6A8A;
             margin-top: 0.3rem;
         }
-        .word-counter .count {
-            font-weight: 700;
-            color: #4A148C;
-        }
-
+        .word-counter .count { font-weight: 700; color: #4A148C; }
         .actions {
             display: flex;
             gap: 1rem;
@@ -200,18 +177,11 @@
             background: #f3edf7;
             color: #4A148C;
         }
-        .btn-secondary:hover {
-            background: #e5d9ed;
-        }
+        .btn-secondary:hover { background: #e5d9ed; }
         .btn-success {
             background: linear-gradient(135deg, #2e7d32, #43a047);
             color: white;
         }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
-        }
-
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -220,19 +190,9 @@
             border: 2px solid #7B1FA2;
             display: none;
         }
-        .result.show {
-            display: block;
-        }
-        .result .score-big {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #4A148C;
-        }
-        .result .feedback-text {
-            font-size: 1.05rem;
-            margin-top: 0.5rem;
-            line-height: 1.8;
-        }
+        .result.show { display: block; }
+        .result .score-big { font-size: 3rem; font-weight: 900; color: #4A148C; }
+        .result .feedback-text { font-size: 1.05rem; margin-top: 0.5rem; line-height: 1.8; }
         .result .feedback-text .band {
             display: inline-block;
             background: #FFD700;
@@ -241,11 +201,7 @@
             border-radius: 50px;
             font-weight: 700;
         }
-        .result .save-status {
-            margin-top: 0.8rem;
-            font-size: 0.95rem;
-            color: #2e7d32;
-        }
+        .result .save-status { margin-top: 0.8rem; font-size: 0.95rem; }
         .result .task-breakdown {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -259,16 +215,12 @@
             border: 1px solid #f0e8f5;
             text-align: center;
         }
-        .result .task-breakdown .task-result .label {
-            font-size: 0.8rem;
-            color: #7B6A8A;
-        }
+        .result .task-breakdown .task-result .label { font-size: 0.8rem; color: #7B6A8A; }
         .result .task-breakdown .task-result .value {
             font-size: 1.8rem;
             font-weight: 800;
             color: #4A148C;
         }
-
         .back-link {
             display: inline-block;
             margin-top: 1.5rem;
@@ -276,41 +228,105 @@
             font-weight: 600;
             text-decoration: none;
         }
-        .back-link:hover {
-            text-decoration: underline;
+        .back-link:hover { text-decoration: underline; }
+
+        /* ===== LOGIN OVERLAY ===== */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-overlay.active { display: flex; }
+        .login-overlay .modal-box {
+            background: white;
+            border-radius: 32px;
+            padding: 3rem;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        .login-overlay .modal-box .icon { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box h2 { color: #4A148C; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box p { color: #7B6A8A; margin-bottom: 1.5rem; }
+        .login-overlay .modal-box .btn-login {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 0 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .login-overlay .modal-box .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-secondary:hover { background: #e5d9ed; }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            .container {
-                padding: 1.5rem;
-            }
-            .test-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .actions {
-                flex-direction: column;
-            }
-            .btn {
-                justify-content: center;
-            }
-            .result .task-breakdown {
-                grid-template-columns: 1fr;
-            }
-            .writing-area textarea {
-                min-height: 150px;
-            }
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            .test-header { flex-direction: column; align-items: flex-start; }
+            .actions { flex-direction: column; }
+            .btn { justify-content: center; }
+            .result .task-breakdown { grid-template-columns: 1fr; }
+            .writing-area textarea { min-height: 150px; }
+            .login-overlay .modal-box { padding: 2rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="modal-box">
+        <span class="icon">🔒</span>
+        <h2>Login Required</h2>
+        <p>You need to be logged in to take this test.</p>
+        <div>
+            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
+            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
+        </p>
+    </div>
+</div>
 
-    <!-- HEADER -->
+<!-- ===== TEST CONTENT ===== -->
+<div class="container" id="testContent" style="display:none;">
+
     <div class="test-header">
         <h1><i class="fas fa-pen-fancy"></i> Writing Test</h1>
         <div class="meta">
@@ -356,14 +372,12 @@
         </div>
     </div>
 
-    <!-- ACTIONS -->
     <div class="actions">
         <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
         <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Test</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
-    <!-- RESULT -->
     <div class="result" id="resultBox">
         <h2>📊 Your Writing Evaluation</h2>
         <div class="task-breakdown">
@@ -381,13 +395,9 @@
         <div class="save-status" id="saveStatus"></div>
         <a href="index.html" class="back-link">← Back to Home</a>
     </div>
-
 </div>
 
 <script>
-    // ============================================================
-    // FIREBASE CONFIG
-    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
         authDomain: "ieltsprova.firebaseapp.com",
@@ -396,53 +406,44 @@
         messagingSenderId: "812300970124",
         appId: "1:812300970124:web:992398c08c151ae97df3a9"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // ============================================================
-    // WORD COUNTER
-    // ============================================================
+    // 🔒 LOGIN CHECK
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            document.getElementById('loginOverlay').classList.add('active');
+            document.getElementById('testContent').style.display = 'none';
+            return;
+        }
+        document.getElementById('loginOverlay').classList.remove('active');
+        document.getElementById('testContent').style.display = 'block';
+    });
+
     function updateWordCount(textareaId, displayId) {
         const text = document.getElementById(textareaId).value;
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
         document.getElementById(displayId).textContent = words;
     }
 
-    // ============================================================
-    // TIMER (60 minutes)
-    // ============================================================
     let timeLeft = 3600;
     const timerDisplay = document.getElementById('timerDisplay');
-
     function updateTimer() {
         const mins = Math.floor(timeLeft / 60);
         const secs = timeLeft % 60;
         timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up! Your test will be submitted automatically.');
-            submitTest();
-        }
+        if (timeLeft <= 0) { clearInterval(timerInterval); alert('⏰ Time is up!'); submitTest(); }
         timeLeft--;
     }
-
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
-    // ============================================================
-    // EVALUATION FUNCTION (AI-powered scoring)
-    // ============================================================
     function evaluateWriting(text, type) {
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
         const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
         const avgWordLength = text.length / (words || 1);
-
-        // Band scores based on length, sentence variety, and structure
-        let band = 5.0; // Base band
-
-        // Task 1: Minimum 150 words
+        let band = 5.0;
         if (type === 'task1') {
             if (words >= 150 && words <= 180) band = 6.5;
             else if (words > 180 && words <= 220) band = 7.0;
@@ -451,17 +452,9 @@
             else if (words >= 100) band = 5.5;
             else if (words >= 50) band = 5.0;
             else band = 4.5;
-
-            // Bonus for good structure (number of sentences)
             if (sentences >= 10 && sentences <= 18) band += 0.5;
-            if (sentences > 18) band += 0.3;
-
-            // Bonus for variety (average word length)
             if (avgWordLength > 5 && avgWordLength < 7) band += 0.3;
-        }
-
-        // Task 2: Minimum 250 words
-        if (type === 'task2') {
+        } else {
             if (words >= 250 && words <= 300) band = 6.5;
             else if (words > 300 && words <= 350) band = 7.0;
             else if (words > 350) band = 7.5;
@@ -469,120 +462,61 @@
             else if (words >= 150) band = 5.5;
             else if (words >= 80) band = 5.0;
             else band = 4.5;
-
             if (sentences >= 12 && sentences <= 22) band += 0.5;
-            if (sentences > 22) band += 0.3;
             if (avgWordLength > 5 && avgWordLength < 7.5) band += 0.3;
         }
-
-        // Cap at 9.0 and round to nearest 0.5
         band = Math.min(band, 9.0);
         band = Math.round(band * 2) / 2;
-
-        return {
-            band: band,
-            words: words,
-            sentences: sentences,
-            feedback: getFeedback(band, type, words)
-        };
+        return { band, words, sentences };
     }
 
     function getFeedback(band, type, words) {
         const minWords = type === 'task1' ? 150 : 250;
-        const wordFeedback = words < minWords 
-            ? `<br />⚠️ ${type === 'task1' ? 'Task 1' : 'Task 2'} needs more words (${words}/${minWords}). Aim for at least ${minWords} words.` 
-            : `<br />✅ Good word count (${words} words).`;
-
-        if (band >= 8.5) return `🌟 Excellent work! This is a high-band response.${wordFeedback}`;
-        if (band >= 7.5) return `👏 Great job! You're showing strong writing skills.${wordFeedback}`;
+        const wordFeedback = words < minWords ? `<br />⚠️ Needs more words (${words}/${minWords}).` : `<br />✅ Good word count (${words}).`;
+        if (band >= 8.5) return `🌟 Excellent work!${wordFeedback}`;
+        if (band >= 7.5) return `👏 Great job! Strong writing skills.${wordFeedback}`;
         if (band >= 6.5) return `💪 Good effort! You're on the right track.${wordFeedback}`;
         if (band >= 5.5) return `📚 You're developing your skills. Keep practicing!${wordFeedback}`;
-        return `📝 Keep practicing! Focus on developing your ideas more fully.${wordFeedback}`;
+        return `📝 Keep practicing! Focus on developing your ideas.${wordFeedback}`;
     }
 
-    // ============================================================
-    // SUBMIT TEST
-    // ============================================================
     async function submitTest() {
         const task1Text = document.getElementById('task1Response').value;
         const task2Text = document.getElementById('task2Response').value;
-
-        // Evaluate both tasks
         const task1Result = evaluateWriting(task1Text, 'task1');
         const task2Result = evaluateWriting(task2Text, 'task2');
-
         const overallBand = Math.round(((task1Result.band + task2Result.band) / 2) * 2) / 2;
-
-        // Show results
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
-
         document.getElementById('task1Band').textContent = task1Result.band;
         document.getElementById('task2Band').textContent = task2Result.band;
         document.getElementById('overallBand').textContent = overallBand;
-
-        const feedback = document.getElementById('feedbackText');
-        feedback.innerHTML = `
-            <div style="margin-bottom:1rem;">
-                <span class="band">Overall Band: ${overallBand}</span>
+        document.getElementById('feedbackText').innerHTML = `
+            <div style="margin-bottom:1rem;"><span class="band">Overall Band: ${overallBand}</span></div>
+            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
+                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${getFeedback(task1Result.band, 'task1', task1Result.words)}
             </div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${task1Result.feedback}
-            </div>
-            <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${task2Result.feedback}
-            </div>
-            <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
-                💡 Tip: To improve your band score, focus on:
-                • Developing your ideas with specific examples
-                • Using a variety of sentence structures
-                • Including linking words for cohesion
-                • Checking your grammar and spelling
+                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${getFeedback(task2Result.band, 'task2', task2Result.words)}
             </div>
         `;
-
-        // Disable submit button
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
-        // ============================================================
-        // SAVE TO LOCALSTORAGE
-        // ============================================================
-        const scoreData = {
-            module: 'writing',
-            score: overallBand,
-            total: 9,
-            task1Band: task1Result.band,
-            task2Band: task2Result.band,
-            date: new Date().toISOString()
-        };
-
+        const scoreData = { module: 'writing', score: overallBand, total: 9, task1Band: task1Result.band, task2Band: task2Result.band, date: new Date().toISOString() };
         let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         savedScores.push(scoreData);
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
-        console.log('✅ Writing score saved to localStorage:', scoreData);
 
-        // ============================================================
-        // SAVE TO FIRESTORE
-        // ============================================================
         const saveStatus = document.getElementById('saveStatus');
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
-                    await db.collection('scores').add({
-                        userId: user.uid,
-                        module: 'writing',
-                        score: overallBand,
-                        total: 9,
-                        task1Band: task1Result.band,
-                        task2Band: task2Result.band,
-                        date: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    await db.collection('scores').add({ userId: user.uid, module: 'writing', score: overallBand, total: 9, task1Band: task1Result.band, task2Band: task2Result.band, date: firebase.firestore.FieldValue.serverTimestamp() });
                     saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
-                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed, but your data is safe!)';
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed).';
                     saveStatus.style.color = '#f57f17';
                 }
             } else {
@@ -592,13 +526,7 @@
         });
     }
 
-    // ============================================================
-    // RESET TEST
-    // ============================================================
-    function resetTest() {
-        location.reload();
-    }
+    function resetTest() { location.reload(); }
 </script>
-
 </body>
-  </html>
+    </html>
