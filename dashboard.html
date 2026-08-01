@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="DoXFd_K1WOpsk5zd76X9pKWmgYydvjzabfgC0L-nMo4" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
     <title>Dashboard — IELTSProva</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -30,7 +33,11 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .dashboard-header h1 { font-size: 2rem; font-weight: 800; color: #4A148C; }
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
         .dashboard-header h1 span { color: #FFD700; }
         .dashboard-header .user-info {
             display: flex;
@@ -40,6 +47,7 @@
             padding: 0.5rem 1.5rem 0.5rem 1rem;
             border-radius: 50px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
         }
         .dashboard-header .user-info .avatar {
             width: 40px;
@@ -61,6 +69,34 @@
             font-size: 0.7rem;
             font-weight: 700;
         }
+        .dashboard-header .user-info .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .dashboard-header .user-info .plan-badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .btn-upgrade {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-upgrade:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
         .loading-spinner {
             text-align: center;
             padding: 3rem;
@@ -73,6 +109,7 @@
             margin-bottom: 0.5rem;
             color: #4A148C;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -87,10 +124,25 @@
             text-align: center;
             transition: 0.3s;
         }
-        .stat-card:hover { border-color: #7B1FA2; transform: translateY(-4px); }
-        .stat-card .stat-number { font-size: 2.5rem; font-weight: 800; color: #4A148C; }
-        .stat-card .stat-label { color: #7B6A8A; font-size: 0.9rem; }
-        .stat-card .stat-icon { font-size: 2rem; display: block; margin-bottom: 0.3rem; }
+        .stat-card:hover {
+            border-color: #7B1FA2;
+            transform: translateY(-4px);
+        }
+        .stat-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+        .stat-card .stat-label {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+        }
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
         .progress-section {
             background: white;
             border-radius: 24px;
@@ -98,8 +150,14 @@
             border: 1px solid #f0e8f5;
             margin-bottom: 2rem;
         }
-        .progress-section h2 { font-size: 1.4rem; color: #4A148C; margin-bottom: 1.5rem; }
-        .progress-item { margin-bottom: 1.2rem; }
+        .progress-section h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1.5rem;
+        }
+        .progress-item {
+            margin-bottom: 1.2rem;
+        }
         .progress-item .progress-label {
             display: flex;
             justify-content: space-between;
@@ -119,14 +177,21 @@
             transition: width 1s ease;
             width: 0%;
         }
-        .progress-bar .fill.gold { background: linear-gradient(90deg, #FFD700, #f5c500); }
+        .progress-bar .fill.gold {
+            background: linear-gradient(90deg, #FFD700, #f5c500);
+        }
+
         .history-section {
             background: white;
             border-radius: 24px;
             padding: 2rem;
             border: 1px solid #f0e8f5;
         }
-        .history-section h2 { font-size: 1.4rem; color: #4A148C; margin-bottom: 1rem; }
+        .history-section h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1rem;
+        }
         .history-item {
             display: flex;
             justify-content: space-between;
@@ -147,13 +212,32 @@
         .history-item .test-score.high { background: #e8f5e9; color: #2e7d32; }
         .history-item .test-score.medium { background: #fff8e1; color: #f57f17; }
         .history-item .test-score.low { background: #fce4ec; color: #c62828; }
-        .history-item .test-date { color: #7B6A8A; font-size: 0.85rem; }
-        .no-history { color: #7B6A8A; text-align: center; padding: 1.5rem; }
+        .history-item .test-date {
+            color: #7B6A8A;
+            font-size: 0.85rem;
+        }
+        .no-history {
+            color: #7B6A8A;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .back-link:hover { border-bottom-color: #FFD700; }
+
         .storage-info {
             background: #faf7ff;
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.2rem;
             border-radius: 12px;
-            margin: 1rem 0;
+            margin: 0 0 1.5rem 0;
             font-size: 0.85rem;
             border: 1px solid #f0e8f5;
             display: flex;
@@ -178,27 +262,21 @@
             font-weight: 700;
             font-size: 0.7rem;
         }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            color: #4A148C;
-            font-weight: 600;
-            text-decoration: none;
-            border-bottom: 2px solid transparent;
-            transition: 0.3s;
-        }
-        .back-link:hover { border-bottom-color: #FFD700; }
+
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .dashboard-header { flex-direction: column; align-items: flex-start; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .history-item { flex-wrap: wrap; gap: 0.5rem; }
+            .dashboard-header .user-info { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+
+    <!-- ===== HEADER ===== -->
     <div class="dashboard-header">
         <h1>📊 My <span>Dashboard</span></h1>
         <div class="user-info" id="userInfo">
@@ -207,18 +285,23 @@
                 <strong id="userName">Student</strong>
                 <span class="plan-badge" id="userPlan">Free Plan</span>
             </div>
+            <a href="checkout.html" class="btn-upgrade" id="upgradeBtn">
+                <i class="fas fa-arrow-up"></i> Upgrade
+            </a>
         </div>
     </div>
 
+    <!-- ===== LOADING ===== -->
     <div id="loadingMessage" class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
         Loading your progress...
     </div>
 
+    <!-- ===== DASHBOARD CONTENT ===== -->
     <div id="dashboardContent" style="display:none;">
 
-        <!-- STORAGE INFO -->
-        <div class="storage-info" id="storageInfo">
+        <!-- ===== STORAGE INFO ===== -->
+        <div class="storage-info">
             <span>📊 Scores loaded from:</span>
             <div>
                 <span class="badge-local" id="localBadge">💾 Local: 0</span>
@@ -226,6 +309,7 @@
             </div>
         </div>
 
+        <!-- ===== STATS ===== -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
                 <span class="stat-icon">📝</span>
@@ -249,6 +333,7 @@
             </div>
         </div>
 
+        <!-- ===== PROGRESS BARS ===== -->
         <div class="progress-section">
             <h2>📈 Your Progress</h2>
             <div id="progressBars">
@@ -291,12 +376,14 @@
             </div>
         </div>
 
+        <!-- ===== TEST HISTORY ===== -->
         <div class="history-section">
             <h2>📋 Test History</h2>
             <div id="historyList">
                 <div class="no-history">No test attempts yet. Take your first test!</div>
             </div>
         </div>
+
     </div>
 
     <a href="index.html" class="back-link">← Back to Home</a>
@@ -304,7 +391,7 @@
 
 <script>
     // ============================================================
-    // FIREBASE CONFIG
+    // 🔥 FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -328,29 +415,47 @@
             return;
         }
 
+        // ===== UPDATE USER INFO =====
         document.getElementById('userName').textContent = user.displayName || 'Student';
         document.getElementById('userAvatar').textContent = (user.displayName || 'S')[0].toUpperCase();
+
+        // ===== LOAD USER PLAN FROM FIRESTORE =====
+        let userPlan = 'free';
 
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             if (userDoc.exists) {
                 const data = userDoc.data();
-                document.getElementById('userPlan').textContent = data.plan === 'pro' ? '⭐ Pro Plan' : 'Free Plan';
+                userPlan = data.plan || 'free';
+                console.log('📊 User plan loaded:', userPlan);
             }
         } catch (e) {
-            console.log('User doc not found');
+            console.log('Error loading user plan:', e);
         }
 
-        // ============================================================
-        // LOAD FROM LOCALSTORAGE (ALWAYS WORKS)
-        // ============================================================
+        // ===== UPDATE PLAN BADGE =====
+        const planBadge = document.getElementById('userPlan');
+        const upgradeBtn = document.getElementById('upgradeBtn');
+
+        if (userPlan === 'pro') {
+            planBadge.textContent = '⭐ Pro Plan';
+            planBadge.className = 'plan-badge pro';
+            upgradeBtn.style.display = 'none';
+        } else if (userPlan === 'proplus') {
+            planBadge.textContent = '🚀 Pro+ Plan';
+            planBadge.className = 'plan-badge proplus';
+            upgradeBtn.style.display = 'none';
+        } else {
+            planBadge.textContent = '🟢 Free Plan';
+            planBadge.className = 'plan-badge';
+            upgradeBtn.style.display = 'inline-flex';
+        }
+
+        // ===== LOAD SCORES =====
         let allScores = [];
         let localScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         console.log('📊 LocalStorage scores:', localScores);
 
-        // ============================================================
-        // LOAD FROM FIRESTORE (IF AVAILABLE)
-        // ============================================================
         let firebaseScores = [];
         try {
             const scoresSnapshot = await db.collection('scores')
@@ -372,10 +477,7 @@
             console.error('❌ Firestore error:', error);
         }
 
-        // ============================================================
-        // MERGE SCORES (LocalStorage + Firebase, no duplicates)
-        // ============================================================
-        // Use localStorage as primary, add Firebase scores that aren't duplicates
+        // ===== MERGE SCORES =====
         const mergedScores = [...localScores];
         const existingModules = new Set(localScores.map(s => `${s.module}_${s.date}`));
         
@@ -389,10 +491,11 @@
 
         console.log('📊 Total merged scores:', mergedScores.length);
 
-        // Update storage info
+        // ===== UPDATE STORAGE INFO =====
         document.getElementById('localBadge').textContent = `💾 Local: ${localScores.length}`;
         document.getElementById('firebaseBadge').textContent = `☁️ Firebase: ${firebaseScores.length}`;
 
+        // ===== SHOW DASHBOARD =====
         document.getElementById('loadingMessage').style.display = 'none';
         document.getElementById('dashboardContent').style.display = 'block';
 
