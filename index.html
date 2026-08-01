@@ -3,40 +3,33 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
     <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
-    <!-- ===== SEO ===== -->
-    <title>IELTSProva — Ace Your IELTS with AI-Powered Practice</title>
-    <meta name="description" content="IELTSProva by Prova Technologies — Free IELTS practice tests for Reading, Writing, Listening, and Speaking. AI-powered evaluation and progress tracking." />
-    <meta name="keywords" content="IELTS, IELTS practice, IELTS test, IELTS preparation, Prova Technologies, IELTSProva" />
+    
+    <title>IELTSProva — AI-Powered IELTS Preparation</title>
+    <meta name="description" content="Master all four IELTS skills with personalized practice, realistic mock tests, and an AI-powered coaching partner designed to help you reach your target score." />
+    <meta name="keywords" content="IELTS, IELTS practice, IELTS test, IELTS preparation, IELTSProva, Prova Technologies, AI IELTS" />
     <meta name="author" content="Prova Technologies" />
-    <meta property="og:title" content="IELTSProva — Ace Your IELTS with AI-Powered Practice" />
-    <meta property="og:description" content="Free IELTS practice tests for Reading, Writing, Listening, and Speaking. AI-powered evaluation and progress tracking." />
+    <meta property="og:title" content="IELTSProva — AI-Powered IELTS Preparation" />
+    <meta property="og:description" content="Master all four IELTS skills with personalized practice, realistic mock tests, and an AI-powered coaching partner." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://esantoluwase.github.io/IELTSPROVA-/" />
+    <meta property="og:url" content="https://ieltsprova.netlify.app/" />
     <meta name="theme-color" content="#4A148C" />
     
-    <!-- ===== Favicon ===== -->
+    <!-- ===== FAVICON ===== -->
     <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>" />
     
-    <!-- ===== Fonts & Icons ===== -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
-    <!-- ===== Firebase SDKs ===== -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        /* ===== RESET & BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', sans-serif;
             background: #f5f0ff;
@@ -44,25 +37,17 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
         /* ===== NAV ===== */
         nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.7);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
             padding: 1rem 0;
         }
         .nav-container {
@@ -76,11 +61,8 @@
             font-size: 1.6rem;
             font-weight: 900;
             color: #4A148C;
-            letter-spacing: -0.5px;
         }
-        .logo span {
-            color: #FFD700;
-        }
+        .logo span { color: #FFD700; }
         .logo small {
             display: block;
             font-size: 0.55rem;
@@ -88,8 +70,6 @@
             color: #7B6A8A;
             letter-spacing: 1px;
         }
-
-        /* ===== HAMBURGER MENU ===== */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -110,19 +90,15 @@
         .hamburger.active span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 6px);
         }
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) {
             transform: rotate(-45deg) translate(5px, -6px);
         }
-
         .nav-links {
             display: flex;
             align-items: center;
             gap: 1.5rem;
             flex-wrap: wrap;
-            transition: 0.3s ease;
         }
         .nav-links a {
             color: #2A004F;
@@ -130,12 +106,39 @@
             transition: 0.3s;
             font-size: 0.95rem;
         }
-        .nav-links a:hover {
-            color: #7B1FA2;
+        .nav-links a:hover { color: #7B1FA2; }
+        .nav-links .dropdown {
+            position: relative;
         }
-        .nav-links a.active {
+        .nav-links .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            border: 1px solid #f0e8f5;
+        }
+        .nav-links .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .nav-links .dropdown-content a {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            color: #1a0a2e;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .nav-links .dropdown-content a:hover {
+            background: #f5f0ff;
             color: #4A148C;
-            border-bottom: 2px solid #FFD700;
+        }
+        .nav-links .dropdown-content a i {
+            width: 1.5rem;
+            color: #7B1FA2;
         }
         .nav-cta {
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
@@ -144,15 +147,13 @@
             border-radius: 50px;
             font-weight: 700;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.3);
             border: none;
             cursor: pointer;
             font-size: 0.95rem;
         }
         .nav-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.4);
-            color: white !important;
+            box-shadow: 0 8px 25px rgba(74,20,140,0.4);
         }
         .nav-cta-outline {
             background: transparent;
@@ -169,19 +170,10 @@
             background: #4A148C;
             color: white !important;
         }
-        .user-greeting {
-            font-weight: 600;
-            color: #4A148C;
-        }
-        .user-greeting i {
-            margin-right: 0.3rem;
-        }
+        .user-greeting { font-weight: 600; color: #4A148C; }
 
-        /* ===== MOBILE NAV ===== */
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
+            .hamburger { display: flex; }
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -189,33 +181,27 @@
                 background: white;
                 padding: 1.5rem;
                 border-radius: 16px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
                 margin-top: 0.5rem;
                 gap: 1rem;
                 align-items: center;
             }
-            .nav-links.open {
-                display: flex;
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1rem; }
+            .nav-links .dropdown-content {
+                position: static;
+                box-shadow: none;
+                padding-left: 1rem;
             }
-            .nav-links a {
-                font-size: 1rem;
-            }
-            .nav-cta,
-            .nav-cta-outline {
-                width: 100%;
-                text-align: center;
-            }
-            #userGreeting {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.5rem;
-            }
+            .nav-cta, .nav-cta-outline { width: 100%; text-align: center; }
+            #userGreeting { flex-direction: column; width: 100%; gap: 0.5rem; }
         }
 
         /* ===== HERO ===== */
         .hero {
-            padding: 5rem 0 4rem;
+            padding: 4rem 0 3rem;
             background: linear-gradient(160deg, #f5f0ff 0%, #e8dff5 100%);
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -226,39 +212,31 @@
             right: -10%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(74, 20, 140, 0.05), transparent 70%);
+            background: radial-gradient(circle, rgba(74,20,140,0.05), transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-        }
-        .hero-content h1 {
+        .hero h1 {
             font-size: 3.5rem;
             font-weight: 900;
-            line-height: 1.1;
             color: #1a0a2e;
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.5rem;
         }
-        .hero-content h1 span {
+        .hero h1 span {
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-        .hero-content p {
+        .hero p {
             font-size: 1.2rem;
             color: #4A3A5A;
-            max-width: 500px;
-            margin-bottom: 2rem;
+            max-width: 650px;
+            margin: 0 auto 1.5rem;
         }
         .hero-buttons {
             display: flex;
             gap: 1rem;
+            justify-content: center;
             flex-wrap: wrap;
         }
         .btn-primary {
@@ -268,7 +246,6 @@
             border-radius: 50px;
             font-weight: 700;
             transition: 0.3s;
-            box-shadow: 0 4px 20px rgba(74, 20, 140, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -277,7 +254,7 @@
         }
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 35px rgba(74, 20, 140, 0.4);
+            box-shadow: 0 8px 35px rgba(74,20,140,0.4);
         }
         .btn-secondary {
             background: white;
@@ -286,205 +263,21 @@
             border-radius: 50px;
             font-weight: 700;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
             border: none;
             cursor: pointer;
         }
         .btn-secondary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-        .hero-stats {
-            display: flex;
-            gap: 2.5rem;
-            margin-top: 2.5rem;
-        }
-        .hero-stats .stat h3 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #4A148C;
-        }
-        .hero-stats .stat p {
-            font-size: 0.85rem;
-            color: #7B6A8A;
-            margin: 0;
-        }
-        .hero-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .hero-image .illustration {
-            width: 100%;
-            max-width: 450px;
-            background: linear-gradient(135deg, #4A148C, #7B1FA2);
-            border-radius: 30px;
-            padding: 2rem;
-            color: white;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(74, 20, 140, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-image .illustration::before {
-            content: '📚';
-            font-size: 6rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .hero-image .illustration h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        .hero-image .illustration p {
-            opacity: 0.8;
-            font-size: 0.95rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal {
-            background: white;
-            border-radius: 32px;
-            padding: 2.5rem;
-            max-width: 440px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.3s ease;
-        }
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-            background: none;
-            border: none;
-        }
-        .modal-close:hover {
-            color: #4A148C;
-        }
-        .modal h2 {
-            font-size: 1.8rem;
-            color: #4A148C;
-            margin-bottom: 0.5rem;
-        }
-        .modal .subtitle {
-            color: #7B6A8A;
-            margin-bottom: 1.5rem;
-        }
-        .modal .form-group {
-            margin-bottom: 1.2rem;
-        }
-        .modal .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-            color: #1a0a2e;
-        }
-        .modal .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #f0e8f5;
-            border-radius: 14px;
-            font-size: 1rem;
-            transition: 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-        .modal .form-group input:focus {
-            outline: none;
-            border-color: #7B1FA2;
-        }
-        .modal .btn-auth {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, #4A148C, #7B1FA2);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .modal .btn-auth:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
-        }
-        .modal .btn-auth:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .modal .switch-auth {
-            text-align: center;
-            margin-top: 1.2rem;
-            color: #7B6A8A;
-        }
-        .modal .switch-auth a {
-            color: #4A148C;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .modal .switch-auth a:hover {
-            text-decoration: underline;
-        }
-        .modal .error-msg {
-            color: #e53935;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-        .modal .error-msg.show {
-            display: block;
-        }
-        .modal .success-msg {
-            color: #2e7d32;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-        .modal .success-msg.show {
-            display: block;
-        }
-
-        /* ===== FEATURES ===== */
-        .features {
-            padding: 4rem 0;
-            background: white;
-        }
+        /* ===== SECTION STYLES ===== */
+        .section { padding: 4rem 0; }
+        .section-white { background: white; }
+        .section-purple { background: #faf7ff; }
         .section-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
         .section-header h2 {
             font-size: 2.5rem;
@@ -495,7 +288,6 @@
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         .section-header p {
             color: #7B6A8A;
@@ -503,6 +295,8 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+        /* ===== FEATURES GRID ===== */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -510,7 +304,7 @@
         }
         .feature-card {
             background: white;
-            padding: 2.5rem 2rem;
+            padding: 2rem;
             border-radius: 24px;
             text-align: center;
             border: 1px solid #f0e8f5;
@@ -518,36 +312,15 @@
             cursor: pointer;
             display: block;
             color: inherit;
-            text-decoration: none;
         }
         .feature-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             border-color: #7B1FA2;
-            box-shadow: 0 20px 50px rgba(74, 20, 140, 0.08);
+            box-shadow: 0 20px 50px rgba(74,20,140,0.08);
         }
-        .feature-card.disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-        .feature-card.disabled:hover {
-            transform: none;
-            border-color: #f0e8f5;
-            box-shadow: none;
-        }
-        .feature-card .icon {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .feature-card h3 {
-            font-size: 1.3rem;
-            color: #1a0a2e;
-            margin-bottom: 0.3rem;
-        }
-        .feature-card p {
-            color: #7B6A8A;
-            font-size: 0.95rem;
-        }
+        .feature-card .icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+        .feature-card h3 { font-size: 1.2rem; color: #4A148C; margin-bottom: 0.3rem; }
+        .feature-card p { color: #7B6A8A; font-size: 0.95rem; }
         .feature-card .badge {
             display: inline-block;
             background: #e8f5e9;
@@ -558,29 +331,74 @@
             border-radius: 50px;
             margin-top: 0.5rem;
         }
-        .feature-card .badge.pro {
-            background: #fff8e1;
-            color: #f57f17;
+        .feature-card .badge.pro { background: #fff8e1; color: #f57f17; }
+        .feature-card .badge.premium { background: #fce4ec; color: #c62828; }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
-        .feature-card .badge.premium {
-            background: #fce4ec;
-            color: #c62828;
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            border: 1px solid #f0e8f5;
         }
-        .feature-card .badge.soon {
-            background: #f3edf7;
-            color: #7B6A8A;
+        .testimonial-card .stars { color: #FFD700; font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .testimonial-card .text { font-size: 1rem; color: #3d2a4a; font-style: italic; }
+        .testimonial-card .author {
+            font-weight: 700;
+            color: #4A148C;
+            margin-top: 0.8rem;
+        }
+
+        /* ===== FAQ ===== */
+        .faq-grid {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background: white;
+            padding: 1.2rem 1.8rem;
+            border-radius: 16px;
+            margin-bottom: 0.8rem;
+            border: 1px solid #f0e8f5;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .faq-item:hover { border-color: #7B1FA2; }
+        .faq-item .question {
+            font-weight: 700;
+            color: #4A148C;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-item .question i {
+            transition: 0.3s;
+            color: #7B1FA2;
+        }
+        .faq-item .answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: #3d2a4a;
+        }
+        .faq-item.active .answer {
+            max-height: 200px;
+            margin-top: 0.8rem;
+        }
+        .faq-item.active .question i {
+            transform: rotate(180deg);
         }
 
         /* ===== PRICING ===== */
-        .pricing {
-            padding: 4rem 0;
-            background: #faf7ff;
-        }
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-top: 1rem;
         }
         .pricing-card {
             background: white;
@@ -597,7 +415,6 @@
         .pricing-card.popular {
             border-color: #FFD700;
             background: linear-gradient(135deg, #fffef5, #fefcf0);
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.12);
         }
         .pricing-card .popular-badge {
             background: #FFD700;
@@ -611,11 +428,7 @@
             display: inline-block;
             margin-bottom: 0.8rem;
         }
-        .pricing-card .plan-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1a0a2e;
-        }
+        .pricing-card .plan-name { font-size: 1.4rem; font-weight: 700; color: #1a0a2e; }
         .pricing-card .price {
             font-size: 2.8rem;
             font-weight: 800;
@@ -656,7 +469,7 @@
         }
         .pricing-card .btn-plan:hover {
             transform: scale(1.04);
-            box-shadow: 0 8px 30px rgba(74, 20, 140, 0.3);
+            box-shadow: 0 8px 30px rgba(74,20,140,0.3);
         }
         .pricing-card.popular .btn-plan {
             background: #FFD700;
@@ -664,14 +477,13 @@
         }
         .pricing-card.popular .btn-plan:hover {
             background: #f5c500;
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
         }
 
         /* ===== FOOTER ===== */
         footer {
             padding: 3rem 0;
             background: linear-gradient(135deg, #1a0a2e, #4A148C);
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255,255,255,0.8);
         }
         .footer-grid {
             display: grid;
@@ -683,54 +495,42 @@
             font-weight: 800;
             color: white;
         }
-        .footer-brand span {
-            color: #FFD700;
-        }
+        .footer-brand span { color: #FFD700; }
         .footer-brand small {
             display: block;
             font-size: 0.7rem;
             font-weight: 400;
             opacity: 0.6;
         }
-        footer h4 {
-            color: white;
-            font-size: 1rem;
-            margin-bottom: 0.8rem;
-        }
+        footer h4 { color: white; font-size: 1rem; margin-bottom: 0.8rem; }
         footer a {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255,255,255,0.6);
             display: block;
             margin-bottom: 0.4rem;
             transition: 0.3s;
             font-size: 0.9rem;
         }
-        footer a:hover {
-            color: #FFD700;
-        }
+        footer a:hover { color: #FFD700; }
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
             margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255,255,255,0.08);
             font-size: 0.85rem;
             opacity: 0.6;
         }
         .footer-social {
             display: flex;
             gap: 1rem;
-            justify-content: center;
             margin-top: 0.5rem;
         }
         .footer-social a {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255,255,255,0.6);
             font-size: 1.2rem;
             transition: 0.3s;
         }
-        .footer-social a:hover {
-            color: #FFD700;
-        }
+        .footer-social a:hover { color: #FFD700; }
 
-        /* ===== SCROLL TO TOP ===== */
         .scroll-top {
             position: fixed;
             bottom: 2rem;
@@ -743,71 +543,27 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(74, 20, 140, 0.3);
+            box-shadow: 0 4px 20px rgba(74,20,140,0.3);
             transition: 0.3s;
             display: none;
             z-index: 50;
         }
-        .scroll-top:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(74, 20, 140, 0.4);
-        }
-        .scroll-top.show {
-            display: block;
-        }
+        .scroll-top:hover { transform: translateY(-3px); }
+        .scroll-top.show { display: block; }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .hero-content p {
-                margin: 0 auto 2rem;
-            }
-            .hero-buttons {
-                justify-content: center;
-            }
-            .hero-stats {
-                justify-content: center;
-            }
-            .hero-image .illustration {
-                max-width: 300px;
-                margin: 0 auto;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .hero h1 { font-size: 2.8rem; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 600px) {
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            .modal {
-                padding: 1.8rem;
-            }
-            .hero-stats {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1.5rem;
-            }
-            .scroll-top {
-                bottom: 1rem;
-                right: 1rem;
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
+            .hero h1 { font-size: 2rem; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-social { justify-content: center; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .section-header h2 { font-size: 2rem; }
+            .scroll-top { bottom: 1rem; right: 1rem; width: 40px; height: 40px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -820,19 +576,25 @@
                 IELTS<span>Prova</span>
                 <small>by Prova Technologies</small>
             </div>
-
-            <!-- Hamburger Button -->
             <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-
             <div class="nav-links" id="navLinks">
-                <a href="about.html">About</a>
-                <a href="#features">Tests</a>
-                <a href="#pricing">Pricing</a>
+                <div class="dropdown">
+                    <a href="#">Tests <i class="fas fa-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="reading-test.html"><i class="fas fa-book-open"></i> Reading</a>
+                        <a href="writing-test.html"><i class="fas fa-pen-fancy"></i> Writing</a>
+                        <a href="listening-test.html"><i class="fas fa-headphones"></i> Listening</a>
+                        <a href="speaking-test.html"><i class="fas fa-microphone"></i> Speaking</a>
+                    </div>
+                </div>
                 <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="study-tips.html"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
                 <span id="authButtons">
                     <button class="nav-cta-outline" onclick="openModal('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
                     <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
@@ -847,95 +609,126 @@
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-        <div class="container hero-grid">
-            <div class="hero-content">
-                <h1>Ace Your IELTS <br /><span>With Confidence</span></h1>
-                <p>Practice with real-style tests, track your progress, and get the band score you deserve — all in one beautiful platform.</p>
-                <div class="hero-buttons">
-                    <a href="reading-test.html" class="btn-primary"><i class="fas fa-rocket"></i> Start Free Test</a>
-                    <a href="#pricing" class="btn-secondary"><i class="fas fa-crown"></i> View Plans</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <h3>150+</h3>
-                        <p>Practice Questions</p>
-                    </div>
-                    <div class="stat">
-                        <h3>4</h3>
-                        <p>IELTS Modules</p>
-                    </div>
-                    <div class="stat">
-                        <h3>100%</h3>
-                        <p>Free to Start</p>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-image">
-                <div class="illustration">
-                    <h3>🎯 Ready to Practice?</h3>
-                    <p>Join thousands of students preparing for IELTS success.</p>
-                    <a href="reading-test.html" style="color: #FFD700; font-weight: 700; margin-top: 1rem; display: inline-block;">Start Now →</a>
-                </div>
+        <div class="container">
+            <h1>Prepare Smarter.<br /><span>Achieve Your Target Band.</span></h1>
+            <p>Master all four IELTS skills with personalized practice, realistic mock tests, and an AI-powered coaching partner designed to help you reach your target score.</p>
+            <div class="hero-buttons">
+                <a href="reading-test.html" class="btn-primary"><i class="fas fa-rocket"></i> Start Free Practice</a>
+                <a href="#pricing" class="btn-secondary"><i class="fas fa-crown"></i> View Plans</a>
             </div>
         </div>
     </section>
 
-    <!-- ===== FEATURES ===== -->
-    <section class="features" id="features">
+    <!-- ===== FEATURES / TESTS ===== -->
+    <section class="section section-white" id="features">
         <div class="container">
             <div class="section-header">
-                <h2>What You'll <span>Practice</span></h2>
-                <p>Full coverage of all 4 IELTS modules — designed to feel like the real exam.</p>
+                <h2>Everything You Need <span>to Improve</span></h2>
+                <p>Master all four IELTS skills with personalized practice and AI-powered feedback.</p>
             </div>
             <div class="features-grid">
-                <!-- Reading -->
                 <a href="reading-test.html" class="feature-card">
                     <span class="icon">📖</span>
                     <h3>Reading</h3>
-                    <p>3 passages · 40 questions · 60 mins</p>
+                    <p>Improve comprehension, learn skimming and scanning, and tackle complex passages.</p>
                     <span class="badge">Free: 10 Qs</span>
                     <span class="badge pro">Pro: Full</span>
                 </a>
-
-                <!-- Writing -->
                 <a href="writing-test.html" class="feature-card">
                     <span class="icon">✍️</span>
                     <h3>Writing</h3>
-                    <p>Task 1 &amp; 2 · with AI evaluation</p>
+                    <p>Get AI-powered feedback on Task 1 &amp; 2 and improve your writing band score.</p>
                     <span class="badge">Free: 2 Tasks</span>
-                    <span class="badge pro">Pro: Detailed Feedback</span>
+                    <span class="badge pro">Pro: Detailed</span>
                 </a>
-
-                <!-- Listening -->
                 <a href="listening-test.html" class="feature-card">
                     <span class="icon">🎧</span>
                     <h3>Listening</h3>
-                    <p>4 sections · 40 questions · 30 mins</p>
+                    <p>Train with real audio, understand different accents, and improve your listening skills.</p>
                     <span class="badge">Free: 10 Qs</span>
                     <span class="badge pro">Pro: Full</span>
                 </a>
-
-                <!-- Speaking -->
                 <a href="speaking-test.html" class="feature-card">
                     <span class="icon">🗣️</span>
                     <h3>Speaking</h3>
-                    <p>Part 1–3 · AI voice examiner</p>
+                    <p>Practice speaking with our AI tutor and get instant personalized feedback.</p>
                     <span class="badge">Free: Full Test</span>
-                    <span class="badge pro">Pro: Detailed Feedback</span>
+                    <span class="badge pro">Pro: Detailed</span>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AI COACH SECTION ===== -->
+    <section class="section section-purple">
+        <div class="container">
+            <div class="section-header">
+                <h2>Learn Smarter <span>with AI</span></h2>
+                <p>Our advanced AI understands your answers, analyzes your performance and gives you personalized feedback to help you improve faster.</p>
+            </div>
+            <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="feature-card" style="border-color:#7B1FA2;">
+                    <span class="icon">🧠</span>
+                    <h3>AI Speaking Tutor</h3>
+                    <p>Available 24/7 for practice</p>
+                </div>
+                <div class="feature-card" style="border-color:#7B1FA2;">
+                    <span class="icon">📝</span>
+                    <h3>AI Writing Evaluation</h3>
+                    <p>Get accurate band scores</p>
+                </div>
+                <div class="feature-card" style="border-color:#7B1FA2;">
+                    <span class="icon">📊</span>
+                    <h3>Personalized Recommendations</h3>
+                    <p>Study what matters most</p>
+                </div>
+                <div class="feature-card" style="border-color:#7B1FA2;">
+                    <span class="icon">📈</span>
+                    <h3>Performance Analytics</h3>
+                    <p>Track your progress</p>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:2rem;">
+                <a href="speaking-test.html" class="btn-primary"><i class="fas fa-robot"></i> Try AI Coach Now →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-header">
+                <h2>Success <span>Stories</span></h2>
+                <p>Loved by IELTS learners worldwide.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="text">"The AI speaking practice helped me improve my fluency and confidence."</div>
+                    <div class="author">— Asan K.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="text">"The writing feedback is so accurate and helped me improve my band score."</div>
+                    <div class="author">— Daniel L.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="text">"I improved from 6.0 to 7.5 in just 2 months. Highly recommended!"</div>
+                    <div class="author">— Sarah M.</div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- ===== PRICING ===== -->
-    <section class="pricing" id="pricing">
+    <section class="section section-purple" id="pricing">
         <div class="container">
             <div class="section-header">
                 <h2>Choose Your <span>Plan</span></h2>
-                <p>Start for free, upgrade when you're ready.</p>
+                <p>Unlock all features and accelerate your progress.</p>
             </div>
             <div class="pricing-grid">
-                <!-- Free -->
                 <div class="pricing-card">
                     <div class="plan-name">Free</div>
                     <div class="price">$0 <small>/mo</small></div>
@@ -947,8 +740,6 @@
                     </ul>
                     <a href="reading-test.html" class="btn-plan">Start Free</a>
                 </div>
-
-                <!-- Pro -->
                 <div class="pricing-card popular">
                     <div class="popular-badge">⭐ Most Popular</div>
                     <div class="plan-name">Pro</div>
@@ -960,10 +751,8 @@
                         <li><i class="fas fa-check-circle"></i> Progress dashboard</li>
                         <li><i class="fas fa-check-circle"></i> Detailed feedback</li>
                     </ul>
-                    <a href="#" class="btn-plan">Go Pro</a>
+                    <a href="checkout.html" class="btn-plan">Go Pro</a>
                 </div>
-
-                <!-- Pro+ -->
                 <div class="pricing-card">
                     <div class="plan-name">🚀 Pro+</div>
                     <div class="price">$19 <small>/mo</small></div>
@@ -974,7 +763,35 @@
                         <li><i class="fas fa-check-circle"></i> Unlimited tests</li>
                         <li><i class="fas fa-check-circle"></i> Priority support</li>
                     </ul>
-                    <a href="#" class="btn-plan">Go Pro+</a>
+                    <a href="checkout.html" class="btn-plan">Go Pro+</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently <span>Asked Questions</span></h2>
+                <p>Everything you need to know about IELTSProva.</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="question">What is IELTSProva? <i class="fas fa-chevron-down"></i></div>
+                    <div class="answer">IELTSProva is an AI-powered IELTS preparation platform offering practice tests for Reading, Writing, Listening, and Speaking with personalized feedback.</div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="question">Can I use IELTSProva for free? <i class="fas fa-chevron-down"></i></div>
+                    <div class="answer">Yes! You can access free practice tests with 10 questions per module. Upgrade to Pro for unlimited access.</div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="question">How does the AI Speaking Tutor work? <i class="fas fa-chevron-down"></i></div>
+                    <div class="answer">Our AI Speaking Tutor uses speech recognition to listen to your answers and provides instant feedback on fluency, vocabulary, and pronunciation.</div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="question">Can IELTSProva guarantee my IELTS score? <i class="fas fa-chevron-down"></i></div>
+                    <div class="answer">While we can't guarantee a specific score, our platform is designed to help you improve through consistent practice and AI-powered feedback.</div>
                 </div>
             </div>
         </div>
@@ -989,33 +806,35 @@
                         Prova <span>Technologies</span>
                         <small>IELTSProva · TOEFLProva · SATProva · GREProva</small>
                     </div>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.7;">
+                    <p style="margin-top:0.5rem; font-size:0.9rem; opacity:0.7;">
                         📧 <a href="mailto:provatech@gmail.com" style="color:rgba(255,255,255,0.7);">provatech@gmail.com</a>
                     </p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
                 <div>
                     <h4>Product</h4>
-                    <a href="#features">Tests</a>
-                    <a href="#pricing">Pricing</a>
+                    <a href="reading-test.html">Reading</a>
+                    <a href="writing-test.html">Writing</a>
+                    <a href="listening-test.html">Listening</a>
+                    <a href="speaking-test.html">Speaking</a>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <a href="study-tips.html">💡 Study Tips</a>
                     <a href="dashboard.html">Dashboard</a>
+                    <a href="#pricing">Pricing</a>
                 </div>
                 <div>
                     <h4>Company</h4>
                     <a href="about.html">About</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Contact</a>
-                </div>
-                <div>
-                    <h4>Legal</h4>
+                    <a href="contact.html">Contact</a>
                     <a href="#">Privacy</a>
                     <a href="#">Terms</a>
-                    <a href="#">Cookies</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -1024,44 +843,44 @@
         </div>
     </footer>
 
-    <!-- ===== SCROLL TO TOP BUTTON ===== -->
+    <!-- ===== SCROLL TO TOP ===== -->
     <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- ===== AUTH MODAL ===== -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h2 id="modalTitle">Welcome Back</h2>
-            <p class="subtitle" id="modalSubtitle">Log in to continue your IELTS journey.</p>
-            <div class="error-msg" id="errorMsg"></div>
-            <div class="success-msg" id="successMsg"></div>
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:999;justify-content:center;align-items:center;">
+        <div class="modal" style="background:white;border-radius:32px;padding:2.5rem;max-width:440px;width:90%;position:relative;box-shadow:0 30px 60px rgba(0,0,0,0.2);">
+            <button class="modal-close" onclick="closeModal()" style="position:absolute;top:1rem;right:1.5rem;font-size:1.5rem;cursor:pointer;color:#888;background:none;border:none;">&times;</button>
+            <h2 id="modalTitle" style="font-size:1.8rem;color:#4A148C;margin-bottom:0.5rem;">Welcome Back</h2>
+            <p class="subtitle" id="modalSubtitle" style="color:#7B6A8A;margin-bottom:1.5rem;">Log in to continue your IELTS journey.</p>
+            <div class="error-msg" id="errorMsg" style="color:#e53935;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
+            <div class="success-msg" id="successMsg" style="color:#2e7d32;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
             <form id="authForm" onsubmit="handleAuth(event)">
-                <div class="form-group" id="nameGroup" style="display:none;">
-                    <label>Full Name</label>
-                    <input type="text" id="fullName" placeholder="Enter your name" />
+                <div class="form-group" id="nameGroup" style="display:none;margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
                 </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="authEmail" placeholder="you@example.com" required />
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Email Address</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" />
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Password</label>
+                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
                 </div>
-                <button type="submit" class="btn-auth" id="authBtn">Continue</button>
+                <button type="submit" class="btn-auth" id="authBtn" style="width:100%;padding:0.9rem;background:linear-gradient(135deg,#4A148C,#7B1FA2);color:white;border:none;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:0.3s;">Continue</button>
             </form>
-            <div class="switch-auth">
+            <div class="switch-auth" style="text-align:center;margin-top:1.2rem;color:#7B6A8A;">
                 <span id="switchText">Don't have an account?</span>
-                <a id="switchLink" onclick="toggleAuthMode()">Sign Up</a>
+                <a id="switchLink" onclick="toggleAuthMode()" style="color:#4A148C;font-weight:700;cursor:pointer;">Sign Up</a>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================================
-        // 🔥 FIREBASE CONFIG
+        // FIREBASE CONFIG
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -1077,7 +896,7 @@
         const db = firebase.firestore();
 
         // ============================================================
-        // HAMBURGER MENU TOGGLE
+        // HAMBURGER
         // ============================================================
         const hamburger = document.getElementById('hamburgerBtn');
         const navLinks = document.getElementById('navLinks');
@@ -1095,16 +914,20 @@
         });
 
         // ============================================================
-        // SCROLL TO TOP BUTTON
+        // SCROLL TO TOP
         // ============================================================
         window.addEventListener('scroll', function() {
             const btn = document.getElementById('scrollTopBtn');
-            if (window.scrollY > 300) {
-                btn.classList.add('show');
-            } else {
-                btn.classList.remove('show');
-            }
+            if (window.scrollY > 300) btn.classList.add('show');
+            else btn.classList.remove('show');
         });
+
+        // ============================================================
+        // FAQ TOGGLE
+        // ============================================================
+        function toggleFaq(el) {
+            el.classList.toggle('active');
+        }
 
         // ============================================================
         // AUTH STATE
@@ -1114,7 +937,6 @@
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userGreeting').style.display = 'inline-flex';
                 document.getElementById('greetingText').innerHTML = `<i class="fas fa-user-circle"></i> Hi, ${user.displayName || 'Student'}`;
-
                 db.collection('users').doc(user.uid).set({
                     name: user.displayName || 'Student',
                     email: user.email,
@@ -1128,7 +950,7 @@
         });
 
         // ============================================================
-        // MODAL CONTROLS
+        // MODAL
         // ============================================================
         let currentMode = 'login';
 
@@ -1164,11 +986,11 @@
                 nameGroup.style.display = 'block';
             }
 
-            modal.classList.add('active');
+            modal.style.display = 'flex';
         }
 
         function closeModal() {
-            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('authModal').style.display = 'none';
         }
 
         function toggleAuthMode() {
@@ -1178,9 +1000,6 @@
             }, 300);
         }
 
-        // ============================================================
-        // HANDLE AUTH
-        // ============================================================
         async function handleAuth(e) {
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
@@ -1200,21 +1019,13 @@
                     await auth.signInWithEmailAndPassword(email, password);
                     successMsg.textContent = '✅ Logged in successfully!';
                     successMsg.classList.add('show');
-                    setTimeout(() => {
-                        closeModal();
-                        location.reload();
-                    }, 1500);
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
                 } else {
                     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    await userCredential.user.updateProfile({
-                        displayName: fullName || 'Student'
-                    });
+                    await userCredential.user.updateProfile({ displayName: fullName || 'Student' });
                     successMsg.textContent = '✅ Account created! Welcome to IELTSProva!';
                     successMsg.classList.add('show');
-                    setTimeout(() => {
-                        closeModal();
-                        location.reload();
-                    }, 1500);
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
                 }
             } catch (error) {
                 errorMsg.textContent = error.message;
@@ -1224,22 +1035,14 @@
             }
         }
 
-        // ============================================================
-        // LOGOUT
-        // ============================================================
         function logoutUser() {
-            auth.signOut().then(() => {
-                location.reload();
-            });
+            auth.signOut().then(() => { location.reload(); });
         }
 
-        // ============================================================
-        // CLOSE MODAL ON OUTSIDE CLICK
-        // ============================================================
         document.getElementById('authModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
     </script>
 
 </body>
-    </html>
+        </html>
