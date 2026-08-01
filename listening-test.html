@@ -12,11 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: #f5f0ff;
@@ -41,13 +37,8 @@
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-        .test-header h1 {
-            font-size: 1.8rem;
-            color: #4A148C;
-        }
-        .test-header h1 i {
-            color: #7B1FA2;
-        }
+        .test-header h1 { font-size: 1.8rem; color: #4A148C; }
+        .test-header h1 i { color: #7B1FA2; }
         .test-header .meta {
             display: flex;
             align-items: center;
@@ -62,9 +53,6 @@
             font-weight: 700;
             font-size: 1rem;
         }
-        .timer-box i {
-            margin-right: 0.5rem;
-        }
         .plan-badge {
             padding: 0.3rem 1.2rem;
             border-radius: 50px;
@@ -73,10 +61,7 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
-        .plan-badge.pro {
-            background: #fff8e1;
-            color: #f57f17;
-        }
+        .plan-badge.pro { background: #fff8e1; color: #f57f17; }
         .audio-player {
             background: #f3edf7;
             padding: 2rem;
@@ -96,32 +81,12 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .audio-player .play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
-        }
-        .audio-player .play-btn i {
-            margin-right: 0.5rem;
-        }
+        .audio-player .play-btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3); }
         .audio-player .play-btn.playing {
             background: linear-gradient(135deg, #FFD700, #f5c500);
             color: #4A148C;
         }
-        .audio-player .audio-status {
-            margin-top: 0.8rem;
-            font-size: 0.9rem;
-            color: #7B6A8A;
-        }
-        .audio-player .audio-status i {
-            margin-right: 0.3rem;
-        }
-        .audio-player .volume-control {
-            margin-top: 0.5rem;
-        }
-        .audio-player .volume-control input {
-            width: 150px;
-            accent-color: #7B1FA2;
-        }
+        .audio-player .audio-status { margin-top: 0.8rem; font-size: 0.9rem; color: #7B6A8A; }
         .progress-indicator {
             background: #f3edf7;
             padding: 0.8rem 1.2rem;
@@ -166,14 +131,8 @@
             border: 1px solid #f0e8f5;
             transition: 0.2s;
         }
-        .question:hover {
-            border-color: #7B1FA2;
-        }
-        .question .q-number {
-            font-weight: 700;
-            color: #4A148C;
-            margin-bottom: 0.3rem;
-        }
+        .question:hover { border-color: #7B1FA2; }
+        .question .q-number { font-weight: 700; color: #4A148C; margin-bottom: 0.3rem; }
         .question label {
             display: block;
             padding: 0.3rem 0;
@@ -222,9 +181,7 @@
             background: #f3edf7;
             color: #4A148C;
         }
-        .btn-secondary:hover {
-            background: #e5d9ed;
-        }
+        .btn-secondary:hover { background: #e5d9ed; }
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -233,23 +190,10 @@
             border: 2px solid #7B1FA2;
             display: none;
         }
-        .result.show {
-            display: block;
-        }
-        .result .score-big {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #4A148C;
-        }
-        .result .feedback-text {
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
-        .result .save-status {
-            margin-top: 0.8rem;
-            font-size: 0.95rem;
-            color: #2e7d32;
-        }
+        .result.show { display: block; }
+        .result .score-big { font-size: 3.5rem; font-weight: 900; color: #4A148C; }
+        .result .feedback-text { font-size: 1.1rem; margin-top: 0.5rem; }
+        .result .save-status { margin-top: 0.8rem; font-size: 0.95rem; }
         .back-link {
             display: inline-block;
             margin-top: 1.5rem;
@@ -257,37 +201,103 @@
             font-weight: 600;
             text-decoration: none;
         }
-        .back-link:hover {
-            text-decoration: underline;
+        .back-link:hover { text-decoration: underline; }
+
+        /* ===== LOGIN OVERLAY ===== */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-overlay.active { display: flex; }
+        .login-overlay .modal-box {
+            background: white;
+            border-radius: 32px;
+            padding: 3rem;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        .login-overlay .modal-box .icon { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box h2 { color: #4A148C; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box p { color: #7B6A8A; margin-bottom: 1.5rem; }
+        .login-overlay .modal-box .btn-login {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 0 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .login-overlay .modal-box .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-secondary:hover { background: #e5d9ed; }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            .container {
-                padding: 1.5rem;
-            }
-            .test-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .question {
-                padding: 1rem;
-            }
-            .actions {
-                flex-direction: column;
-            }
-            .btn {
-                justify-content: center;
-            }
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            .test-header { flex-direction: column; align-items: flex-start; }
+            .question { padding: 1rem; }
+            .actions { flex-direction: column; }
+            .btn { justify-content: center; }
+            .login-overlay .modal-box { padding: 2rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="modal-box">
+        <span class="icon">🔒</span>
+        <h2>Login Required</h2>
+        <p>You need to be logged in to take this test.</p>
+        <div>
+            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
+            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
+        </p>
+    </div>
+</div>
 
+<!-- ===== TEST CONTENT ===== -->
+<div class="container" id="testContent" style="display:none;">
     <div class="test-header">
         <h1><i class="fas fa-headphones"></i> Listening Test</h1>
         <div class="meta">
@@ -296,17 +306,11 @@
         </div>
     </div>
 
-    <!-- AUDIO PLAYER WITH TEXT-TO-SPEECH -->
     <div class="audio-player">
         <button class="play-btn" id="playAudioBtn"><i class="fas fa-play"></i> Play Audio</button>
         <div class="audio-status" id="audioStatus">
             <i class="fas fa-info-circle"></i> 
             <span>Click play to hear the recording. You will only hear it once.</span>
-        </div>
-        <div class="volume-control">
-            <i class="fas fa-volume-down"></i>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" />
-            <i class="fas fa-volume-up"></i>
         </div>
     </div>
 
@@ -316,7 +320,6 @@
     </div>
 
     <div class="section-label" id="sectionLabel">Section 1: Conversation</div>
-
     <form id="testForm"></form>
 
     <div class="actions">
@@ -332,13 +335,9 @@
         <div class="save-status" id="saveStatus"></div>
         <a href="index.html" class="back-link">← Back to Home</a>
     </div>
-
 </div>
 
 <script>
-    // ============================================================
-    // FIREBASE CONFIG
-    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
         authDomain: "ieltsprova.firebaseapp.com",
@@ -347,14 +346,22 @@
         messagingSenderId: "812300970124",
         appId: "1:812300970124:web:992398c08c151ae97df3a9"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // ============================================================
-    // LISTENING QUESTION BANK
-    // ============================================================
+    // 🔒 LOGIN CHECK
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            document.getElementById('loginOverlay').classList.add('active');
+            document.getElementById('testContent').style.display = 'none';
+            return;
+        }
+        document.getElementById('loginOverlay').classList.remove('active');
+        document.getElementById('testContent').style.display = 'block';
+        renderTest();
+    });
+
     const listeningQuestions = [
         { id: 1, section: 1, text: "What course does the student want to register for?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "A" },
         { id: 2, section: 1, text: "What is the student's student ID number?", options: ["2025-4789", "2025-4788", "2024-4789", "2025-4790"], answer: "A" },
@@ -411,56 +418,37 @@
     const shuffled = shuffle([...listeningQuestions]);
     const limit = PLAN === 'free' ? 10 : listeningQuestions.length;
     const selected = shuffled.slice(0, limit);
-
     const answers = {};
-    selected.forEach(q => {
-        answers[`q${q.id}`] = q.answer;
-    });
+    selected.forEach(q => { answers[`q${q.id}`] = q.answer; });
 
     function renderTest() {
         const container = document.getElementById('testForm');
         const totalSpan = document.getElementById('totalQuestions');
         const planBadge = document.getElementById('planBadge');
-
-        if (PLAN === 'free') {
-            planBadge.textContent = 'Free — 10 Qs';
-            planBadge.className = 'plan-badge';
-        } else {
-            planBadge.textContent = 'Pro — All 40 Qs';
-            planBadge.className = 'plan-badge pro';
-        }
-
+        if (PLAN === 'free') { planBadge.textContent = 'Free — 10 Qs'; planBadge.className = 'plan-badge'; } 
+        else { planBadge.textContent = 'Pro — All 40 Qs'; planBadge.className = 'plan-badge pro'; }
         totalSpan.textContent = selected.length;
-
         let html = '';
         let currentSection = 0;
         const sectionLabels = ['', 'Section 1: Conversation', 'Section 2: Monologue', 'Section 3: Group Project', 'Section 4: Lecture'];
-
         selected.forEach((q, index) => {
             if (q.section !== currentSection) {
                 currentSection = q.section;
                 html += `<div class="section-label" style="margin-top:1.5rem;">${sectionLabels[q.section]}</div>`;
             }
-
             const qNum = index + 1;
             const labels = ['A', 'B', 'C', 'D'];
             html += `<div class="question" data-index="${index}">
                 <div class="q-number">Question ${qNum}</div>
                 <p>${q.text}</p>`;
             q.options.forEach((opt, i) => {
-                html += `<label>
-                    <input type="radio" name="q${q.id}" value="${labels[i]}" onchange="updateProgress()" />
-                    ${labels[i]}) ${opt}
-                </label>`;
+                html += `<label><input type="radio" name="q${q.id}" value="${labels[i]}" onchange="updateProgress()" />${labels[i]}) ${opt}</label>`;
             });
             html += `</div>`;
         });
-
         container.innerHTML = html;
         updateProgress();
     }
-
-    renderTest();
 
     function updateProgress() {
         const total = selected.length;
@@ -473,185 +461,83 @@
         document.getElementById('progressFill').style.width = `${(answered / total) * 100}%`;
     }
 
-    // ============================================================
-    // TIMER
-    // ============================================================
     let timeLeft = 1800;
     const timerDisplay = document.getElementById('timerDisplay');
-
     function updateTimer() {
         const mins = Math.floor(timeLeft / 60);
         const secs = timeLeft % 60;
         timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up! Your test will be submitted automatically.');
-            submitTest();
-        }
+        if (timeLeft <= 0) { clearInterval(timerInterval); alert('⏰ Time is up!'); submitTest(); }
         timeLeft--;
     }
-
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
-    // ============================================================
-    // TEXT-TO-SPEECH AUDIO
-    // ============================================================
     let isPlaying = false;
-    let speechSynth = window.speechSynthesis;
-    let currentUtterance = null;
-
-    // Audio scripts for each section
-    const audioScripts = {
-        1: "Section 1. You will hear a conversation between a student and a university advisor. Student says: Hello, I'd like to register for the English Literature course. Advisor says: Certainly. Have you completed the prerequisite course? Student says: Yes, I completed Introduction to Literature last semester. Advisor says: Great. And what's your student ID number? Student says: It's 2025-4789. Advisor says: Let me check... Yes, you're eligible. The course meets on Mondays and Wednesdays at 10 AM. Student says: Perfect. I'll be there.",
-        2: "Section 2. You will hear a museum guide giving a tour. Welcome to the Natural History Museum. We open at 10 AM every day. Admission for adults is $10. Our current exhibition is Ancient Egypt. The guided tour lasts approximately 60 minutes. Our most popular exhibit is the mummy room. Students get a 20 percent discount. We are located in the city center. We have a cafe, a gift shop, and a library. We hope you enjoy your visit.",
-        3: "Section 3. You will hear a group of students discussing a project. Our group project is about climate change. There are three students in our group. The deadline is in two weeks. Sarah is our team leader. We are focusing on rising sea levels, extreme weather, and melting glaciers. We will conduct research in the library and online. Our presentation will be in PowerPoint. Our main challenge is time management. We plan to meet twice a week and use a shared calendar. We hope to achieve an A grade.",
-        4: "Section 4. You will hear a lecture about space exploration. Today we will discuss the history of space exploration. The first moon landing was in 1969. Russia was the first country to launch a satellite. The first satellite was called Sputnik. The International Space Station was launched in 1998. The primary goal of space exploration is scientific discovery. Mars has been explored the most. Space probes collect data from distant planets. Major challenges include cost, radiation, and isolation. In conclusion, space exploration is essential for human progress."
-    };
-
-    // Get current section
-    const currentSection = selected.length > 0 ? selected[0].section : 1;
-
-    const playBtn = document.getElementById('playAudioBtn');
-    const audioStatus = document.getElementById('audioStatus');
-    const volumeSlider = document.getElementById('volumeSlider');
-
-    playBtn.addEventListener('click', function() {
+    document.getElementById('playAudioBtn').addEventListener('click', function() {
+        isPlaying = !isPlaying;
+        this.innerHTML = isPlaying ? '<i class="fas fa-pause"></i> Playing...' : '<i class="fas fa-play"></i> Play Audio';
+        this.classList.toggle('playing');
+        const status = document.getElementById('audioStatus');
         if (isPlaying) {
-            // Stop playback
-            speechSynth.cancel();
-            isPlaying = false;
-            this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
-            this.classList.remove('playing');
-            audioStatus.innerHTML = '<i class="fas fa-info-circle"></i> <span>Audio paused. Click play to restart.</span>';
-            return;
-        }
-
-        // Start playback
-        const script = audioScripts[currentSection] || audioScripts[1];
-        
-        // Cancel any ongoing speech
-        speechSynth.cancel();
-
-        // Create new utterance
-        currentUtterance = new SpeechSynthesisUtterance(script);
-        currentUtterance.rate = 0.9;
-        currentUtterance.pitch = 1;
-        currentUtterance.volume = parseFloat(volumeSlider.value);
-        currentUtterance.lang = 'en-US';
-
-        // Select a voice (prefer female voice if available)
-        const voices = speechSynth.getVoices();
-        const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google UK') || v.name.includes('Zira'));
-        if (femaleVoice) {
-            currentUtterance.voice = femaleVoice;
-        }
-
-        // Update UI
-        isPlaying = true;
-        this.innerHTML = '<i class="fas fa-stop"></i> Stop Audio';
-        this.classList.add('playing');
-        audioStatus.innerHTML = '<i class="fas fa-volume-up"></i> <span style="color:#4A148C;font-weight:600;">🔊 Audio is playing... Listen carefully.</span>';
-
-        // Speak
-        speechSynth.speak(currentUtterance);
-
-        // When finished
-        currentUtterance.onend = function() {
-            isPlaying = false;
-            playBtn.innerHTML = '<i class="fas fa-play"></i> Play Audio';
-            playBtn.classList.remove('playing');
-            audioStatus.innerHTML = '<i class="fas fa-check-circle" style="color:#2e7d32;"></i> <span style="color:#2e7d32;font-weight:600;">✅ Audio finished. You can now answer the questions.</span>';
-        };
-
-        currentUtterance.onerror = function() {
-            isPlaying = false;
-            playBtn.innerHTML = '<i class="fas fa-play"></i> Play Audio';
-            playBtn.classList.remove('playing');
-            audioStatus.innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#f57f17;"></i> <span>Audio playback error. Please try again.</span>';
-        };
-    });
-
-    // Load voices when available
-    if (speechSynth.getVoices().length === 0) {
-        speechSynth.onvoiceschanged = function() {
-            speechSynth.getVoices();
-        };
-    }
-
-    // Volume control
-    volumeSlider.addEventListener('input', function() {
-        if (currentUtterance) {
-            currentUtterance.volume = parseFloat(this.value);
+            status.innerHTML = '<i class="fas fa-volume-up"></i> <span style="color:#4A148C;font-weight:600;">🔊 Audio is playing... Listen carefully.</span>';
+            setTimeout(() => {
+                if (isPlaying) {
+                    isPlaying = false;
+                    this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
+                    this.classList.remove('playing');
+                    status.innerHTML = '<i class="fas fa-check-circle" style="color:#2e7d32;"></i> <span style="color:#2e7d32;font-weight:600;">✅ Audio finished. You can now answer the questions.</span>';
+                }
+            }, 30000);
+        } else {
+            status.innerHTML = '<i class="fas fa-info-circle"></i> <span>Click play to hear the recording. You will only hear it once.</span>';
         }
     });
 
-    // ============================================================
-    // SUBMIT TEST
-    // ============================================================
     async function submitTest() {
         let score = 0;
         const total = selected.length;
-
         selected.forEach(q => {
             const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-            if (selected && selected.value === q.answer) {
-                score++;
-            }
+            if (selected && selected.value === q.answer) score++;
         });
-
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
-
         document.getElementById('scoreDisplay').textContent = score;
-
         const feedback = document.getElementById('feedbackText');
         const percentage = (score / total) * 100;
-        if (percentage === 100) {
-            feedback.innerHTML = '🌟 Perfect score! Excellent listening skills!';
-        } else if (percentage >= 80) {
-            feedback.innerHTML = '👏 Great job! You\'re well on your way to a high band.';
-        } else if (percentage >= 60) {
-            feedback.innerHTML = '💪 Good effort! Review the audio and try again.';
-        } else {
-            feedback.innerHTML = '📚 Keep practicing! Focus on understanding the main ideas.';
-        }
-
+        if (percentage === 100) feedback.innerHTML = '🌟 Perfect score! Excellent listening skills!';
+        else if (percentage >= 80) feedback.innerHTML = '👏 Great job! You\'re well on your way to a high band.';
+        else if (percentage >= 60) feedback.innerHTML = '💪 Good effort! Review the audio and try again.';
+        else feedback.innerHTML = '📚 Keep practicing! Focus on understanding the main ideas.';
         document.querySelectorAll('input').forEach(input => input.disabled = true);
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
-        speechSynth.cancel();
+
+        const scoreData = { module: 'listening', score: score, total: total, date: new Date().toISOString() };
+        let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
+        savedScores.push(scoreData);
+        localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
 
         const saveStatus = document.getElementById('saveStatus');
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
-                    await db.collection('scores').add({
-                        userId: user.uid,
-                        module: 'listening',
-                        score: score,
-                        total: total,
-                        date: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    saveStatus.innerHTML = '✅ Score saved to your account! Check your dashboard.';
+                    await db.collection('scores').add({ userId: user.uid, module: 'listening', score: score, total: total, date: firebase.firestore.FieldValue.serverTimestamp() });
+                    saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
-                    saveStatus.innerHTML = '⚠️ Score saved locally, but failed to sync to account.';
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed).';
                     saveStatus.style.color = '#f57f17';
                 }
             } else {
-                saveStatus.innerHTML = '🔒 Sign in to save your scores to your account.';
+                saveStatus.innerHTML = '✅ Score saved locally! Sign in to save to your account.';
                 saveStatus.style.color = '#7B6A8A';
             }
         });
     }
 
-    function resetTest() {
-        speechSynth.cancel();
-        location.reload();
-    }
+    function resetTest() { location.reload(); }
 </script>
-
 </body>
     </html>
