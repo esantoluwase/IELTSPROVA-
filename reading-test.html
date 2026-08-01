@@ -179,6 +179,80 @@
             text-decoration: none;
         }
         .back-link:hover { text-decoration: underline; }
+        
+        /* ===== LOGIN OVERLAY ===== */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-overlay.active {
+            display: flex;
+        }
+        .login-overlay .modal-box {
+            background: white;
+            border-radius: 32px;
+            padding: 3rem;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        .login-overlay .modal-box .icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .login-overlay .modal-box h2 {
+            color: #4A148C;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .login-overlay .modal-box p {
+            color: #7B6A8A;
+            margin-bottom: 1.5rem;
+        }
+        .login-overlay .modal-box .btn-login {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 0 0.5rem;
+        }
+        .login-overlay .modal-box .btn-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .login-overlay .modal-box .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-secondary:hover {
+            background: #e5d9ed;
+        }
+
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
@@ -186,12 +260,13 @@
             .question { padding: 1rem; }
             .actions { flex-direction: column; }
             .btn { justify-content: center; }
+            .login-overlay .modal-box { padding: 2rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="testContent" style="display:none;">
     <div class="test-header">
         <h1><i class="fas fa-book-open"></i> Reading Test</h1>
         <div class="meta">
@@ -223,6 +298,22 @@
     </div>
 </div>
 
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="modal-box">
+        <span class="icon">🔒</span>
+        <h2>Login Required</h2>
+        <p>You need to be logged in to take this test.</p>
+        <div>
+            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
+            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
+        </p>
+    </div>
+</div>
+
 <script>
     // ============================================================
     // FIREBASE CONFIG
@@ -239,6 +330,22 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+
+    // ============================================================
+    // 🔒 CHECK IF USER IS LOGGED IN
+    // ============================================================
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            // Show login overlay
+            document.getElementById('loginOverlay').classList.add('active');
+            document.getElementById('testContent').style.display = 'none';
+            return;
+        }
+        // User is logged in — show the test
+        document.getElementById('loginOverlay').classList.remove('active');
+        document.getElementById('testContent').style.display = 'block';
+        renderTest();
+    });
 
     // ============================================================
     // COMPLETE QUESTION BANK — 60 QUESTIONS
@@ -431,8 +538,6 @@
         document.getElementById('progressFill').style.width = `${(answered / total) * 100}%`;
     }
 
-    renderTest();
-
     // ============================================================
     // TIMER
     // ============================================================
@@ -455,7 +560,7 @@
     updateTimer();
 
     // ============================================================
-    // SUBMIT TEST — SAVES TO LOCALSTORAGE + FIRESTORE
+    // SUBMIT TEST
     // ============================================================
     async function submitTest() {
         let score = 0;
@@ -489,9 +594,7 @@
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
-        // ============================================================
-        // SAVE TO LOCALSTORAGE (ALWAYS WORKS)
-        // ============================================================
+        // Save to localStorage
         const scoreData = {
             module: 'reading',
             score: score,
@@ -499,17 +602,10 @@
             date: new Date().toISOString()
         };
 
-        // Get existing scores from localStorage
         let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         savedScores.push(scoreData);
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
 
-        console.log('✅ Score saved to localStorage:', scoreData);
-        console.log('📊 All saved scores:', savedScores);
-
-        // ============================================================
-        // ALSO TRY TO SAVE TO FIRESTORE
-        // ============================================================
         const saveStatus = document.getElementById('saveStatus');
 
         auth.onAuthStateChanged(async (user) => {
@@ -525,7 +621,6 @@
                     saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
-                    console.error('❌ Firestore error:', error);
                     saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed, but your data is safe!)';
                     saveStatus.style.color = '#f57f17';
                 }
@@ -536,9 +631,6 @@
         });
     }
 
-    // ============================================================
-    // RESET TEST
-    // ============================================================
     function resetTest() {
         location.reload();
     }
