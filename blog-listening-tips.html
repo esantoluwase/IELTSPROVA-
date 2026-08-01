@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>Top 10 IELTS Listening Tips — IELTSProva</title>
+    <meta name="description" content="Master the IELTS Listening test with these 10 proven tips. Learn how to improve your score with listening strategies and practice techniques." />
+    <meta name="keywords" content="IELTS listening tips, improve IELTS listening, IELTS listening strategies, band 7 IELTS" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            line-height: 1.8;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
+
+        /* ===== NAV ===== */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 1rem 0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .logo span { color: #FFD700; }
+        .logo small {
+            display: block;
+            font-size: 0.55rem;
+            font-weight: 400;
+            color: #7B6A8A;
+            letter-spacing: 1px;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.4rem;
+        }
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: #4A148C;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #2A004F;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        .nav-links a:hover { color: #7B1FA2; }
+        .nav-links a.active { color: #4A148C; border-bottom: 2px solid #FFD700; }
+        .nav-cta {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.4);
+        }
+        .nav-cta-outline {
+            background: transparent;
+            border: 2px solid #4A148C;
+            color: #4A148C !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .nav-cta-outline:hover {
+            background: #4A148C;
+            color: white !important;
+        }
+        .user-greeting { font-weight: 600; color: #4A148C; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: white;
+                padding: 1.5rem;
+                border-radius: 16px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                margin-top: 0.5rem;
+                gap: 1rem;
+                align-items: center;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1rem; }
+            .nav-cta, .nav-cta-outline { width: 100%; text-align: center; }
+            #userGreeting { flex-direction: column; width: 100%; gap: 0.5rem; }
+        }
+
+        /* ===== BLOG CONTENT ===== */
+        .blog-hero {
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+        .blog-hero .category {
+            display: inline-block;
+            background: #f3edf7;
+            color: #4A148C;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 0.5rem;
+        }
+        .blog-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #1a0a2e;
+            line-height: 1.2;
+        }
+        .blog-hero h1 span { color: #4A148C; }
+        .blog-hero .meta {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .blog-hero .meta i { margin-right: 0.3rem; }
+
+        .blog-body {
+            padding: 2rem 0 3rem;
+            background: white;
+            border-radius: 28px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.04);
+        }
+        .blog-body .content h2 {
+            color: #4A148C;
+            font-size: 1.8rem;
+            margin: 2rem 0 0.5rem;
+        }
+        .blog-body .content h3 {
+            color: #4A148C;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+        .blog-body .content p {
+            color: #3d2a4a;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+        .blog-body .content ul, .blog-body .content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #3d2a4a;
+        }
+        .blog-body .content ul li, .blog-body .content ol li {
+            margin-bottom: 0.5rem;
+        }
+        .blog-body .content .tip-box {
+            background: #faf7ff;
+            border-left: 6px solid #7B1FA2;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+        .blog-body .content .tip-box h4 {
+            color: #4A148C;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        .blog-body .content .tip-box p { margin-bottom: 0; }
+        .blog-body .content .highlight-box {
+            background: #f3edf7;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        .blog-body .content .highlight-box .big-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .blog-body .content .highlight-box p {
+            margin-bottom: 0;
+            color: #7B6A8A;
+        }
+        .blog-body .content .number-item {
+            background: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            border: 1px solid #f0e8f5;
+            transition: 0.3s;
+        }
+        .blog-body .content .number-item:hover {
+            border-color: #7B1FA2;
+            transform: translateX(5px);
+        }
+        .blog-body .content .number-item .num {
+            display: inline-block;
+            background: #4A148C;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 50px;
+            margin-right: 0.5rem;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 2rem 0 0;
+        }
+        .cta-box h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .cta-box p { opacity: 0.9; margin-bottom: 1rem; }
+        .cta-box .btn-cta {
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .cta-box .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #1a0a2e, #4A148C);
+            color: rgba(255,255,255,0.8);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+        .footer-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+        }
+        .footer-brand span { color: #FFD700; }
+        .footer-brand small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.6;
+        }
+        footer h4 { color: white; font-size: 1rem; margin-bottom: 0.8rem; }
+        footer a {
+            color: rgba(255,255,255,0.6);
+            display: block;
+            margin-bottom: 0.4rem;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        footer a:hover { color: #FFD700; }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 600px) {
+            .blog-hero h1 { font-size: 2rem; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .blog-body { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAV ===== -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">
+                IELTS<span>Prova</span>
+                <small>by Prova Technologies</small>
+            </div>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="study-tips.html">Tips</a>
+                <a href="blog-reading-tips.html">Blog</a>
+                <a href="about.html">About</a>
+                <span id="authButtons">
+                    <button class="nav-cta-outline" onclick="openModal('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
+                </span>
+                <span id="userGreeting" style="display:none;">
+                    <span class="user-greeting" id="greetingText"><i class="fas fa-user-circle"></i> Hi, User</span>
+                    <button class="nav-cta-outline" onclick="logoutUser()" style="padding:0.4rem 1.2rem; font-size:0.8rem;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== BLOG HERO ===== -->
+    <section class="blog-hero">
+        <div class="container">
+            <span class="category">🎧 Listening Tips</span>
+            <h1>Top 10 <span>IELTS Listening</span> Tips</h1>
+            <div class="meta">
+                <i class="fas fa-calendar-alt"></i> August 1, 2026 &nbsp;·&nbsp; 
+                <i class="fas fa-clock"></i> 8 min read
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BLOG BODY ===== -->
+    <section class="blog-body">
+        <div class="container">
+            <div class="content">
+
+                <p>The IELTS Listening test can be tricky — you only hear the audio once, and the answers come quickly. But with the right strategies, you can significantly improve your score. Here are my top 10 tips to help you succeed.</p>
+
+                <div class="highlight-box">
+                    <div class="big-number">10</div>
+                    <p>Proven tips to boost your listening score</p>
+                </div>
+
+                <!-- TIP 1 -->
+                <div class="number-item">
+                    <span class="num">1</span>
+                    <strong>Read the Questions First</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">Before the audio starts, you have time to read the questions. Use this time wisely. Underline keywords in the questions — this helps you know what to listen for.</p>
+                </div>
+
+                <!-- TIP 2 -->
+                <div class="number-item">
+                    <span class="num">2</span>
+                    <strong>Listen for Signpost Words</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">Words like "first," "next," "finally," "however," and "for example" often signal that the answer is coming. Pay attention to these signposts.</p>
+                </div>
+
+                <!-- TIP 3 -->
+                <div class="number-item">
+                    <span class="num">3</span>
+                    <strong>Focus on the Speaker's Intention</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">Sometimes the answer isn't directly stated. Listen for the speaker's tone and intention — what are they trying to say?</p>
+                </div>
+
+                <!-- TIP 4 -->
+                <div class="number-item">
+                    <span class="num">4</span>
+                    <strong>Watch Out for Distractors</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">The test often includes false clues. The speaker might mention the wrong answer first, then correct themselves. Listen for corrections like "Actually..." or "Wait, it's..."</p>
+                </div>
+
+                <!-- TIP 5 -->
+                <div class="number-item">
+                    <span class="num">5</span>
+                    <strong>Spelling Matters</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">Spelling counts in IELTS Listening. If you spell a word incorrectly, your answer is wrong. Practice spelling common words and names.</p>
+                </div>
+
+                <!-- TIP 6 -->
+                <div class="number-item">
+                    <span class="num">6</span>
+                    <strong>Use the Pause to Predict</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">There are pauses in the audio. Use them to read ahead and predict what the next answer might be. This reduces the mental load while listening.</p>
+                </div>
+
+                <!-- TIP 7 -->
+                <div class="number-item">
+                    <span class="num">7</span>
+                    <strong>Practice with Accents</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">IELTS uses British, Australian, North American, and other English accents. Expose yourself to different accents through podcasts, news, and movies.</p>
+                </div>
+
+                <!-- TIP 8 -->
+                <div class="number-item">
+                    <span class="num">8</span>
+                    <strong>Don't Get Stuck on One Question</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">If you miss an answer, move on. Dwelling on one question means you'll miss the next one. You can always go back later if you have time.</p>
+                </div>
+
+                <!-- TIP 9 -->
+                <div class="number-item">
+                    <span class="num">9</span>
+                    <strong>Transfer Answers Carefully</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">If you're taking the paper-based test, make sure you transfer your answers to the answer sheet correctly. Check spelling and grammar before submitting.</p>
+                </div>
+
+                <!-- TIP 10 -->
+                <div class="number-item">
+                    <span class="num">10</span>
+                    <strong>Practice, Practice, Practice</strong>
+                    <p style="margin-top:0.3rem; color:#3d2a4a;">The more you practice, the better you'll get. Use IELTSProva's Listening Test to practice with real-style questions and get instant feedback.</p>
+                </div>
+
+                <div class="tip-box">
+                    <h4>🎧 Extra Tip: Use Headphones</h4>
+                    <p>If you're taking the computer-based test, use headphones to focus on the audio and block out background noise. This is especially important if you're in a test center with other candidates.</p>
+                </div>
+
+                <div class="cta-box">
+                    <h3>🎧 Ready to Practice?</h3>
+                    <p>Take our IELTS Listening Test with real-style audio and get your band score instantly.</p>
+                    <a href="listening-test.html" class="btn-cta">Start Listening Test →</a>
+                </div>
+
+                <div style="background:#faf7ff;padding:1.5rem;border-radius:12px;margin:2rem 0;">
+                    <h3 style="color:#4A148C;margin-bottom:0.5rem;">📢 Share This Guide</h3>
+                    <p style="margin-bottom:0.5rem;">If you found this helpful, share it with a friend who's preparing for IELTS.</p>
+                    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                        <a href="#" style="color:#4A148C;font-weight:600;"><i class="fab fa-twitter"></i> Twitter</a>
+                        <a href="#" style="color:#4A148C;font-weight:600;"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                        <a href="#" style="color:#4A148C;font-weight:600;"><i class="fab fa-facebook"></i> Facebook</a>
+                        <a href="#" style="color:#4A148C;font-weight:600;"><i class="fas fa-envelope"></i> Email</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        Prova <span>Technologies</span>
+                        <small>IELTSProva · TOEFLProva · SATProva · GREProva</small>
+                    </div>
+                    <p style="margin-top:0.5rem; font-size:0.9rem; opacity:0.7;">
+                        📧 <a href="mailto:provatech9@gmail.com" style="color:rgba(255,255,255,0.7);">provatech9@gmail.com</a>
+                    </p>
+                </div>
+                <div>
+                    <h4>Product</h4>
+                    <a href="reading-test.html">Reading</a>
+                    <a href="writing-test.html">Writing</a>
+                    <a href="listening-test.html">Listening</a>
+                    <a href="speaking-test.html">Speaking</a>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <a href="study-tips.html">💡 Study Tips</a>
+                    <a href="blog-reading-tips.html">📝 Blog</a>
+                    <a href="dashboard.html">Dashboard</a>
+                </div>
+                <div>
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 Prova Technologies — Built with 💜 for exam success worldwide.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:999;justify-content:center;align-items:center;">
+        <div class="modal" style="background:white;border-radius:32px;padding:2.5rem;max-width:440px;width:90%;position:relative;box-shadow:0 30px 60px rgba(0,0,0,0.2);">
+            <button class="modal-close" onclick="closeModal()" style="position:absolute;top:1rem;right:1.5rem;font-size:1.5rem;cursor:pointer;color:#888;background:none;border:none;">&times;</button>
+            <h2 id="modalTitle" style="font-size:1.8rem;color:#4A148C;margin-bottom:0.5rem;">Welcome Back</h2>
+            <p class="subtitle" id="modalSubtitle" style="color:#7B6A8A;margin-bottom:1.5rem;">Log in to continue your IELTS journey.</p>
+            <div class="error-msg" id="errorMsg" style="color:#e53935;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
+            <div class="success-msg" id="successMsg" style="color:#2e7d32;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display:none;margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
+                </div>
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Email Address</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
+                </div>
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Password</label>
+                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
+                </div>
+                <button type="submit" class="btn-auth" id="authBtn" style="width:100%;padding:0.9rem;background:linear-gradient(135deg,#4A148C,#7B1FA2);color:white;border:none;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:0.3s;">Continue</button>
+            </form>
+            <div class="switch-auth" style="text-align:center;margin-top:1.2rem;color:#7B6A8A;">
+                <span id="switchText">Don't have an account?</span>
+                <a id="switchLink" onclick="toggleAuthMode()" style="color:#4A148C;font-weight:700;cursor:pointer;">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+            authDomain: "ieltsprova.firebaseapp.com",
+            projectId: "ieltsprova",
+            storageBucket: "ieltsprova.firebasestorage.app",
+            messagingSenderId: "812300970124",
+            appId: "1:812300970124:web:992398c08c151ae97df3a9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const hamburger = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(item => {
+            item.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userGreeting').style.display = 'inline-flex';
+                document.getElementById('greetingText').innerHTML = `<i class="fas fa-user-circle"></i> Hi, ${user.displayName || 'Student'}`;
+            } else {
+                document.getElementById('authButtons').style.display = 'inline-flex';
+                document.getElementById('userGreeting').style.display = 'none';
+            }
+        });
+
+        let currentMode = 'login';
+
+        function openModal(mode) {
+            currentMode = mode;
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const btn = document.getElementById('authBtn');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+            const nameGroup = document.getElementById('nameGroup');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            document.getElementById('authForm').reset();
+
+            if (mode === 'login') {
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Log in to continue your IELTS journey.';
+                btn.textContent = 'Log In';
+                switchText.textContent = "Don't have an account?";
+                switchLink.textContent = 'Sign Up';
+                nameGroup.style.display = 'none';
+            } else {
+                title.textContent = 'Create Your Account';
+                subtitle.textContent = 'Start your IELTS journey today — it\'s free!';
+                btn.textContent = 'Sign Up';
+                switchText.textContent = "Already have an account?";
+                switchLink.textContent = 'Log In';
+                nameGroup.style.display = 'block';
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function toggleAuthMode() {
+            closeModal();
+            setTimeout(() => {
+                openModal(currentMode === 'login' ? 'signup' : 'login');
+            }, 300);
+        }
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const fullName = document.getElementById('fullName').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const btn = document.getElementById('authBtn');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
+            try {
+                if (currentMode === 'login') {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    successMsg.textContent = '✅ Logged in successfully!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
+                } else {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    await userCredential.user.updateProfile({ displayName: fullName || 'Student' });
+                    successMsg.textContent = '✅ Account created! Welcome to IELTSProva!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
+                }
+            } catch (error) {
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = currentMode === 'login' ? 'Log In' : 'Sign Up';
+            }
+        }
+
+        function logoutUser() {
+            auth.signOut().then(() => { location.reload(); });
+        }
+
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+
+</body>
+      </html>
