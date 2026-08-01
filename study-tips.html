@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Tips — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 1rem 0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #4A148C;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            color: #FFD700;
+        }
+        .logo small {
+            display: block;
+            font-size: 0.55rem;
+            font-weight: 400;
+            color: #7B6A8A;
+            letter-spacing: 1px;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.4rem;
+        }
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: #4A148C;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            transition: 0.3s ease;
+        }
+        .nav-links a {
+            color: #2A004F;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        .nav-links a:hover {
+            color: #7B1FA2;
+        }
+        .nav-links a.active {
+            color: #4A148C;
+            border-bottom: 2px solid #FFD700;
+        }
+        .nav-cta {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.3);
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.4);
+            color: white !important;
+        }
+        .nav-cta-outline {
+            background: transparent;
+            border: 2px solid #4A148C;
+            color: #4A148C !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .nav-cta-outline:hover {
+            background: #4A148C;
+            color: white !important;
+        }
+        .user-greeting {
+            font-weight: 600;
+            color: #4A148C;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: white;
+                padding: 1.5rem;
+                border-radius: 16px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                margin-top: 0.5rem;
+                gap: 1rem;
+                align-items: center;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-links a {
+                font-size: 1rem;
+            }
+            .nav-cta,
+            .nav-cta-outline {
+                width: 100%;
+                text-align: center;
+            }
+            #userGreeting {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
+        }
+
+        /* ===== TIPS HERO ===== */
+        .tips-hero {
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+        .tips-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .tips-hero h1 span {
+            color: #FFD700;
+        }
+        .tips-hero p {
+            font-size: 1.1rem;
+            color: #7B6A8A;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== TIPS GRID ===== */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0 4rem;
+        }
+        .tip-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            transition: 0.3s;
+        }
+        .tip-card:hover {
+            transform: translateY(-5px);
+            border-color: #7B1FA2;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.06);
+        }
+        .tip-card .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .tip-card .badge {
+            display: inline-block;
+            background: #f3edf7;
+            color: #4A148C;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            margin-bottom: 0.5rem;
+        }
+        .tip-card h3 {
+            color: #4A148C;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tip-card p {
+            color: #3d2a4a;
+            font-size: 0.95rem;
+        }
+        .tip-card ul {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+        .tip-card ul li {
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
+            color: #3d2a4a;
+        }
+        .tip-card ul li::before {
+            content: "✅ ";
+            color: #7B1FA2;
+        }
+
+        /* ===== BAND CALCULATOR ===== */
+        .calculator-section {
+            background: white;
+            padding: 3rem 0;
+            border-top: 2px solid #f0e8f5;
+            border-bottom: 2px solid #f0e8f5;
+        }
+        .calculator-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #4A148C;
+            margin-bottom: 0.5rem;
+        }
+        .calculator-section h2 span {
+            color: #FFD700;
+        }
+        .calculator-section .sub {
+            text-align: center;
+            color: #7B6A8A;
+            margin-bottom: 2rem;
+        }
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .calc-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .calc-inputs .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .calc-inputs .input-group label {
+            font-weight: 600;
+            color: #4A148C;
+        }
+        .calc-inputs .input-group input {
+            padding: 0.8rem 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s;
+        }
+        .calc-inputs .input-group input:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .calc-inputs .btn-calc {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 0.5rem;
+        }
+        .calc-inputs .btn-calc:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .calc-result {
+            background: #faf7ff;
+            padding: 2rem;
+            border-radius: 24px;
+            border: 2px solid #7B1FA2;
+            text-align: center;
+        }
+        .calc-result .band-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .calc-result .band-label {
+            font-size: 1.1rem;
+            color: #7B6A8A;
+        }
+        .calc-result .band-description {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #3d2a4a;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #1a0a2e, #4A148C);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+        .footer-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+        }
+        .footer-brand span {
+            color: #FFD700;
+        }
+        .footer-brand small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.6;
+        }
+        footer h4 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        footer a {
+            color: rgba(255, 255, 255, 0.6);
+            display: block;
+            margin-bottom: 0.4rem;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        footer a:hover {
+            color: #FFD700;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .tips-hero h1 {
+                font-size: 2rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .calc-result .band-number {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAV ===== -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">
+                IELTS<span>Prova</span>
+                <small>by Prova Technologies</small>
+            </div>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="study-tips.html" class="active">💡 Tips</a>
+                <a href="index.html#features">Tests</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <span id="authButtons">
+                    <button class="nav-cta-outline" onclick="openModal('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
+                </span>
+                <span id="userGreeting" style="display:none;">
+                    <span class="user-greeting" id="greetingText"><i class="fas fa-user-circle"></i> Hi, User</span>
+                    <button class="nav-cta-outline" onclick="logoutUser()" style="padding:0.4rem 1.2rem; font-size:0.8rem;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== TIPS HERO ===== -->
+    <section class="tips-hero">
+        <div class="container">
+            <h1>💡 IELTS <span>Study Tips</span></h1>
+            <p>Expert strategies to boost your band score in all 4 modules.</p>
+        </div>
+    </section>
+
+    <!-- ===== TIPS GRID ===== -->
+    <section class="container">
+        <div class="tips-grid">
+            <!-- Reading Tip -->
+            <div class="tip-card">
+                <span class="icon">📖</span>
+                <span class="badge">Reading</span>
+                <h3>Master Skimming &amp; Scanning</h3>
+                <p>Don't read every word. Learn to:</p>
+                <ul>
+                    <li>Skim for main ideas (headings, first/last sentences)</li>
+                    <li>Scan for specific information (dates, names, numbers)</li>
+                    <li>Underline keywords in questions before reading</li>
+                    <li>Practice with 20-minute timed sessions</li>
+                </ul>
+            </div>
+
+            <!-- Writing Tip -->
+            <div class="tip-card">
+                <span class="icon">✍️</span>
+                <span class="badge">Writing</span>
+                <h3>Structure Your Essays</h3>
+                <p>Follow this formula for Task 2:</p>
+                <ul>
+                    <li>Introduction: Paraphrase + Thesis</li>
+                    <li>Body 1: Main point + Explanation + Example</li>
+                    <li>Body 2: Second point + Explanation + Example</li>
+                    <li>Conclusion: Summarize + Final thought</li>
+                    <li>Always write 250+ words</li>
+                </ul>
+            </div>
+
+            <!-- Listening Tip -->
+            <div class="tip-card">
+                <span class="icon">🎧</span>
+                <span class="badge">Listening</span>
+                <h3>Listen for Signposts</h3>
+                <p>Key words that signal answers:</p>
+                <ul>
+                    <li>"First, next, finally" — indicates sequence</li>
+                    <li>"However, but" — indicates contrast</li>
+                    <li>"For example" — indicates details</li>
+                    <li>Practice with 1.25x speed to train your ear</li>
+                    <li>Always read questions before the audio starts</li>
+                </ul>
+            </div>
+
+            <!-- Speaking Tip -->
+            <div class="tip-card">
+                <span class="icon">🗣️</span>
+                <span class="badge">Speaking</span>
+                <h3>Extend Your Answers</h3>
+                <p>Use the "P.E.E." method:</p>
+                <ul>
+                    <li><strong>Point:</strong> State your main idea</li>
+                    <li><strong>Explain:</strong> Elaborate with reasons</li>
+                    <li><strong>Example:</strong> Give a specific example</li>
+                    <li>Speak for 2 minutes without stopping in Part 2</li>
+                    <li>Record yourself and listen back</li>
+                </ul>
+            </div>
+
+            <!-- Vocabulary Tip -->
+            <div class="tip-card">
+                <span class="icon">📚</span>
+                <span class="badge">Vocabulary</span>
+                <h3>Build Topic-Specific Vocabulary</h3>
+                <p>Learn words by topic:</p>
+                <ul>
+                    <li>Environment: pollution, conservation, sustainability</li>
+                    <li>Technology: innovation, artificial intelligence, automation</li>
+                    <li>Education: curriculum, assessment, pedagogy</li>
+                    <li>Health: nutrition, epidemiology, wellness</li>
+                    <li>Use new words in your writing and speaking</li>
+                </ul>
+            </div>
+
+            <!-- General Tip -->
+            <div class="tip-card">
+                <span class="icon">🎯</span>
+                <span class="badge">General</span>
+                <h3>Practice Under Exam Conditions</h3>
+                <p>Simulate the real test:</p>
+                <ul>
+                    <li>Use our timed tests with no distractions</li>
+                    <li>Complete a full test in one sitting</li>
+                    <li>Check your answers with our feedback</li>
+                    <li>Track your progress on the dashboard</li>
+                    <li>Practice daily for 30 minutes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BAND SCORE CALCULATOR ===== -->
+    <section class="calculator-section">
+        <div class="container">
+            <h2>📊 IELTS Band <span>Calculator</span></h2>
+            <p class="sub">Enter your practice test scores to estimate your IELTS band score.</p>
+
+            <div class="calculator-grid">
+                <div class="calc-inputs">
+                    <div class="input-group">
+                        <label>📖 Reading (40 questions)</label>
+                        <input type="number" id="readingRaw" placeholder="Enter your score (0-40)" min="0" max="40" />
+                    </div>
+                    <div class="input-group">
+                        <label>🎧 Listening (40 questions)</label>
+                        <input type="number" id="listeningRaw" placeholder="Enter your score (0-40)" min="0" max="40" />
+                    </div>
+                    <div class="input-group">
+                        <label>✍️ Writing (Estimated)</label>
+                        <select id="writingBand" style="padding:0.8rem 1rem; border:2px solid #f0e8f5; border-radius:12px; font-size:1rem; font-family:'Inter',sans-serif;">
+                            <option value="5.0">5.0</option>
+                            <option value="5.5">5.5</option>
+                            <option value="6.0" selected>6.0</option>
+                            <option value="6.5">6.5</option>
+                            <option value="7.0">7.0</option>
+                            <option value="7.5">7.5</option>
+                            <option value="8.0">8.0</option>
+                            <option value="8.5">8.5</option>
+                            <option value="9.0">9.0</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>🗣️ Speaking (Estimated)</label>
+                        <select id="speakingBand" style="padding:0.8rem 1rem; border:2px solid #f0e8f5; border-radius:12px; font-size:1rem; font-family:'Inter',sans-serif;">
+                            <option value="5.0">5.0</option>
+                            <option value="5.5">5.5</option>
+                            <option value="6.0" selected>6.0</option>
+                            <option value="6.5">6.5</option>
+                            <option value="7.0">7.0</option>
+                            <option value="7.5">7.5</option>
+                            <option value="8.0">8.0</option>
+                            <option value="8.5">8.5</option>
+                            <option value="9.0">9.0</option>
+                        </select>
+                    </div>
+                    <button class="btn-calc" onclick="calculateBand()"><i class="fas fa-calculator"></i> Calculate My Band</button>
+                </div>
+
+                <div class="calc-result" id="calcResult">
+                    <div class="band-number" id="bandResult">?</div>
+                    <div class="band-label">Overall IELTS Band Score</div>
+                    <div class="band-description" id="bandDescription">
+                        Enter your scores above and click "Calculate My Band"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        Prova <span>Technologies</span>
+                        <small>IELTSProva · TOEFLProva · SATProva · GREProva</small>
+                    </div>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.7;">
+                        📧 <a href="mailto:provatech@gmail.com" style="color:rgba(255,255,255,0.7);">provatech@gmail.com</a>
+                    </p>
+                </div>
+                <div>
+                    <h4>Product</h4>
+                    <a href="index.html#features">Tests</a>
+                    <a href="index.html#pricing">Pricing</a>
+                    <a href="dashboard.html">Dashboard</a>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <a href="study-tips.html">💡 Study Tips</a>
+                    <a href="study-tips.html#calculator">📊 Band Calculator</a>
+                </div>
+                <div>
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 Prova Technologies — Built with 💜 for exam success worldwide.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle">Welcome Back</h2>
+            <p class="subtitle" id="modalSubtitle">Log in to continue your IELTS journey.</p>
+            <div class="error-msg" id="errorMsg"></div>
+            <div class="success-msg" id="successMsg"></div>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display:none;">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name" />
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" />
+                </div>
+                <button type="submit" class="btn-auth" id="authBtn">Continue</button>
+            </form>
+            <div class="switch-auth">
+                <span id="switchText">Don't have an account?</span>
+                <a id="switchLink" onclick="toggleAuthMode()">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+            authDomain: "ieltsprova.firebaseapp.com",
+            projectId: "ieltsprova",
+            storageBucket: "ieltsprova.firebasestorage.app",
+            messagingSenderId: "812300970124",
+            appId: "1:812300970124:web:992398c08c151ae97df3a9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ============================================================
+        // HAMBURGER MENU
+        // ============================================================
+        const hamburger = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(item => {
+            item.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // ============================================================
+        // AUTH STATE
+        // ============================================================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userGreeting').style.display = 'inline-flex';
+                document.getElementById('greetingText').innerHTML = `<i class="fas fa-user-circle"></i> Hi, ${user.displayName || 'Student'}`;
+            } else {
+                document.getElementById('authButtons').style.display = 'inline-flex';
+                document.getElementById('userGreeting').style.display = 'none';
+            }
+        });
+
+        // ============================================================
+        // MODAL CONTROLS
+        // ============================================================
+        let currentMode = 'login';
+
+        function openModal(mode) {
+            currentMode = mode;
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const btn = document.getElementById('authBtn');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+            const nameGroup = document.getElementById('nameGroup');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            document.getElementById('authForm').reset();
+
+            if (mode === 'login') {
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Log in to continue your IELTS journey.';
+                btn.textContent = 'Log In';
+                switchText.textContent = "Don't have an account?";
+                switchLink.textContent = 'Sign Up';
+                nameGroup.style.display = 'none';
+            } else {
+                title.textContent = 'Create Your Account';
+                subtitle.textContent = 'Start your IELTS journey today — it\'s free!';
+                btn.textContent = 'Sign Up';
+                switchText.textContent = "Already have an account?";
+                switchLink.textContent = 'Log In';
+                nameGroup.style.display = 'block';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            closeModal();
+            setTimeout(() => {
+                openModal(currentMode === 'login' ? 'signup' : 'login');
+            }, 300);
+        }
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const fullName = document.getElementById('fullName').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const btn = document.getElementById('authBtn');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
+            try {
+                if (currentMode === 'login') {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    successMsg.textContent = '✅ Logged in successfully!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => { closeModal();
+                        location.reload(); }, 1500);
+                } else {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    await userCredential.user.updateProfile({ displayName: fullName || 'Student' });
+                    successMsg.textContent = '✅ Account created! Welcome!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => { closeModal();
+                        location.reload(); }, 1500);
+                }
+            } catch (error) {
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = currentMode === 'login' ? 'Log In' : 'Sign Up';
+            }
+        }
+
+        function logoutUser() {
+            auth.signOut().then(() => { location.reload(); });
+        }
+
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
+        // BAND CALCULATOR
+        // ============================================================
+        function calculateBand() {
+            const readingRaw = parseInt(document.getElementById('readingRaw').value) || 0;
+            const listeningRaw = parseInt(document.getElementById('listeningRaw').value) || 0;
+            const writingBand = parseFloat(document.getElementById('writingBand').value);
+            const speakingBand = parseFloat(document.getElementById('speakingBand').value);
+
+            // Convert reading raw to band (approximate)
+            const readingBand = readingRawToBand(readingRaw);
+            const listeningBand = listeningRawToBand(listeningRaw);
+
+            // Calculate overall (average of 4)
+            const average = (readingBand + listeningBand + writingBand + speakingBand) / 4;
+            const overallBand = Math.round(average * 2) / 2;
+
+            // Display result
+            document.getElementById('bandResult').textContent = overallBand;
+
+            const description = document.getElementById('bandDescription');
+            const descriptions = {
+                '9.0': '🎯 Expert user — Fully operational command of the language.',
+                '8.0': '⭐ Very good user — Has fully operational command with only occasional errors.',
+                '7.0': '✅ Good user — Has operational command of the language.',
+                '6.0': '💪 Competent user — Has generally effective command despite inaccuracies.',
+                '5.0': '📚 Modest user — Has partial command of the language.',
+                '4.0': '📝 Limited user — Basic competence is limited to familiar situations.'
+            };
+
+            const descKey = Object.keys(descriptions).find(key => overallBand >= parseFloat(key));
+            description.textContent = descKey ? descriptions[descKey] : 'Keep practicing! You\'ll get there!';
+
+            // Add detailed breakdown
+            description.innerHTML += `
+                <br /><br />
+                <div style="font-size:0.85rem; color:#7B6A8A; border-top:1px solid #f0e8f5; padding-top:0.5rem;">
+                    📖 Reading: ${readingRaw} → ${readingBand} &nbsp;|&nbsp; 
+                    🎧 Listening: ${listeningRaw} → ${listeningBand} &nbsp;|&nbsp; 
+                    ✍️ Writing: ${writingBand} &nbsp;|&nbsp; 
+                    🗣️ Speaking: ${speakingBand}
+                </div>
+            `;
+        }
+
+        function readingRawToBand(raw) {
+            if (raw >= 39) return 9.0;
+            if (raw >= 37) return 8.5;
+            if (raw >= 35) return 8.0;
+            if (raw >= 33) return 7.5;
+            if (raw >= 30) return 7.0;
+            if (raw >= 27) return 6.5;
+            if (raw >= 23) return 6.0;
+            if (raw >= 19) return 5.5;
+            if (raw >= 15) return 5.0;
+            if (raw >= 12) return 4.5;
+            return 4.0;
+        }
+
+        function listeningRawToBand(raw) {
+            if (raw >= 39) return 9.0;
+            if (raw >= 37) return 8.5;
+            if (raw >= 35) return 8.0;
+            if (raw >= 33) return 7.5;
+            if (raw >= 30) return 7.0;
+            if (raw >= 27) return 6.5;
+            if (raw >= 23) return 6.0;
+            if (raw >= 19) return 5.5;
+            if (raw >= 15) return 5.0;
+            if (raw >= 12) return 4.5;
+            return 4.0;
+        }
+    </script>
+
+</body>
+  </html>
