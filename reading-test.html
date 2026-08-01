@@ -231,6 +231,8 @@
             cursor: pointer;
             transition: 0.3s;
             margin: 0 0.5rem;
+            text-decoration: none;
+            display: inline-block;
         }
         .login-overlay .modal-box .btn-login:hover {
             transform: scale(1.05);
@@ -252,6 +254,10 @@
         .login-overlay .modal-box .btn-secondary:hover {
             background: #e5d9ed;
         }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
         @media (max-width: 600px) {
             body { padding: 1rem; }
@@ -266,6 +272,23 @@
 </head>
 <body>
 
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="modal-box">
+        <span class="icon">🔒</span>
+        <h2>Login Required</h2>
+        <p>You need to be logged in to take this test.</p>
+        <div>
+            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
+            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
+        </p>
+    </div>
+</div>
+
+<!-- ===== TEST CONTENT ===== -->
 <div class="container" id="testContent" style="display:none;">
     <div class="test-header">
         <h1><i class="fas fa-book-open"></i> Reading Test</h1>
@@ -298,22 +321,6 @@
     </div>
 </div>
 
-<!-- ===== LOGIN OVERLAY ===== -->
-<div class="login-overlay" id="loginOverlay">
-    <div class="modal-box">
-        <span class="icon">🔒</span>
-        <h2>Login Required</h2>
-        <p>You need to be logged in to take this test.</p>
-        <div>
-            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
-            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
-        </div>
-        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
-            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
-        </p>
-    </div>
-</div>
-
 <script>
     // ============================================================
     // FIREBASE CONFIG
@@ -336,12 +343,10 @@
     // ============================================================
     auth.onAuthStateChanged(user => {
         if (!user) {
-            // Show login overlay
             document.getElementById('loginOverlay').classList.add('active');
             document.getElementById('testContent').style.display = 'none';
             return;
         }
-        // User is logged in — show the test
         document.getElementById('loginOverlay').classList.remove('active');
         document.getElementById('testContent').style.display = 'block';
         renderTest();
@@ -351,7 +356,6 @@
     // COMPLETE QUESTION BANK — 60 QUESTIONS
     // ============================================================
     const questionBank = [
-        // PASSAGE 1: History of Glassmaking
         {
             passage: "Glassmaking is one of the oldest crafts in human history, dating back to around 3500 BCE in Mesopotamia. Early glass was used primarily for beads and decorative objects, as it was difficult to produce clear, flawless sheets. The discovery of glassblowing in the 1st century BCE in the Roman Empire revolutionised production, making glass cheaper and more widely available. This technique allowed artisans to create transparent vessels, which soon became popular across Europe and Asia. During the Middle Ages, Venice emerged as a major centre for glass production, particularly on the island of Murano. Murano glassmakers developed crystalline glass and enamel decoration, and their techniques were closely guarded secrets. By the 17th century, lead crystal glass was invented in England, adding brilliance and weight to glassware, which became highly sought after by royalty. The Industrial Revolution brought mechanisation to glass production. In 1887, the mass production of glass bottles began, and in the early 20th century, the invention of the float glass process made it possible to produce large, perfectly flat sheets of glass for windows and mirrors. Today, glass is used in everything from smartphone screens to fibre optics, proving that this ancient material remains at the forefront of modern technology.",
             questions: [
@@ -367,7 +371,6 @@
                 { id: 10, text: "What is the main idea of the passage?", options: ["Glass is fragile", "Glassmaking has evolved significantly over time", "Venice was the only glassmaking centre", "Modern glass is better than ancient glass"], answer: "B" }
             ]
         },
-        // PASSAGE 2: The Science of Sleep
         {
             passage: "Sleep is a fundamental biological process that affects every aspect of human health. Adults typically need 7-9 hours of sleep per night for optimal functioning. During sleep, the brain cycles through different stages, including REM (Rapid Eye Movement) and deep sleep. REM sleep is crucial for memory consolidation and emotional processing. The hormone melatonin regulates the sleep-wake cycle, and exposure to blue light from screens can suppress melatonin production, disrupting sleep patterns. Sleep disorders such as insomnia and sleep apnoea affect millions of people worldwide. Chronic sleep deprivation has been linked to obesity, diabetes, and cardiovascular disease. Conversely, good sleep hygiene — including maintaining a consistent schedule, avoiding caffeine before bed, and creating a dark, quiet environment — can significantly improve sleep quality. For teenagers, 8-10 hours of sleep is recommended to support their physical and cognitive development.",
             questions: [
@@ -383,7 +386,6 @@
                 { id: 20, text: "What is the main purpose of sleep according to the passage?", options: ["To conserve energy", "To restore and repair the body", "To dream", "To pass time"], answer: "B" }
             ]
         },
-        // PASSAGE 3: Renewable Energy
         {
             passage: "Renewable energy sources — including solar, wind, hydro, and geothermal — are critical for reducing greenhouse gas emissions and combating climate change. Solar power, which converts sunlight into electricity using photovoltaic panels, is one of the fastest-growing energy sectors worldwide. China is currently the world's largest producer of solar energy. Wind energy harnesses the power of wind turbines to generate electricity, offering a clean and abundant energy source, though it requires significant land or offshore space. Hydropower, which generates electricity from flowing water, remains the largest source of renewable electricity globally. However, each renewable source has limitations: solar depends on weather conditions, wind is intermittent, and hydropower can impact aquatic ecosystems. Despite these challenges, renewable energy currently accounts for nearly 20% of global electricity generation, and this share is expected to grow as technology improves and costs continue to decline. Geothermal energy, which taps into the earth's internal heat, offers a consistent and sustainable option, particularly in volcanically active regions.",
             questions: [
@@ -399,7 +401,6 @@
                 { id: 30, text: "The main challenge for renewable energy adoption is...", options: ["Lack of technology", "Cost and storage", "Public opposition", "Low demand"], answer: "B" }
             ]
         },
-        // PASSAGE 4: Cultural Heritage
         {
             passage: "Cultural heritage encompasses the tangible and intangible assets that define a society's identity. This includes monuments, historical buildings, traditional crafts, languages, and rituals. The United Nations Educational, Scientific and Cultural Organisation (UNESCO) works to protect cultural and natural heritage around the world through its World Heritage Convention, adopted in 1972. Today, there are over 1,000 UNESCO World Heritage sites, with Italy having the most sites, followed by China, France, and Spain. However, cultural heritage faces numerous threats: climate change, urbanisation, armed conflict, and natural disasters. In recent years, there has been growing recognition of the importance of intangible cultural heritage — such as traditional music, dance, and oral traditions — which are equally vital to preserving cultural diversity. The loss of heritage diminishes not only national pride but also the historical record for future generations. Protecting heritage requires international cooperation, community involvement, and sustainable tourism practices.",
             questions: [
@@ -415,7 +416,6 @@
                 { id: 40, text: "The passage suggests cultural heritage should be...", options: ["Ignored", "Preserved for future generations", "Replaced", "Commercialised"], answer: "B" }
             ]
         },
-        // PASSAGE 5: Artificial Intelligence
         {
             passage: "Artificial intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn. AI applications include self-driving cars, virtual assistants like Siri and Alexa, and healthcare diagnostics. Machine learning, a subset of AI, involves algorithms that improve through experience and data. While AI offers tremendous opportunities — from automating repetitive tasks to solving complex problems in science and medicine — it also raises significant ethical concerns, including job displacement, privacy issues, and algorithmic bias. Major tech companies like Google, Amazon, and Microsoft are investing heavily in AI research, with applications ranging from natural language processing to computer vision. It is estimated that up to 50% of current jobs could be automated by AI in the coming decades, prompting calls for new educational models and social safety nets. Ethical guidelines are being developed to ensure that AI systems are transparent, fair, and accountable. The future of AI will depend not only on technological advancements but also on how society chooses to govern and integrate these powerful tools.",
             questions: [
@@ -431,7 +431,6 @@
                 { id: 50, text: "The future of AI depends on...", options: ["Better algorithms", "More data", "Ethical guidelines", "All of the above"], answer: "D" }
             ]
         },
-        // PASSAGE 6: Environmental Conservation
         {
             passage: "Environmental conservation is the practice of protecting and preserving natural resources and ecosystems. It is essential for maintaining biodiversity, regulating climate, and ensuring the availability of resources for future generations. Deforestation, caused by agriculture, logging, and urbanisation, poses a significant threat to rainforests, which are vital for oxygen production, carbon storage, and hosting more than half of the world's terrestrial species. The Kyoto Protocol and the Paris Agreement are international treaties aimed at reducing greenhouse gas emissions to mitigate climate change. Recycling, reducing waste, and using renewable energy are individual actions that contribute to conservation efforts. Plastic waste is the largest source of ocean pollution, harming marine life and ecosystems. National parks and protected areas are established to safeguard natural and cultural heritage while promoting sustainable tourism. The concept of a carbon footprint measures the total greenhouse gas emissions caused by an individual or organisation, encouraging accountability and more sustainable choices.",
             questions: [
@@ -594,7 +593,6 @@
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
-        // Save to localStorage
         const scoreData = {
             module: 'reading',
             score: score,
