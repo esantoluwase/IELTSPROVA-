@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
     <meta name="google-site-verification" content="DoXFd_K1WOpsk5zd76X9pKWmgYydvjzabfgC0L-nMo4" />
+    
     <title>IELTSProva — AI Speaking Test</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
@@ -62,6 +66,7 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
+
         .ai-examiner {
             background: linear-gradient(135deg, #f3edf7, #faf7ff);
             border-radius: 20px;
@@ -213,7 +218,6 @@
             margin-top: 1.5rem;
         }
 
-        /* ===== LOGIN OVERLAY ===== */
         .login-overlay {
             display: none;
             position: fixed;
@@ -423,7 +427,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // 🔒 LOGIN CHECK
+    // ===== LOGIN CHECK =====
     auth.onAuthStateChanged(user => {
         if (!user) {
             document.getElementById('loginOverlay').classList.add('active');
@@ -434,7 +438,7 @@
         document.getElementById('testContent').style.display = 'block';
     });
 
-    // SPEECH RECOGNITION
+    // ===== SPEECH RECOGNITION =====
     let isRecording = false;
     let recognition = null;
     let userSpeech = '';
@@ -689,5 +693,6 @@
 
     function resetTest() { stopRecording(); location.reload(); }
 </script>
+
 </body>
-                </html>
+    </html>
