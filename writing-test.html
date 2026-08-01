@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="DoXFd_K1WOpsk5zd76X9pKWmgYydvjzabfgC0L-nMo4" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
     <title>IELTSProva — Writing Test</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -11,6 +14,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- ===== QUESTION BANK ===== -->
+    <script src="questions.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -61,6 +67,10 @@
             font-size: 0.75rem;
             background: #e8f5e9;
             color: #2e7d32;
+        }
+        .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
         }
         .task-section {
             margin-bottom: 2.5rem;
@@ -231,7 +241,6 @@
         }
         .back-link:hover { text-decoration: underline; }
 
-        /* ===== LOGIN OVERLAY ===== */
         .login-overlay {
             display: none;
             position: fixed;
@@ -295,6 +304,41 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
+        .question-limit-info {
+            background: #faf7ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid #f0e8f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .question-limit-info .free-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        .question-limit-info .pro-badge {
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        .question-limit-info .upgrade-link {
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
@@ -327,51 +371,25 @@
 
 <!-- ===== TEST CONTENT ===== -->
 <div class="container" id="testContent" style="display:none;">
-
     <div class="test-header">
         <h1><i class="fas fa-pen-fancy"></i> Writing Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">60:00</span></span>
-            <span class="plan-badge" id="planBadge">Free — 2 Tasks</span>
+            <span class="plan-badge" id="planBadge">Loading...</span>
         </div>
     </div>
 
-    <!-- TASK 1 -->
-    <div class="task-section">
-        <div class="task-label">📊 Task 1</div>
-        <div class="task-prompt">
-            <h3>The chart below shows the percentage of households in the UK that had access to the internet from 2005 to 2025.</h3>
-            <div class="chart-placeholder">
-                <i class="fas fa-chart-line"></i>
-                <strong>Internet Access in UK Households</strong><br />
-                2005: 45% | 2010: 70% | 2015: 85% | 2020: 92% | 2025: 98%
-                <br /><br />
-                <span style="font-size:0.8rem; color:#7B6A8A;">(Data shown in chart format for reference)</span>
-            </div>
-            <p><strong>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</strong></p>
-            <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum 150 words</p>
-        </div>
-        <div class="writing-area">
-            <label for="task1Response">✏️ Your response:</label>
-            <textarea id="task1Response" placeholder="Write your Task 1 response here..." oninput="updateWordCount('task1Response', 'task1Words')"></textarea>
-            <div class="word-counter">📝 Words: <span class="count" id="task1Words">0</span> / 150</div>
-        </div>
+    <!-- ===== QUESTION LIMIT INFO ===== -->
+    <div class="question-limit-info" id="questionLimitInfo">
+        <span id="limitText">Loading question limit...</span>
+        <span>
+            <span class="free-badge" id="freeBadge">Free: 50 Prompts</span>
+            <span class="pro-badge" id="proBadge" style="display:none;">⭐ Pro: Unlimited</span>
+            <a href="checkout.html" class="upgrade-link" id="upgradeLink" style="display:none;">Upgrade →</a>
+        </span>
     </div>
 
-    <!-- TASK 2 -->
-    <div class="task-section">
-        <div class="task-label">📝 Task 2</div>
-        <div class="task-prompt">
-            <h3>Some people believe that technology has made our lives more complicated, while others think it has made our lives easier.</h3>
-            <p><strong>Discuss both views and give your own opinion.</strong></p>
-            <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum 250 words</p>
-        </div>
-        <div class="writing-area">
-            <label for="task2Response">✏️ Your essay:</label>
-            <textarea id="task2Response" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('task2Response', 'task2Words')"></textarea>
-            <div class="word-counter">📝 Words: <span class="count" id="task2Words">0</span> / 250</div>
-        </div>
-    </div>
+    <div id="taskContainer"></div>
 
     <div class="actions">
         <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
@@ -399,6 +417,9 @@
 </div>
 
 <script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
         authDomain: "ieltsprova.firebaseapp.com",
@@ -407,73 +428,208 @@
         messagingSenderId: "812300970124",
         appId: "1:812300970124:web:992398c08c151ae97df3a9"
     };
+
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // 🔒 LOGIN CHECK
-    auth.onAuthStateChanged(user => {
+    // ============================================================
+    // STATE
+    // ============================================================
+    let userPlan = 'free';
+    let userId = null;
+    let selectedTask1 = null;
+    let selectedTask2 = null;
+
+    // ============================================================
+    // 🔒 CHECK LOGIN + LOAD USER PLAN
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
         if (!user) {
             document.getElementById('loginOverlay').classList.add('active');
             document.getElementById('testContent').style.display = 'none';
             return;
         }
+
+        userId = user.uid;
         document.getElementById('loginOverlay').classList.remove('active');
         document.getElementById('testContent').style.display = 'block';
+
+        try {
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                userPlan = data.plan || 'free';
+            }
+        } catch (e) {
+            console.log('Error loading user plan:', e);
+        }
+
+        updatePlanUI();
+        renderTest();
     });
 
+    // ============================================================
+    // UPDATE PLAN UI
+    // ============================================================
+    function updatePlanUI() {
+        const planBadge = document.getElementById('planBadge');
+        const limitText = document.getElementById('limitText');
+        const freeBadge = document.getElementById('freeBadge');
+        const proBadge = document.getElementById('proBadge');
+        const upgradeLink = document.getElementById('upgradeLink');
+
+        if (userPlan === 'free') {
+            planBadge.textContent = 'Free — 50 Prompts';
+            planBadge.className = 'plan-badge';
+            limitText.textContent = '📚 You have access to 50 free writing prompts.';
+            freeBadge.style.display = 'inline-block';
+            proBadge.style.display = 'none';
+            upgradeLink.style.display = 'inline-block';
+            upgradeLink.textContent = '🚀 Upgrade for Unlimited →';
+        } else {
+            planBadge.textContent = '⭐ Pro — Unlimited Prompts';
+            planBadge.className = 'plan-badge pro';
+            limitText.textContent = '🌟 You have unlimited access to all writing prompts!';
+            freeBadge.style.display = 'none';
+            proBadge.style.display = 'inline-block';
+            upgradeLink.style.display = 'none';
+        }
+    }
+
+    // ============================================================
+    // RENDER TEST
+    // ============================================================
+    function renderTest() {
+        const allQuestions = getQuestions('writing', userPlan);
+        const shuffled = shuffleArray([...allQuestions]);
+        
+        // Separate Task 1 and Task 2
+        const task1Prompts = shuffled.filter(q => q.type === 'task1');
+        const task2Prompts = shuffled.filter(q => q.type === 'task2');
+        
+        // Select one random from each
+        selectedTask1 = task1Prompts.length > 0 ? task1Prompts[0] : null;
+        selectedTask2 = task2Prompts.length > 0 ? task2Prompts[0] : null;
+
+        const container = document.getElementById('taskContainer');
+        let html = '';
+
+        // Task 1
+        if (selectedTask1) {
+            const chartData = selectedTask1.data;
+            let chartHTML = '';
+            if (chartData) {
+                chartHTML = `
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <strong>${chartData.labels ? chartData.labels.join(' | ') : 'Chart Data'}</strong>
+                        <br />
+                        ${chartData.values ? chartData.values.join(' | ') : ''}
+                    </div>
+                `;
+            }
+            html += `
+                <div class="task-section">
+                    <div class="task-label">📊 Task 1</div>
+                    <div class="task-prompt">
+                        <h3>${selectedTask1.title || 'Chart Description'}</h3>
+                        <p>${selectedTask1.prompt || 'Describe the chart below.'}</p>
+                        ${chartHTML}
+                        <p><strong>${selectedTask1.instructions || 'Summarise the information by selecting and reporting the main features.'}</strong></p>
+                        <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum 150 words</p>
+                    </div>
+                    <div class="writing-area">
+                        <label for="task1Response">✏️ Your response:</label>
+                        <textarea id="task1Response" placeholder="Write your Task 1 response here..." oninput="updateWordCount('task1Response', 'task1Words')"></textarea>
+                        <div class="word-counter">📝 Words: <span class="count" id="task1Words">0</span> / 150</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Task 2
+        if (selectedTask2) {
+            html += `
+                <div class="task-section">
+                    <div class="task-label">📝 Task 2</div>
+                    <div class="task-prompt">
+                        <h3>${selectedTask2.title || 'Essay Topic'}</h3>
+                        <p>${selectedTask2.prompt || 'Write an essay on the topic below.'}</p>
+                        <p><strong>${selectedTask2.instructions || 'Discuss both views and give your own opinion.'}</strong></p>
+                        <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum ${selectedTask2.minWords || 250} words</p>
+                    </div>
+                    <div class="writing-area">
+                        <label for="task2Response">✏️ Your essay:</label>
+                        <textarea id="task2Response" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('task2Response', 'task2Words')"></textarea>
+                        <div class="word-counter">📝 Words: <span class="count" id="task2Words">0</span> / ${selectedTask2.minWords || 250}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // WORD COUNTER
+    // ============================================================
     function updateWordCount(textareaId, displayId) {
         const text = document.getElementById(textareaId).value;
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
         document.getElementById(displayId).textContent = words;
     }
 
+    // ============================================================
+    // TIMER (60 minutes)
+    // ============================================================
     let timeLeft = 3600;
     const timerDisplay = document.getElementById('timerDisplay');
+
     function updateTimer() {
         const mins = Math.floor(timeLeft / 60);
         const secs = timeLeft % 60;
         timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) { clearInterval(timerInterval); alert('⏰ Time is up!'); submitTest(); }
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('⏰ Time is up!');
+            submitTest();
+        }
         timeLeft--;
     }
+
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
-    function evaluateWriting(text, type) {
+    // ============================================================
+    // EVALUATE WRITING
+    // ============================================================
+    function evaluateWriting(text, minWords) {
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
         const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
         const avgWordLength = text.length / (words || 1);
         let band = 5.0;
-        if (type === 'task1') {
-            if (words >= 150 && words <= 180) band = 6.5;
-            else if (words > 180 && words <= 220) band = 7.0;
-            else if (words > 220) band = 7.5;
-            else if (words >= 130) band = 6.0;
-            else if (words >= 100) band = 5.5;
-            else if (words >= 50) band = 5.0;
-            else band = 4.5;
-            if (sentences >= 10 && sentences <= 18) band += 0.5;
-            if (avgWordLength > 5 && avgWordLength < 7) band += 0.3;
-        } else {
-            if (words >= 250 && words <= 300) band = 6.5;
-            else if (words > 300 && words <= 350) band = 7.0;
-            else if (words > 350) band = 7.5;
-            else if (words >= 200) band = 6.0;
-            else if (words >= 150) band = 5.5;
-            else if (words >= 80) band = 5.0;
-            else band = 4.5;
-            if (sentences >= 12 && sentences <= 22) band += 0.5;
-            if (avgWordLength > 5 && avgWordLength < 7.5) band += 0.3;
-        }
+        
+        if (words >= minWords && words <= minWords + 50) band = 6.5;
+        else if (words > minWords + 50 && words <= minWords + 100) band = 7.0;
+        else if (words > minWords + 100) band = 7.5;
+        else if (words >= minWords - 20) band = 6.0;
+        else if (words >= minWords - 50) band = 5.5;
+        else if (words >= minWords - 100) band = 5.0;
+        else band = 4.5;
+        
+        if (sentences >= 8 && sentences <= 18) band += 0.5;
+        if (avgWordLength > 5 && avgWordLength < 7.5) band += 0.3;
+        
         band = Math.min(band, 9.0);
         band = Math.round(band * 2) / 2;
         return { band, words, sentences };
     }
 
-    function getFeedback(band, type, words) {
-        const minWords = type === 'task1' ? 150 : 250;
-        const wordFeedback = words < minWords ? `<br />⚠️ Needs more words (${words}/${minWords}).` : `<br />✅ Good word count (${words}).`;
+    function getFeedback(band, words, minWords) {
+        const wordFeedback = words < minWords 
+            ? `<br />⚠️ Needs more words (${words}/${minWords}).` 
+            : `<br />✅ Good word count (${words}).`;
         if (band >= 8.5) return `🌟 Excellent work!${wordFeedback}`;
         if (band >= 7.5) return `👏 Great job! Strong writing skills.${wordFeedback}`;
         if (band >= 6.5) return `💪 Good effort! You're on the right track.${wordFeedback}`;
@@ -481,30 +637,50 @@
         return `📝 Keep practicing! Focus on developing your ideas.${wordFeedback}`;
     }
 
+    // ============================================================
+    // SUBMIT TEST
+    // ============================================================
     async function submitTest() {
-        const task1Text = document.getElementById('task1Response').value;
-        const task2Text = document.getElementById('task2Response').value;
-        const task1Result = evaluateWriting(task1Text, 'task1');
-        const task2Result = evaluateWriting(task2Text, 'task2');
+        const task1Text = document.getElementById('task1Response')?.value || '';
+        const task2Text = document.getElementById('task2Response')?.value || '';
+
+        const minWords1 = 150;
+        const minWords2 = selectedTask2?.minWords || 250;
+
+        const task1Result = evaluateWriting(task1Text, minWords1);
+        const task2Result = evaluateWriting(task2Text, minWords2);
+
         const overallBand = Math.round(((task1Result.band + task2Result.band) / 2) * 2) / 2;
+
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
+
         document.getElementById('task1Band').textContent = task1Result.band;
         document.getElementById('task2Band').textContent = task2Result.band;
         document.getElementById('overallBand').textContent = overallBand;
+
         document.getElementById('feedbackText').innerHTML = `
             <div style="margin-bottom:1rem;"><span class="band">Overall Band: ${overallBand}</span></div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${getFeedback(task1Result.band, 'task1', task1Result.words)}
+                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${getFeedback(task1Result.band, task1Result.words, minWords1)}
             </div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${getFeedback(task2Result.band, 'task2', task2Result.words)}
+                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${getFeedback(task2Result.band, task2Result.words, minWords2)}
             </div>
         `;
+
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
-        const scoreData = { module: 'writing', score: overallBand, total: 9, task1Band: task1Result.band, task2Band: task2Result.band, date: new Date().toISOString() };
+        const scoreData = {
+            module: 'writing',
+            score: overallBand,
+            total: 9,
+            task1Band: task1Result.band,
+            task2Band: task2Result.band,
+            date: new Date().toISOString()
+        };
+
         let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         savedScores.push(scoreData);
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
@@ -513,7 +689,15 @@
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
-                    await db.collection('scores').add({ userId: user.uid, module: 'writing', score: overallBand, total: 9, task1Band: task1Result.band, task2Band: task2Result.band, date: firebase.firestore.FieldValue.serverTimestamp() });
+                    await db.collection('scores').add({
+                        userId: user.uid,
+                        module: 'writing',
+                        score: overallBand,
+                        total: 9,
+                        task1Band: task1Result.band,
+                        task2Band: task2Result.band,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    });
                     saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
@@ -527,7 +711,24 @@
         });
     }
 
-    function resetTest() { location.reload(); }
+    // ============================================================
+    // RESET
+    // ============================================================
+    function resetTest() {
+        location.reload();
+    }
+
+    // ============================================================
+    // SHUFFLE HELPER
+    // ============================================================
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 </script>
+
 </body>
-    </html>
+            </html>
