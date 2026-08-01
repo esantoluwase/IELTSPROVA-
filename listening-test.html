@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="DoXFd_K1WOpsk5zd76X9pKWmgYydvjzabfgC0L-nMo4" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
     <title>IELTSProva — Listening Test</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -11,6 +14,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- ===== QUESTION BANK ===== -->
+    <script src="questions.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -62,7 +68,10 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
-        .plan-badge.pro { background: #fff8e1; color: #f57f17; }
+        .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
         .audio-player {
             background: #f3edf7;
             padding: 2rem;
@@ -204,7 +213,6 @@
         }
         .back-link:hover { text-decoration: underline; }
 
-        /* ===== LOGIN OVERLAY ===== */
         .login-overlay {
             display: none;
             position: fixed;
@@ -268,6 +276,41 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
+        .question-limit-info {
+            background: #faf7ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid #f0e8f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .question-limit-info .free-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        .question-limit-info .pro-badge {
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        .question-limit-info .upgrade-link {
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
@@ -303,8 +346,18 @@
         <h1><i class="fas fa-headphones"></i> Listening Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">30:00</span></span>
-            <span class="plan-badge" id="planBadge">Free — 10 Qs</span>
+            <span class="plan-badge" id="planBadge">Loading...</span>
         </div>
+    </div>
+
+    <!-- ===== QUESTION LIMIT INFO ===== -->
+    <div class="question-limit-info" id="questionLimitInfo">
+        <span id="limitText">Loading question limit...</span>
+        <span>
+            <span class="free-badge" id="freeBadge">Free: 100 Qs</span>
+            <span class="pro-badge" id="proBadge" style="display:none;">⭐ Pro: Unlimited</span>
+            <a href="checkout.html" class="upgrade-link" id="upgradeLink" style="display:none;">Upgrade →</a>
+        </span>
     </div>
 
     <div class="audio-player">
@@ -316,11 +369,11 @@
     </div>
 
     <div class="progress-indicator">
-        <span id="progressText">Question 0 of 10</span>
+        <span id="progressText">Question 0 of 0</span>
         <div class="bar"><div class="fill" id="progressFill"></div></div>
     </div>
 
-    <div class="section-label" id="sectionLabel">Section 1: Conversation</div>
+    <div id="sectionContainer"></div>
     <form id="testForm"></form>
 
     <div class="actions">
@@ -331,7 +384,7 @@
 
     <div class="result" id="resultBox">
         <h2>📊 Your Score</h2>
-        <div class="score-big"><span id="scoreDisplay">0</span> / <span id="totalQuestions">10</span></div>
+        <div class="score-big"><span id="scoreDisplay">0</span> / <span id="totalQuestions">0</span></div>
         <div class="feedback-text" id="feedbackText"></div>
         <div class="save-status" id="saveStatus"></div>
         <a href="index.html" class="back-link">← Back to Home</a>
@@ -339,6 +392,9 @@
 </div>
 
 <script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
         authDomain: "ieltsprova.firebaseapp.com",
@@ -347,114 +403,134 @@
         messagingSenderId: "812300970124",
         appId: "1:812300970124:web:992398c08c151ae97df3a9"
     };
+
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // 🔒 LOGIN CHECK
-    auth.onAuthStateChanged(user => {
+    // ============================================================
+    // STATE
+    // ============================================================
+    let userPlan = 'free';
+    let userId = null;
+    let selectedQuestions = [];
+    let answers = {};
+
+    // ============================================================
+    // 🔒 CHECK LOGIN + LOAD USER PLAN
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
         if (!user) {
             document.getElementById('loginOverlay').classList.add('active');
             document.getElementById('testContent').style.display = 'none';
             return;
         }
+
+        userId = user.uid;
         document.getElementById('loginOverlay').classList.remove('active');
         document.getElementById('testContent').style.display = 'block';
+
+        try {
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                userPlan = data.plan || 'free';
+            }
+        } catch (e) {
+            console.log('Error loading user plan:', e);
+        }
+
+        updatePlanUI();
         renderTest();
     });
 
-    const listeningQuestions = [
-        { id: 1, section: 1, text: "What course does the student want to register for?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "A" },
-        { id: 2, section: 1, text: "What is the student's student ID number?", options: ["2025-4789", "2025-4788", "2024-4789", "2025-4790"], answer: "A" },
-        { id: 3, section: 1, text: "What days does the course meet?", options: ["Mondays and Wednesdays", "Tuesdays and Thursdays", "Mondays and Fridays", "Wednesdays and Fridays"], answer: "A" },
-        { id: 4, section: 1, text: "What time does the course start?", options: ["9 AM", "10 AM", "11 AM", "1 PM"], answer: "B" },
-        { id: 5, section: 1, text: "What prerequisite did the student complete?", options: ["English Literature", "Creative Writing", "Introduction to Literature", "Modern Poetry"], answer: "C" },
-        { id: 6, section: 1, text: "Who is the student speaking to?", options: ["A professor", "A university advisor", "A librarian", "Another student"], answer: "B" },
-        { id: 7, section: 1, text: "What semester did the student take the prerequisite course?", options: ["Last semester", "Last year", "Two semesters ago", "Currently"], answer: "A" },
-        { id: 8, section: 1, text: "The advisor checks the student's...", options: ["Grades", "Student ID", "Eligibility", "Schedule"], answer: "C" },
-        { id: 9, section: 1, text: "How does the student feel about the course schedule?", options: ["Disappointed", "Confused", "Happy", "Indifferent"], answer: "C" },
-        { id: 10, section: 1, text: "What is the main purpose of this conversation?", options: ["To register for a course", "To change a course", "To ask about grades", "To cancel a registration"], answer: "A" },
-        { id: 11, section: 2, text: "What is the name of the museum?", options: ["City Museum", "Natural History Museum", "Art Gallery", "Science Museum"], answer: "B" },
-        { id: 12, section: 2, text: "What time does the museum open?", options: ["9 AM", "10 AM", "11 AM", "12 PM"], answer: "B" },
-        { id: 13, section: 2, text: "What is the admission fee for adults?", options: ["$5", "$10", "$15", "$20"], answer: "B" },
-        { id: 14, section: 2, text: "What exhibition is currently on display?", options: ["Ancient Egypt", "Dinosaurs", "Space Exploration", "Medieval Art"], answer: "A" },
-        { id: 15, section: 2, text: "How long does the guided tour last?", options: ["30 minutes", "45 minutes", "60 minutes", "90 minutes"], answer: "C" },
-        { id: 16, section: 2, text: "What is the museum's most popular exhibit?", options: ["The mummy room", "The dinosaur skeletons", "The space exhibit", "The art gallery"], answer: "A" },
-        { id: 17, section: 2, text: "What discount is available for students?", options: ["10% off", "20% off", "30% off", "Free entry"], answer: "B" },
-        { id: 18, section: 2, text: "Where is the museum located?", options: ["Near the train station", "In the city center", "On the university campus", "By the river"], answer: "B" },
-        { id: 19, section: 2, text: "What facilities does the museum have?", options: ["A cafe", "A gift shop", "A library", "All of the above"], answer: "D" },
-        { id: 20, section: 2, text: "What is the speaker's main purpose?", options: ["To promote the museum", "To explain the museum's history", "To give a tour", "To announce a new exhibit"], answer: "A" },
-        { id: 21, section: 3, text: "What is the topic of the group project?", options: ["Climate Change", "Renewable Energy", "Ocean Pollution", "Urban Planning"], answer: "A" },
-        { id: 22, section: 3, text: "How many students are in the group?", options: ["2", "3", "4", "5"], answer: "B" },
-        { id: 23, section: 3, text: "What is the deadline for the project?", options: ["Next week", "In two weeks", "Next month", "In three weeks"], answer: "B" },
-        { id: 24, section: 3, text: "What role does Sarah have in the group?", options: ["Researcher", "Editor", "Presenter", "Team Leader"], answer: "D" },
-        { id: 25, section: 3, text: "What aspect of climate change are they focusing on?", options: ["Rising sea levels", "Extreme weather", "Melting glaciers", "All of the above"], answer: "D" },
-        { id: 26, section: 3, text: "Where will they conduct their research?", options: ["The library", "Online databases", "Government archives", "All of the above"], answer: "D" },
-        { id: 27, section: 3, text: "What is the presentation format?", options: ["PowerPoint", "Poster", "Video", "Interactive website"], answer: "A" },
-        { id: 28, section: 3, text: "What challenge do they face?", options: ["Time management", "Research materials", "Group conflict", "Technical issues"], answer: "A" },
-        { id: 29, section: 3, text: "What solution do they propose?", options: ["Meeting twice a week", "Using a shared calendar", "Dividing tasks clearly", "All of the above"], answer: "D" },
-        { id: 30, section: 3, text: "What grade do they hope to achieve?", options: ["A", "B", "C", "D"], answer: "A" },
-        { id: 31, section: 4, text: "What is the lecture about?", options: ["The history of space exploration", "The future of space travel", "Life on Mars", "Space technology"], answer: "A" },
-        { id: 32, section: 4, text: "When was the first moon landing?", options: ["1965", "1969", "1972", "1980"], answer: "B" },
-        { id: 33, section: 4, text: "What country was the first to launch a satellite?", options: ["USA", "Russia", "China", "France"], answer: "B" },
-        { id: 34, section: 4, text: "What was the name of the first satellite?", options: ["Sputnik", "Apollo", "Voyager", "Explorer"], answer: "A" },
-        { id: 35, section: 4, text: "What year was the International Space Station launched?", options: ["1998", "2000", "2002", "2005"], answer: "A" },
-        { id: 36, section: 4, text: "What is the primary goal of space exploration?", options: ["Scientific discovery", "Commercial profit", "Military advantage", "Tourism"], answer: "A" },
-        { id: 37, section: 4, text: "Which planet has been explored the most?", options: ["Mars", "Venus", "Saturn", "Jupiter"], answer: "A" },
-        { id: 38, section: 4, text: "What are space probes used for?", options: ["To collect data", "To carry astronauts", "To build space stations", "To launch satellites"], answer: "A" },
-        { id: 39, section: 4, text: "What is a major challenge of space travel?", options: ["Cost", "Radiation", "Isolation", "All of the above"], answer: "D" },
-        { id: 40, section: 4, text: "What is the lecturer's main conclusion?", options: ["Space exploration is essential", "Space exploration is too expensive", "Space exploration is dangerous", "Space exploration is a waste of resources"], answer: "A" }
-    ];
+    // ============================================================
+    // UPDATE PLAN UI
+    // ============================================================
+    function updatePlanUI() {
+        const planBadge = document.getElementById('planBadge');
+        const limitText = document.getElementById('limitText');
+        const freeBadge = document.getElementById('freeBadge');
+        const proBadge = document.getElementById('proBadge');
+        const upgradeLink = document.getElementById('upgradeLink');
 
-    const PLAN = 'free';
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+        if (userPlan === 'free') {
+            planBadge.textContent = 'Free — 100 Qs';
+            planBadge.className = 'plan-badge';
+            limitText.textContent = '📚 You have access to 100 free questions.';
+            freeBadge.style.display = 'inline-block';
+            proBadge.style.display = 'none';
+            upgradeLink.style.display = 'inline-block';
+            upgradeLink.textContent = '🚀 Upgrade for Unlimited →';
+        } else {
+            planBadge.textContent = '⭐ Pro — Unlimited Qs';
+            planBadge.className = 'plan-badge pro';
+            limitText.textContent = '🌟 You have unlimited access to all questions!';
+            freeBadge.style.display = 'none';
+            proBadge.style.display = 'inline-block';
+            upgradeLink.style.display = 'none';
         }
-        return array;
     }
 
-    const shuffled = shuffle([...listeningQuestions]);
-    const limit = PLAN === 'free' ? 10 : listeningQuestions.length;
-    const selected = shuffled.slice(0, limit);
-    const answers = {};
-    selected.forEach(q => { answers[`q${q.id}`] = q.answer; });
-
+    // ============================================================
+    // RENDER TEST
+    // ============================================================
     function renderTest() {
+        const allQuestions = getQuestions('listening', userPlan);
+        const shuffled = shuffleArray([...allQuestions]);
+        const limit = userPlan === 'free' ? Math.min(10, shuffled.length) : Math.min(40, shuffled.length);
+        selectedQuestions = shuffled.slice(0, limit);
+
+        answers = {};
+        selectedQuestions.forEach(q => {
+            answers[`q${q.id}`] = q.answer;
+        });
+
         const container = document.getElementById('testForm');
+        const sectionContainer = document.getElementById('sectionContainer');
         const totalSpan = document.getElementById('totalQuestions');
-        const planBadge = document.getElementById('planBadge');
-        if (PLAN === 'free') { planBadge.textContent = 'Free — 10 Qs'; planBadge.className = 'plan-badge'; } 
-        else { planBadge.textContent = 'Pro — All 40 Qs'; planBadge.className = 'plan-badge pro'; }
-        totalSpan.textContent = selected.length;
+
+        totalSpan.textContent = selectedQuestions.length;
+
+        // Show section info if available
+        if (selectedQuestions.length > 0 && selectedQuestions[0].section) {
+            sectionContainer.innerHTML = `
+                <div class="section-label">${selectedQuestions[0].section}</div>
+                <p style="margin-bottom:1rem; color:#7B6A8A; font-size:0.95rem;">
+                    <i class="fas fa-info-circle"></i> ${selectedQuestions[0].script || 'Listen carefully and answer the questions.'}
+                </p>
+            `;
+        } else {
+            sectionContainer.innerHTML = '';
+        }
+
         let html = '';
-        let currentSection = 0;
-        const sectionLabels = ['', 'Section 1: Conversation', 'Section 2: Monologue', 'Section 3: Group Project', 'Section 4: Lecture'];
-        selected.forEach((q, index) => {
-            if (q.section !== currentSection) {
-                currentSection = q.section;
-                html += `<div class="section-label" style="margin-top:1.5rem;">${sectionLabels[q.section]}</div>`;
-            }
+        selectedQuestions.forEach((q, index) => {
             const qNum = index + 1;
             const labels = ['A', 'B', 'C', 'D'];
             html += `<div class="question" data-index="${index}">
                 <div class="q-number">Question ${qNum}</div>
                 <p>${q.text}</p>`;
             q.options.forEach((opt, i) => {
-                html += `<label><input type="radio" name="q${q.id}" value="${labels[i]}" onchange="updateProgress()" />${labels[i]}) ${opt}</label>`;
+                html += `<label>
+                    <input type="radio" name="q${q.id}" value="${labels[i]}" onchange="updateProgress()" />
+                    ${labels[i]}) ${opt}
+                </label>`;
             });
             html += `</div>`;
         });
+
         container.innerHTML = html;
         updateProgress();
     }
 
+    // ============================================================
+    // UPDATE PROGRESS
+    // ============================================================
     function updateProgress() {
-        const total = selected.length;
+        const total = selectedQuestions.length;
         let answered = 0;
-        selected.forEach(q => {
+        selectedQuestions.forEach(q => {
             const checked = document.querySelector(`input[name="q${q.id}"]:checked`);
             if (checked) answered++;
         });
@@ -462,18 +538,30 @@
         document.getElementById('progressFill').style.width = `${(answered / total) * 100}%`;
     }
 
+    // ============================================================
+    // TIMER (30 minutes)
+    // ============================================================
     let timeLeft = 1800;
     const timerDisplay = document.getElementById('timerDisplay');
+
     function updateTimer() {
         const mins = Math.floor(timeLeft / 60);
         const secs = timeLeft % 60;
         timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) { clearInterval(timerInterval); alert('⏰ Time is up!'); submitTest(); }
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('⏰ Time is up!');
+            submitTest();
+        }
         timeLeft--;
     }
+
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
+    // ============================================================
+    // AUDIO PLAYER
+    // ============================================================
     let isPlaying = false;
     document.getElementById('playAudioBtn').addEventListener('click', function() {
         isPlaying = !isPlaying;
@@ -495,36 +583,64 @@
         }
     });
 
+    // ============================================================
+    // SUBMIT TEST
+    // ============================================================
     async function submitTest() {
         let score = 0;
-        const total = selected.length;
-        selected.forEach(q => {
+        const total = selectedQuestions.length;
+
+        selectedQuestions.forEach(q => {
             const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-            if (selected && selected.value === q.answer) score++;
+            if (selected && selected.value === q.answer) {
+                score++;
+            }
         });
+
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
+
         document.getElementById('scoreDisplay').textContent = score;
+
         const feedback = document.getElementById('feedbackText');
         const percentage = (score / total) * 100;
-        if (percentage === 100) feedback.innerHTML = '🌟 Perfect score! Excellent listening skills!';
-        else if (percentage >= 80) feedback.innerHTML = '👏 Great job! You\'re well on your way to a high band.';
-        else if (percentage >= 60) feedback.innerHTML = '💪 Good effort! Review the audio and try again.';
-        else feedback.innerHTML = '📚 Keep practicing! Focus on understanding the main ideas.';
+        if (percentage === 100) {
+            feedback.innerHTML = '🌟 Perfect score! Excellent listening skills!';
+        } else if (percentage >= 80) {
+            feedback.innerHTML = '👏 Great job! You\'re well on your way to a high band.';
+        } else if (percentage >= 60) {
+            feedback.innerHTML = '💪 Good effort! Review the audio and try again.';
+        } else {
+            feedback.innerHTML = '📚 Keep practicing! Focus on understanding the main ideas.';
+        }
+
         document.querySelectorAll('input').forEach(input => input.disabled = true);
         document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
-        const scoreData = { module: 'listening', score: score, total: total, date: new Date().toISOString() };
+        const scoreData = {
+            module: 'listening',
+            score: score,
+            total: total,
+            date: new Date().toISOString()
+        };
+
         let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
         savedScores.push(scoreData);
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
 
         const saveStatus = document.getElementById('saveStatus');
+
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
-                    await db.collection('scores').add({ userId: user.uid, module: 'listening', score: score, total: total, date: firebase.firestore.FieldValue.serverTimestamp() });
+                    await db.collection('scores').add({
+                        userId: user.uid,
+                        module: 'listening',
+                        score: score,
+                        total: total,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    });
                     saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
@@ -538,7 +654,24 @@
         });
     }
 
-    function resetTest() { location.reload(); }
+    // ============================================================
+    // RESET
+    // ============================================================
+    function resetTest() {
+        location.reload();
+    }
+
+    // ============================================================
+    // SHUFFLE HELPER
+    // ============================================================
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 </script>
+
 </body>
-    </html>
+                                   </html>
