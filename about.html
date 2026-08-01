@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION (ADDED HERE) ===== -->
+    <meta name="google-site-verification" content="DoXFd_K1WOpsk5zd76X9pKWmgYydvjzabfgC0L-nMo4" />
+    
     <title>About — Prova Technologies</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: #f5f0ff;
             color: #1a0a2e;
             line-height: 1.6;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
-        /* ===== NAV ===== */
         nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.7);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
             padding: 1rem 0;
         }
         .nav-container {
@@ -52,11 +46,8 @@
             font-size: 1.6rem;
             font-weight: 900;
             color: #4A148C;
-            letter-spacing: -0.5px;
         }
-        .logo span {
-            color: #FFD700;
-        }
+        .logo span { color: #FFD700; }
         .logo small {
             display: block;
             font-size: 0.55rem;
@@ -64,8 +55,6 @@
             color: #7B6A8A;
             letter-spacing: 1px;
         }
-
-        /* ===== HAMBURGER ===== */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -86,19 +75,15 @@
         .hamburger.active span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 6px);
         }
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) {
             transform: rotate(-45deg) translate(5px, -6px);
         }
-
         .nav-links {
             display: flex;
             align-items: center;
             gap: 1.5rem;
             flex-wrap: wrap;
-            transition: 0.3s ease;
         }
         .nav-links a {
             color: #2A004F;
@@ -106,9 +91,7 @@
             transition: 0.3s;
             font-size: 0.95rem;
         }
-        .nav-links a:hover {
-            color: #7B1FA2;
-        }
+        .nav-links a:hover { color: #7B1FA2; }
         .nav-links a.active {
             color: #4A148C;
             border-bottom: 2px solid #FFD700;
@@ -120,15 +103,13 @@
             border-radius: 50px;
             font-weight: 700;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.3);
             border: none;
             cursor: pointer;
             font-size: 0.95rem;
         }
         .nav-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.4);
-            color: white !important;
+            box-shadow: 0 8px 25px rgba(74,20,140,0.4);
         }
         .nav-cta-outline {
             background: transparent;
@@ -145,15 +126,10 @@
             background: #4A148C;
             color: white !important;
         }
-        .user-greeting {
-            font-weight: 600;
-            color: #4A148C;
-        }
+        .user-greeting { font-weight: 600; color: #4A148C; }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
+            .hamburger { display: flex; }
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -161,30 +137,17 @@
                 background: white;
                 padding: 1.5rem;
                 border-radius: 16px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
                 margin-top: 0.5rem;
                 gap: 1rem;
                 align-items: center;
             }
-            .nav-links.open {
-                display: flex;
-            }
-            .nav-links a {
-                font-size: 1rem;
-            }
-            .nav-cta,
-            .nav-cta-outline {
-                width: 100%;
-                text-align: center;
-            }
-            #userGreeting {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.5rem;
-            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1rem; }
+            .nav-cta, .nav-cta-outline { width: 100%; text-align: center; }
+            #userGreeting { flex-direction: column; width: 100%; gap: 0.5rem; }
         }
 
-        /* ===== ABOUT HERO ===== */
         .about-hero {
             padding: 4rem 0 3rem;
             text-align: center;
@@ -195,11 +158,8 @@
             font-size: 3rem;
             font-weight: 900;
             color: #4A148C;
-            margin-bottom: 0.5rem;
         }
-        .about-hero h1 span {
-            color: #FFD700;
-        }
+        .about-hero h1 span { color: #FFD700; }
         .about-hero p {
             font-size: 1.2rem;
             color: #7B6A8A;
@@ -207,11 +167,7 @@
             margin: 0 auto;
         }
 
-        /* ===== ABOUT CONTENT ===== */
-        .about-content {
-            padding: 4rem 0;
-            background: white;
-        }
+        .about-content { padding: 4rem 0; background: white; }
         .about-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -227,7 +183,6 @@
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         .about-text p {
             color: #3d2a4a;
@@ -244,10 +199,7 @@
             color: #4A148C;
             font-size: 1.1rem;
         }
-        .about-text .highlight i {
-            color: #FFD700;
-            margin-right: 0.5rem;
-        }
+        .about-text .highlight i { color: #FFD700; margin-right: 0.5rem; }
 
         .about-sidebar {
             background: #faf7ff;
@@ -267,9 +219,7 @@
             padding: 0.8rem 0;
             border-bottom: 1px solid #f0e8f5;
         }
-        .about-sidebar .stat-item:last-child {
-            border-bottom: none;
-        }
+        .about-sidebar .stat-item:last-child { border-bottom: none; }
         .about-sidebar .stat-item .icon {
             font-size: 2rem;
             width: 3rem;
@@ -284,11 +234,7 @@
             color: #7B6A8A;
         }
 
-        /* ===== MISSION / VISION / VALUES ===== */
-        .mission-section {
-            padding: 4rem 0;
-            background: #faf7ff;
-        }
+        .mission-section { padding: 4rem 0; background: #faf7ff; }
         .mission-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -306,28 +252,12 @@
         .mission-card:hover {
             transform: translateY(-5px);
             border-color: #7B1FA2;
-            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.06);
         }
-        .mission-card .icon {
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .mission-card h3 {
-            color: #4A148C;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-        .mission-card p {
-            color: #7B6A8A;
-            font-size: 0.95rem;
-        }
+        .mission-card .icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+        .mission-card h3 { color: #4A148C; font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .mission-card p { color: #7B6A8A; font-size: 0.95rem; }
 
-        /* ===== TEAM SECTION ===== */
-        .team-section {
-            padding: 4rem 0;
-            background: white;
-        }
+        .team-section { padding: 4rem 0; background: white; }
         .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -341,25 +271,14 @@
             border-radius: 24px;
             border: 1px solid #f0e8f5;
         }
-        .team-card .avatar {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .team-card h4 {
-            color: #4A148C;
-            font-size: 1.1rem;
-        }
-        .team-card p {
-            color: #7B6A8A;
-            font-size: 0.9rem;
-        }
+        .team-card .avatar { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .team-card h4 { color: #4A148C; font-size: 1.1rem; }
+        .team-card p { color: #7B6A8A; font-size: 0.9rem; }
 
-        /* ===== FOOTER ===== */
         footer {
             padding: 3rem 0;
             background: linear-gradient(135deg, #1a0a2e, #4A148C);
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255,255,255,0.8);
         }
         .footer-grid {
             display: grid;
@@ -371,58 +290,39 @@
             font-weight: 800;
             color: white;
         }
-        .footer-brand span {
-            color: #FFD700;
-        }
+        .footer-brand span { color: #FFD700; }
         .footer-brand small {
             display: block;
             font-size: 0.7rem;
             font-weight: 400;
             opacity: 0.6;
         }
-        footer h4 {
-            color: white;
-            font-size: 1rem;
-            margin-bottom: 0.8rem;
-        }
+        footer h4 { color: white; font-size: 1rem; margin-bottom: 0.8rem; }
         footer a {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255,255,255,0.6);
             display: block;
             margin-bottom: 0.4rem;
             transition: 0.3s;
             font-size: 0.9rem;
         }
-        footer a:hover {
-            color: #FFD700;
-        }
+        footer a:hover { color: #FFD700; }
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
             margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255,255,255,0.08);
             font-size: 0.85rem;
             opacity: 0.6;
         }
 
         @media (max-width: 992px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .about-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 600px) {
-            .about-hero h1 {
-                font-size: 2.2rem;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .about-sidebar .stat-item {
-                justify-content: center;
-            }
+            .about-hero h1 { font-size: 2.2rem; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .about-sidebar .stat-item { justify-content: center; }
         }
     </style>
 </head>
@@ -435,16 +335,15 @@
                 IELTS<span>Prova</span>
                 <small>by Prova Technologies</small>
             </div>
-
             <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
                 <a href="about.html" class="active">About</a>
+                <a href="study-tips.html">💡 Tips</a>
                 <a href="index.html#features">Tests</a>
                 <a href="index.html#pricing">Pricing</a>
                 <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
@@ -474,24 +373,14 @@
             <div class="about-grid">
                 <div class="about-text">
                     <h2>Our <span>Story</span></h2>
-                    <p>
-                        Prova Technologies was born from a simple belief: <strong>every student deserves access to quality test preparation.</strong> 
-                        We saw that many students struggle with exam prep — it's expensive, overwhelming, and often ineffective.
-                    </p>
-                    <p>
-                        We wanted to build something different. Something that uses <strong>AI, real-time feedback, and personalized learning</strong> 
-                        to help students build confidence and achieve their goals — all for free.
-                    </p>
+                    <p>Prova Technologies was born from a simple belief: <strong>every student deserves access to quality test preparation.</strong></p>
+                    <p>We wanted to build something that uses <strong>AI, real-time feedback, and personalized learning</strong> to help students build confidence and achieve their goals — all for free.</p>
                     <div class="highlight">
                         <i class="fas fa-quote-left"></i> 
                         "Success is not about never failing. It's about trying again, learning, and finally proving what you're capable of."
                     </div>
-                    <p>
-                        Today, Prova Technologies offers <strong>AI-powered practice tests</strong> for Reading, Writing, Listening, and Speaking. 
-                        Students can track their progress, get instant feedback, and improve their scores — all in one beautiful platform.
-                    </p>
+                    <p>Today, Prova Technologies offers <strong>AI-powered practice tests</strong> for Reading, Writing, Listening, and Speaking. Students can track their progress, get instant feedback, and improve their scores — all in one beautiful platform.</p>
                 </div>
-
                 <div class="about-sidebar">
                     <h3>📊 Quick Facts</h3>
                     <div class="stat-item">
@@ -527,7 +416,7 @@
         </div>
     </section>
 
-    <!-- ===== MISSION / VISION / VALUES ===== -->
+    <!-- ===== MISSION ===== -->
     <section class="mission-section">
         <div class="container">
             <h2 style="text-align:center; font-size:2.5rem; font-weight:800; color:#4A148C;">
@@ -555,7 +444,7 @@
         </div>
     </section>
 
-    <!-- ===== TEAM SECTION ===== -->
+    <!-- ===== TEAM ===== -->
     <section class="team-section">
         <div class="container">
             <h2 style="text-align:center; font-size:2.5rem; font-weight:800; color:#4A148C; margin-bottom:0.5rem;">
@@ -598,16 +487,13 @@
                     <a href="dashboard.html">Dashboard</a>
                 </div>
                 <div>
-                    <h4>Company</h4>
-                    <a href="about.html">About</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Contact</a>
+                    <h4>Resources</h4>
+                    <a href="study-tips.html">💡 Study Tips</a>
                 </div>
                 <div>
-                    <h4>Legal</h4>
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="#">Cookies</a>
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="#">Contact</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -616,40 +502,37 @@
         </div>
     </footer>
 
-    <!-- ===== AUTH MODAL ===== -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h2 id="modalTitle">Welcome Back</h2>
-            <p class="subtitle" id="modalSubtitle">Log in to continue your IELTS journey.</p>
-            <div class="error-msg" id="errorMsg"></div>
-            <div class="success-msg" id="successMsg"></div>
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:999;justify-content:center;align-items:center;">
+        <div class="modal" style="background:white;border-radius:32px;padding:2.5rem;max-width:440px;width:90%;position:relative;box-shadow:0 30px 60px rgba(0,0,0,0.2);">
+            <button class="modal-close" onclick="closeModal()" style="position:absolute;top:1rem;right:1.5rem;font-size:1.5rem;cursor:pointer;color:#888;background:none;border:none;">&times;</button>
+            <h2 id="modalTitle" style="font-size:1.8rem;color:#4A148C;margin-bottom:0.5rem;">Welcome Back</h2>
+            <p class="subtitle" id="modalSubtitle" style="color:#7B6A8A;margin-bottom:1.5rem;">Log in to continue your IELTS journey.</p>
+            <div class="error-msg" id="errorMsg" style="color:#e53935;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
+            <div class="success-msg" id="successMsg" style="color:#2e7d32;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
             <form id="authForm" onsubmit="handleAuth(event)">
-                <div class="form-group" id="nameGroup" style="display:none;">
-                    <label>Full Name</label>
-                    <input type="text" id="fullName" placeholder="Enter your name" />
+                <div class="form-group" id="nameGroup" style="display:none;margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
                 </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="authEmail" placeholder="you@example.com" required />
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Email Address</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" />
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Password</label>
+                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
                 </div>
-                <button type="submit" class="btn-auth" id="authBtn">Continue</button>
+                <button type="submit" class="btn-auth" id="authBtn" style="width:100%;padding:0.9rem;background:linear-gradient(135deg,#4A148C,#7B1FA2);color:white;border:none;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:0.3s;">Continue</button>
             </form>
-            <div class="switch-auth">
+            <div class="switch-auth" style="text-align:center;margin-top:1.2rem;color:#7B6A8A;">
                 <span id="switchText">Don't have an account?</span>
-                <a id="switchLink" onclick="toggleAuthMode()">Sign Up</a>
+                <a id="switchLink" onclick="toggleAuthMode()" style="color:#4A148C;font-weight:700;cursor:pointer;">Sign Up</a>
             </div>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // FIREBASE CONFIG
-        // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
             authDomain: "ieltsprova.firebaseapp.com",
@@ -663,9 +546,6 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // ============================================================
-        // HAMBURGER MENU
-        // ============================================================
         const hamburger = document.getElementById('hamburgerBtn');
         const navLinks = document.getElementById('navLinks');
 
@@ -681,9 +561,6 @@
             });
         });
 
-        // ============================================================
-        // AUTH STATE
-        // ============================================================
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('authButtons').style.display = 'none';
@@ -695,9 +572,6 @@
             }
         });
 
-        // ============================================================
-        // MODAL CONTROLS
-        // ============================================================
         let currentMode = 'login';
 
         function openModal(mode) {
@@ -732,11 +606,11 @@
                 nameGroup.style.display = 'block';
             }
 
-            modal.classList.add('active');
+            modal.style.display = 'flex';
         }
 
         function closeModal() {
-            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('authModal').style.display = 'none';
         }
 
         function toggleAuthMode() {
@@ -746,9 +620,6 @@
             }, 300);
         }
 
-        // ============================================================
-        // HANDLE AUTH
-        // ============================================================
         async function handleAuth(e) {
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
@@ -768,21 +639,13 @@
                     await auth.signInWithEmailAndPassword(email, password);
                     successMsg.textContent = '✅ Logged in successfully!';
                     successMsg.classList.add('show');
-                    setTimeout(() => {
-                        closeModal();
-                        location.reload();
-                    }, 1500);
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
                 } else {
                     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    await userCredential.user.updateProfile({
-                        displayName: fullName || 'Student'
-                    });
-                    successMsg.textContent = '✅ Account created! Welcome to Prova!';
+                    await userCredential.user.updateProfile({ displayName: fullName || 'Student' });
+                    successMsg.textContent = '✅ Account created! Welcome!';
                     successMsg.classList.add('show');
-                    setTimeout(() => {
-                        closeModal();
-                        location.reload();
-                    }, 1500);
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
                 }
             } catch (error) {
                 errorMsg.textContent = error.message;
@@ -792,13 +655,8 @@
             }
         }
 
-        // ============================================================
-        // LOGOUT
-        // ============================================================
         function logoutUser() {
-            auth.signOut().then(() => {
-                location.reload();
-            });
+            auth.signOut().then(() => { location.reload(); });
         }
 
         document.getElementById('authModal').addEventListener('click', function(e) {
@@ -807,4 +665,4 @@
     </script>
 
 </body>
-  </html>
+    </html>
