@@ -2,7 +2,8 @@
     "name": "IELTSProva",
     "short_name": "IELTSProva",
     "description": "AI-Powered IELTS Preparation",
-    "start_url": "/",
+    "start_url": "/IELTSPROVA-/",
+    "scope": "/IELTSPROVA-/",
     "display": "standalone",
     "background_color": "#4A148C",
     "theme_color": "#4A148C",
@@ -13,4 +14,4 @@
             "type": "image/svg+xml"
         }
     ]
-}
+} 
