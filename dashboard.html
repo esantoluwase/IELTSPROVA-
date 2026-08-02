@@ -62,8 +62,8 @@
             font-size: 1.2rem;
         }
         .dashboard-header .user-info .plan-badge {
-            background: #FFD700;
-            color: #4A148C;
+            background: #e8f5e9;
+            color: #2e7d32;
             padding: 0.2rem 1rem;
             border-radius: 50px;
             font-size: 0.7rem;
@@ -233,34 +233,62 @@
         }
         .back-link:hover { border-bottom-color: #FFD700; }
 
-        .storage-info {
-            background: #faf7ff;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            margin: 0 0 1.5rem 0;
-            font-size: 0.85rem;
+        .mock-exam-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem 2rem;
             border: 1px solid #f0e8f5;
+            margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 1rem;
         }
-        .storage-info .badge-local {
+        .mock-exam-card .mock-info h3 {
+            color: #4A148C;
+            font-size: 1.2rem;
+        }
+        .mock-exam-card .mock-info p {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+        }
+        .mock-exam-card .mock-btn {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .mock-exam-card .mock-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+        .mock-exam-card .mock-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .mock-exam-card .mock-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+        }
+        .mock-exam-card .mock-badge.free {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .mock-exam-card .mock-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .mock-exam-card .mock-badge.proplus {
             background: #e8f5e9;
             color: #2e7d32;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.7rem;
-        }
-        .storage-info .badge-firebase {
-            background: #e3f2fd;
-            color: #0d47a1;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.7rem;
         }
 
         @media (max-width: 600px) {
@@ -269,6 +297,7 @@
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .history-item { flex-wrap: wrap; gap: 0.5rem; }
             .dashboard-header .user-info { width: 100%; justify-content: center; }
+            .mock-exam-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -300,12 +329,17 @@
     <!-- ===== DASHBOARD CONTENT ===== -->
     <div id="dashboardContent" style="display:none;">
 
-        <!-- ===== STORAGE INFO ===== -->
-        <div class="storage-info">
-            <span>📊 Scores loaded from:</span>
+        <!-- ===== MOCK EXAM CARD ===== -->
+        <div class="mock-exam-card" id="mockExamCard">
+            <div class="mock-info">
+                <h3>📝 Full Mock Exam</h3>
+                <p id="mockExamStatus">Upgrade to Pro to access mock exams</p>
+            </div>
             <div>
-                <span class="badge-local" id="localBadge">💾 Local: 0</span>
-                <span class="badge-firebase" id="firebaseBadge">☁️ Firebase: 0</span>
+                <span class="mock-badge" id="mockBadge">🔒 Locked</span>
+                <a href="mock-exam.html" class="mock-btn" id="mockBtn" style="display:none;">
+                    <i class="fas fa-play"></i> Start Mock Exam
+                </a>
             </div>
         </div>
 
@@ -419,7 +453,7 @@
         document.getElementById('userName').textContent = user.displayName || 'Student';
         document.getElementById('userAvatar').textContent = (user.displayName || 'S')[0].toUpperCase();
 
-        // ===== LOAD USER PLAN FROM FIRESTORE =====
+        // ===== LOAD USER PLAN =====
         let userPlan = 'free';
 
         try {
@@ -449,6 +483,28 @@
             planBadge.textContent = '🟢 Free Plan';
             planBadge.className = 'plan-badge';
             upgradeBtn.style.display = 'inline-flex';
+        }
+
+        // ===== UPDATE MOCK EXAM CARD =====
+        const mockBtn = document.getElementById('mockBtn');
+        const mockBadge = document.getElementById('mockBadge');
+        const mockStatus = document.getElementById('mockExamStatus');
+
+        if (userPlan === 'free') {
+            mockBtn.style.display = 'none';
+            mockBadge.textContent = '🔒 Locked';
+            mockBadge.className = 'mock-badge free';
+            mockStatus.textContent = 'Upgrade to Pro to access mock exams';
+        } else if (userPlan === 'pro') {
+            mockBtn.style.display = 'inline-flex';
+            mockBadge.textContent = '⭐ 2 exams/month';
+            mockBadge.className = 'mock-badge pro';
+            mockStatus.textContent = 'You have 2 mock exams remaining this month';
+        } else {
+            mockBtn.style.display = 'inline-flex';
+            mockBadge.textContent = '🚀 Unlimited';
+            mockBadge.className = 'mock-badge proplus';
+            mockStatus.textContent = 'You have unlimited mock exams available';
         }
 
         // ===== LOAD SCORES =====
@@ -490,10 +546,6 @@
         });
 
         console.log('📊 Total merged scores:', mergedScores.length);
-
-        // ===== UPDATE STORAGE INFO =====
-        document.getElementById('localBadge').textContent = `💾 Local: ${localScores.length}`;
-        document.getElementById('firebaseBadge').textContent = `☁️ Firebase: ${firebaseScores.length}`;
 
         // ===== SHOW DASHBOARD =====
         document.getElementById('loadingMessage').style.display = 'none';
