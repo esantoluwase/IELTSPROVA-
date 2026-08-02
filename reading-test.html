@@ -72,6 +72,10 @@
             background: #fff8e1;
             color: #f57f17;
         }
+        .plan-badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
         .progress-indicator {
             background: #f3edf7;
             padding: 0.8rem 1.2rem;
@@ -98,36 +102,114 @@
             width: 0%;
             transition: width 0.5s ease;
         }
-        .passage {
-            background: #faf7ff;
-            padding: 1.8rem;
-            border-radius: 18px;
-            margin-bottom: 2rem;
-            border-left: 6px solid #7B1FA2;
-        }
-        .passage h2 { color: #4A148C; font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .passage p { margin-bottom: 1rem; font-size: 1rem; }
-        .question {
+        
+        /* ===== SECTION CARD ===== */
+        .section-card {
             background: white;
-            padding: 1.5rem 1.8rem;
-            margin-bottom: 1.2rem;
-            border-radius: 16px;
-            border: 1px solid #f0e8f5;
-            transition: 0.2s;
+            border-radius: 20px;
+            border: 2px solid #f0e8f5;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: 0.3s;
         }
-        .question:hover { border-color: #7B1FA2; }
-        .question .q-number { font-weight: 700; color: #4A148C; margin-bottom: 0.3rem; }
-        .question label {
-            display: block;
-            padding: 0.3rem 0;
-            font-size: 0.95rem;
+        .section-card:hover {
+            border-color: #7B1FA2;
+        }
+        .section-card.locked {
+            opacity: 0.7;
+            border-color: #e0d6e8;
+        }
+        .section-card.locked .section-header {
+            background: #f5f0ff;
+        }
+        .section-card .section-header {
+            padding: 1.2rem 1.8rem;
+            background: #faf7ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             cursor: pointer;
         }
-        .question label input {
-            margin-right: 0.7rem;
-            transform: scale(1.1);
-            accent-color: #7B1FA2;
+        .section-card .section-header .title {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 1.1rem;
         }
+        .section-card .section-header .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+        }
+        .section-card .section-header .badge.free {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .section-card .section-header .badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .section-card .section-header .badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .section-card .section-body {
+            padding: 1.2rem 1.8rem;
+        }
+        .section-card .section-body .question-count {
+            font-size: 0.9rem;
+            color: #7B6A8A;
+            margin-bottom: 0.5rem;
+        }
+        .section-card .section-body .question-count .available {
+            color: #2e7d32;
+            font-weight: 700;
+        }
+        .section-card .section-body .question-count .locked {
+            color: #c62828;
+            font-weight: 700;
+        }
+        .section-card .section-body .question-preview {
+            font-size: 0.9rem;
+            color: #3d2a4a;
+            background: #faf7ff;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay {
+            background: #f5f0ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px dashed #7B1FA2;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay .lock-icon {
+            font-size: 2rem;
+            color: #7B1FA2;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .section-card .section-body .locked-overlay .upgrade-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: 0.3s;
+        }
+        .section-card .section-body .locked-overlay .upgrade-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
         .actions {
             display: flex;
             gap: 1rem;
@@ -166,6 +248,7 @@
             color: #4A148C;
         }
         .btn-secondary:hover { background: #e5d9ed; }
+        
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -233,7 +316,7 @@
         }
         .login-overlay .modal-box .btn-login:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
         .login-overlay .modal-box .btn-secondary {
             background: #f3edf7;
@@ -254,46 +337,32 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .question-limit-info {
+        .question-display {
+            margin-top: 1rem;
+        }
+        .question-item {
             background: #faf7ff;
-            padding: 0.8rem 1.2rem;
+            padding: 1rem 1.5rem;
             border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #f0e8f5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #7B1FA2;
         }
-        .question-limit-info .free-badge {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
+        .question-item .q-number {
             font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .pro-badge {
-            background: #FFD700;
             color: #4A148C;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
         }
-        .question-limit-info .upgrade-link {
-            color: #4A148C;
-            font-weight: 600;
-            text-decoration: underline;
-            cursor: pointer;
+        .question-item .q-text {
+            font-size: 0.95rem;
+            color: #3d2a4a;
+            margin-top: 0.2rem;
         }
 
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
             .test-header { flex-direction: column; align-items: flex-start; }
-            .question { padding: 1rem; }
+            .section-card .section-header { flex-direction: column; align-items: flex-start; }
             .actions { flex-direction: column; }
             .btn { justify-content: center; }
             .login-overlay .modal-box { padding: 2rem; }
@@ -324,31 +393,17 @@
         <h1><i class="fas fa-book-open"></i> Reading Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">15:00</span></span>
-            <span class="plan-badge" id="planBadge">Loading...</span>
+            <span class="plan-badge" id="planBadge">Free</span>
         </div>
     </div>
 
-    <!-- ===== QUESTION LIMIT INFO ===== -->
-    <div class="question-limit-info" id="questionLimitInfo">
-        <span id="limitText">Loading question limit...</span>
-        <span>
-            <span class="free-badge" id="freeBadge">Free: 100 Qs</span>
-            <span class="pro-badge" id="proBadge" style="display:none;">⭐ Pro: Unlimited</span>
-            <a href="checkout.html" class="upgrade-link" id="upgradeLink" style="display:none;">Upgrade →</a>
-        </span>
+    <div id="sectionsContainer">
+        <!-- Sections will be rendered by JavaScript -->
     </div>
-
-    <div class="progress-indicator">
-        <span id="progressText">Question 0 of 0</span>
-        <div class="bar"><div class="fill" id="progressFill"></div></div>
-    </div>
-
-    <div id="passageContainer"></div>
-    <form id="testForm"></form>
 
     <div class="actions">
-        <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
-        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Test</button>
+        <button type="button" class="btn btn-primary" id="startTestBtn" onclick="startTest()"><i class="fas fa-play"></i> Start Free Test</button>
+        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
@@ -387,7 +442,7 @@
     let answers = {};
 
     // ============================================================
-    // 🔒 CHECK LOGIN + LOAD USER PLAN
+    // CHECK LOGIN + LOAD USER PLAN
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
@@ -400,7 +455,6 @@
         document.getElementById('loginOverlay').classList.remove('active');
         document.getElementById('testContent').style.display = 'block';
 
-        // Load user's plan from Firestore
         try {
             const userDoc = await db.collection('users').doc(userId).get();
             if (userDoc.exists) {
@@ -411,130 +465,219 @@
             console.log('Error loading user plan:', e);
         }
 
-        // Update UI based on plan
-        updatePlanUI();
-        renderTest();
+        updatePlanBadge();
+        renderSections();
     });
 
     // ============================================================
-    // UPDATE PLAN UI
+    // UPDATE PLAN BADGE
     // ============================================================
-    function updatePlanUI() {
-        const planBadge = document.getElementById('planBadge');
-        const limitText = document.getElementById('limitText');
-        const freeBadge = document.getElementById('freeBadge');
-        const proBadge = document.getElementById('proBadge');
-        const upgradeLink = document.getElementById('upgradeLink');
-
+    function updatePlanBadge() {
+        const badge = document.getElementById('planBadge');
         if (userPlan === 'free') {
-            planBadge.textContent = 'Free — 100 Qs';
-            planBadge.className = 'plan-badge';
-            limitText.textContent = '📚 You have access to 100 free questions.';
-            freeBadge.style.display = 'inline-block';
-            proBadge.style.display = 'none';
-            upgradeLink.style.display = 'inline-block';
-            upgradeLink.textContent = '🚀 Upgrade for Unlimited →';
+            badge.textContent = '🟢 Free Plan';
+            badge.className = 'plan-badge';
+        } else if (userPlan === 'pro') {
+            badge.textContent = '⭐ Pro Plan';
+            badge.className = 'plan-badge pro';
         } else {
-            planBadge.textContent = '⭐ Pro — Unlimited Qs';
-            planBadge.className = 'plan-badge pro';
-            limitText.textContent = '🌟 You have unlimited access to all questions!';
-            freeBadge.style.display = 'none';
-            proBadge.style.display = 'inline-block';
-            upgradeLink.style.display = 'none';
+            badge.textContent = '🚀 Pro+ Plan';
+            badge.className = 'plan-badge proplus';
         }
     }
 
     // ============================================================
-    // RENDER TEST
+    // RENDER SECTIONS
     // ============================================================
-    function renderTest() {
-        // Get questions from the question bank
+    function renderSections() {
+        const container = document.getElementById('sectionsContainer');
         const allQuestions = getQuestions('reading', userPlan);
-        
-        // Shuffle and select based on plan
-        const shuffled = shuffleArray([...allQuestions]);
-        const limit = userPlan === 'free' ? Math.min(10, shuffled.length) : Math.min(40, shuffled.length);
-        selectedQuestions = shuffled.slice(0, limit);
+        const total = allQuestions.length;
 
-        // Build answer key
+        let html = '';
+
+        // Show how many questions are available
+        const freeCount = getQuestionCount('reading', 'free');
+        const proCount = getQuestionCount('reading', 'pro');
+        const proPlusCount = getQuestionCount('reading', 'proplus');
+
+        // FREE SECTION (Always visible)
+        const freeQuestions = shuffleArray(allQuestions.slice(0, Math.min(20, freeCount)));
+        html += `
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="title">🟢 Free Access</span>
+                    <span class="badge free">Free — ${freeQuestions.length} Questions</span>
+                </div>
+                <div class="section-body">
+                    <div class="question-count">
+                        📊 <span class="available">${freeQuestions.length}</span> / ${freeCount} free questions available
+                    </div>
+                    <div class="question-preview">
+                        ${freeQuestions.slice(0, 3).map(q => `
+                            <div class="question-item">
+                                <div class="q-number">Q${q.id || '?'}</div>
+                                <div class="q-text">${q.text || 'Question'}</div>
+                            </div>
+                        `).join('')}
+                        ${freeQuestions.length > 3 ? `<div style="color:#7B6A8A;font-size:0.85rem;margin-top:0.3rem;">+ ${freeQuestions.length - 3} more questions...</div>` : ''}
+                    </div>
+                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.5rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
+                        <i class="fas fa-play"></i> Start Free Test
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // PRO SECTION (Locked for Free users)
+        const proQuestions = allQuestions.slice(0, Math.min(proCount, 1000));
+        const isPro = userPlan === 'pro' || userPlan === 'proplus';
+        html += `
+            <div class="section-card ${isPro ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">⭐ Pro Access</span>
+                    <span class="badge pro">${isPro ? `${proQuestions.length} Questions` : '🔒 Locked'}</span>
+                </div>
+                <div class="section-body">
+                    <div class="question-count">
+                        📊 <span class="${isPro ? 'available' : 'locked'}">${isPro ? proQuestions.length : '🔒'}</span> / ${proCount} pro questions available
+                    </div>
+                    ${isPro ? `
+                        <div class="question-preview">
+                            ${proQuestions.slice(0, 3).map(q => `
+                                <div class="question-item">
+                                    <div class="q-number">Q${q.id || '?'}</div>
+                                    <div class="q-text">${q.text || 'Question'}</div>
+                                </div>
+                            `).join('')}
+                            ${proQuestions.length > 3 ? `<div style="color:#7B6A8A;font-size:0.85rem;margin-top:0.3rem;">+ ${proQuestions.length - 3} more questions...</div>` : ''}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🔒</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro to unlock 1,000+ questions</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get full access to all reading passages</p>
+                            <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        // PRO+ SECTION (Locked for Free and Pro users)
+        const proPlusQuestions = allQuestions.slice(0, Math.min(proPlusCount, 2000));
+        const isProPlus = userPlan === 'proplus';
+        html += `
+            <div class="section-card ${isProPlus ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">🚀 Pro+ Access</span>
+                    <span class="badge proplus">${isProPlus ? `${proPlusQuestions.length} Questions` : '🔒 Locked'}</span>
+                </div>
+                <div class="section-body">
+                    <div class="question-count">
+                        📊 <span class="${isProPlus ? 'available' : 'locked'}">${isProPlus ? proPlusQuestions.length : '🔒'}</span> / ${proPlusCount} pro+ questions available
+                    </div>
+                    ${isProPlus ? `
+                        <div class="question-preview">
+                            ${proPlusQuestions.slice(0, 3).map(q => `
+                                <div class="question-item">
+                                    <div class="q-number">Q${q.id || '?'}</div>
+                                    <div class="q-text">${q.text || 'Question'}</div>
+                                </div>
+                            `).join('')}
+                            ${proPlusQuestions.length > 3 ? `<div style="color:#7B6A8A;font-size:0.85rem;margin-top:0.3rem;">+ ${proPlusQuestions.length - 3} more questions...</div>` : ''}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🚀</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 2,000+ questions</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get unlimited access + AI feedback</p>
+                            <a href="checkout.html" class="upgrade-link">🚀 Upgrade to Pro+</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // START TEST
+    // ============================================================
+    function startTest() {
+        const allQuestions = getQuestions('reading', userPlan);
+        const limit = userPlan === 'free' ? 20 : userPlan === 'pro' ? 1000 : 2000;
+        const shuffled = shuffleArray(allQuestions);
+        selectedQuestions = shuffled.slice(0, Math.min(limit, shuffled.length));
+
         answers = {};
         selectedQuestions.forEach(q => {
             answers[`q${q.id}`] = q.answer;
         });
 
-        const container = document.getElementById('testForm');
-        const passageContainer = document.getElementById('passageContainer');
-        const totalSpan = document.getElementById('totalQuestions');
+        // Build the test form
+        const container = document.getElementById('sectionsContainer');
+        let html = `
+            <div style="margin-bottom:1rem;">
+                <p style="font-weight:600;color:#4A148C;">📝 ${selectedQuestions.length} questions loaded</p>
+            </div>
+        `;
 
-        totalSpan.textContent = selectedQuestions.length;
-
-        // Show passage if available
-        if (selectedQuestions.length > 0 && selectedQuestions[0].passage) {
-            passageContainer.innerHTML = `
-                <div class="passage">
-                    <h2>📄 ${selectedQuestions[0].title || 'Reading Passage'}</h2>
-                    <p>${selectedQuestions[0].passage}</p>
-                </div>
-            `;
-        } else {
-            passageContainer.innerHTML = '';
-        }
-
-        // Build questions
-        let html = '';
         selectedQuestions.forEach((q, index) => {
             const qNum = index + 1;
             const labels = ['A', 'B', 'C', 'D'];
-            html += `<div class="question" data-index="${index}">
-                <div class="q-number">Question ${qNum}</div>
-                <p>${q.text}</p>`;
-            q.options.forEach((opt, i) => {
-                html += `<label>
-                    <input type="radio" name="q${q.id}" value="${labels[i]}" onchange="updateProgress()" />
-                    ${labels[i]}) ${opt}
-                </label>`;
-            });
-            html += `</div>`;
+            html += `
+                <div class="question-item" style="border-left-color:#FFD700;">
+                    <div class="q-number">Question ${qNum}</div>
+                    <div class="q-text">${q.text || 'Question'}</div>
+                    <div style="margin-top:0.3rem;">
+                        ${q.options.map((opt, i) => `
+                            <label style="display:block;padding:0.2rem 0;font-size:0.9rem;cursor:pointer;">
+                                <input type="radio" name="q${q.id}" value="${labels[i]}" />
+                                ${labels[i]}) ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         });
+
+        html += `
+            <div class="actions">
+                <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
+                <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
+            </div>
+        `;
 
         container.innerHTML = html;
-        updateProgress();
+
+        // Start timer
+        startTimer();
     }
 
     // ============================================================
-    // UPDATE PROGRESS
-    // ============================================================
-    function updateProgress() {
-        const total = selectedQuestions.length;
-        let answered = 0;
-        selectedQuestions.forEach(q => {
-            const checked = document.querySelector(`input[name="q${q.id}"]:checked`);
-            if (checked) answered++;
-        });
-        document.getElementById('progressText').textContent = `Question ${answered} of ${total}`;
-        document.getElementById('progressFill').style.width = `${(answered / total) * 100}%`;
-    }
-
-    // ============================================================
-    // TIMER
+    // TIMER (15 minutes)
     // ============================================================
     let timeLeft = 900;
-    const timerDisplay = document.getElementById('timerDisplay');
+    let timerInterval = null;
 
-    function updateTimer() {
-        const mins = Math.floor(timeLeft / 60);
-        const secs = timeLeft % 60;
-        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up! Your test will be submitted automatically.');
-            submitTest();
-        }
-        timeLeft--;
+    function startTimer() {
+        const timerDisplay = document.getElementById('timerDisplay');
+        timeLeft = 900;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('⏰ Time is up!');
+                submitTest();
+            }
+            timeLeft--;
+        }, 1000);
     }
-
-    const timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
 
     // ============================================================
     // SUBMIT TEST
@@ -552,8 +695,8 @@
 
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
-
         document.getElementById('scoreDisplay').textContent = score;
+        document.getElementById('totalQuestions').textContent = total;
 
         const feedback = document.getElementById('feedbackText');
         const percentage = (score / total) * 100;
@@ -568,7 +711,6 @@
         }
 
         document.querySelectorAll('input').forEach(input => input.disabled = true);
-        document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
         // Save score
@@ -584,7 +726,6 @@
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
 
         const saveStatus = document.getElementById('saveStatus');
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
@@ -598,7 +739,7 @@
                     saveStatus.innerHTML = '✅ Score saved to your account AND locally!';
                     saveStatus.style.color = '#2e7d32';
                 } catch (error) {
-                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed, but your data is safe!)';
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed).';
                     saveStatus.style.color = '#f57f17';
                 }
             } else {
@@ -612,6 +753,7 @@
     // RESET
     // ============================================================
     function resetTest() {
+        clearInterval(timerInterval);
         location.reload();
     }
 
@@ -628,4 +770,4 @@
 </script>
 
 </body>
-    </html>
+    </html> 
