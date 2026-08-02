@@ -72,88 +72,166 @@
             background: #fff8e1;
             color: #f57f17;
         }
-        .audio-player {
-            background: #f3edf7;
-            padding: 2rem;
-            border-radius: 18px;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            border: 2px dashed #7B1FA2;
+        .plan-badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
         }
-        .audio-player .play-btn {
-            background: linear-gradient(135deg, #4A148C, #7B1FA2);
-            color: white;
-            border: none;
-            padding: 1rem 3rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
+        
+        /* ===== SECTION CARD ===== */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            border: 2px solid #f0e8f5;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
             transition: 0.3s;
         }
-        .audio-player .play-btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3); }
-        .audio-player .play-btn.playing {
-            background: linear-gradient(135deg, #FFD700, #f5c500);
-            color: #4A148C;
+        .section-card:hover {
+            border-color: #7B1FA2;
         }
-        .audio-player .audio-status { margin-top: 0.8rem; font-size: 0.9rem; color: #7B6A8A; }
-        .progress-indicator {
-            background: #f3edf7;
-            padding: 0.8rem 1.2rem;
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
+        .section-card.locked {
+            opacity: 0.7;
+            border-color: #e0d6e8;
+        }
+        .section-card.locked .section-header {
+            background: #f5f0ff;
+        }
+        .section-card .section-header {
+            padding: 1.2rem 1.8rem;
+            background: #faf7ff;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        .progress-indicator .bar {
-            flex: 1;
-            height: 6px;
-            background: #ddd;
-            border-radius: 50px;
-            overflow: hidden;
-            min-width: 100px;
+        .section-card .section-header .title {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 1.1rem;
         }
-        .progress-indicator .bar .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4A148C, #7B1FA2);
+        .section-card .section-header .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
             border-radius: 50px;
-            width: 0%;
-            transition: width 0.5s ease;
         }
-        .section-label {
-            background: #4A148C;
+        .section-card .section-header .badge.free {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .section-card .section-header .badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .section-card .section-header .badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .section-card .section-body {
+            padding: 1.2rem 1.8rem;
+        }
+        .section-card .section-body .question-count {
+            font-size: 0.9rem;
+            color: #7B6A8A;
+            margin-bottom: 0.5rem;
+        }
+        .section-card .section-body .question-count .available {
+            color: #2e7d32;
+            font-weight: 700;
+        }
+        .section-card .section-body .question-count .locked {
+            color: #c62828;
+            font-weight: 700;
+        }
+        .section-card .section-body .audio-preview {
+            background: #faf7ff;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: #3d2a4a;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .audio-preview i {
+            color: #7B1FA2;
+            margin-right: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay {
+            background: #f5f0ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px dashed #7B1FA2;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay .lock-icon {
+            font-size: 2rem;
+            color: #7B1FA2;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .section-card .section-body .locked-overlay .upgrade-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white;
-            padding: 0.4rem 1.2rem;
+            padding: 0.5rem 1.8rem;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.8rem;
-            display: inline-block;
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: 0.3s;
         }
+        .section-card .section-body .locked-overlay .upgrade-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
+        .audio-player {
+            background: #f3edf7;
+            padding: 1.5rem;
+            border-radius: 18px;
+            text-align: center;
+            border: 2px dashed #7B1FA2;
+            margin-bottom: 1.5rem;
+        }
+        .audio-player .play-btn {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .audio-player .play-btn:hover { transform: scale(1.05); }
+        .audio-player .play-btn.playing {
+            background: linear-gradient(135deg, #FFD700, #f5c500);
+            color: #4A148C;
+        }
+        .audio-player .audio-status { margin-top: 0.5rem; font-size: 0.9rem; color: #7B6A8A; }
+
         .question {
             background: white;
-            padding: 1.5rem 1.8rem;
-            margin-bottom: 1.2rem;
-            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 0.8rem;
+            border-radius: 12px;
             border: 1px solid #f0e8f5;
-            transition: 0.2s;
         }
-        .question:hover { border-color: #7B1FA2; }
-        .question .q-number { font-weight: 700; color: #4A148C; margin-bottom: 0.3rem; }
+        .question .q-number { font-weight: 700; color: #4A148C; }
         .question label {
             display: block;
-            padding: 0.3rem 0;
-            font-size: 0.95rem;
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
             cursor: pointer;
         }
         .question label input {
-            margin-right: 0.7rem;
-            transform: scale(1.1);
+            margin-right: 0.5rem;
             accent-color: #7B1FA2;
         }
+
         .actions {
             display: flex;
             gap: 1rem;
@@ -192,6 +270,7 @@
             color: #4A148C;
         }
         .btn-secondary:hover { background: #e5d9ed; }
+        
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -255,7 +334,7 @@
         }
         .login-overlay .modal-box .btn-login:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
         .login-overlay .modal-box .btn-secondary {
             background: #f3edf7;
@@ -276,41 +355,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .question-limit-info {
-            background: #faf7ff;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #f0e8f5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .question-limit-info .free-badge {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .pro-badge {
-            background: #FFD700;
-            color: #4A148C;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .upgrade-link {
-            color: #4A148C;
-            font-weight: 600;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
@@ -319,6 +363,7 @@
             .actions { flex-direction: column; }
             .btn { justify-content: center; }
             .login-overlay .modal-box { padding: 2rem; }
+            .section-card .section-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -346,39 +391,17 @@
         <h1><i class="fas fa-headphones"></i> Listening Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">30:00</span></span>
-            <span class="plan-badge" id="planBadge">Loading...</span>
+            <span class="plan-badge" id="planBadge">Free</span>
         </div>
     </div>
 
-    <!-- ===== QUESTION LIMIT INFO ===== -->
-    <div class="question-limit-info" id="questionLimitInfo">
-        <span id="limitText">Loading question limit...</span>
-        <span>
-            <span class="free-badge" id="freeBadge">Free: 100 Qs</span>
-            <span class="pro-badge" id="proBadge" style="display:none;">⭐ Pro: Unlimited</span>
-            <a href="checkout.html" class="upgrade-link" id="upgradeLink" style="display:none;">Upgrade →</a>
-        </span>
+    <div id="sectionsContainer">
+        <!-- Sections will be rendered by JavaScript -->
     </div>
-
-    <div class="audio-player">
-        <button class="play-btn" id="playAudioBtn"><i class="fas fa-play"></i> Play Audio</button>
-        <div class="audio-status" id="audioStatus">
-            <i class="fas fa-info-circle"></i> 
-            <span>Click play to hear the recording. You will only hear it once.</span>
-        </div>
-    </div>
-
-    <div class="progress-indicator">
-        <span id="progressText">Question 0 of 0</span>
-        <div class="bar"><div class="fill" id="progressFill"></div></div>
-    </div>
-
-    <div id="sectionContainer"></div>
-    <form id="testForm"></form>
 
     <div class="actions">
-        <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
-        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Test</button>
+        <button type="button" class="btn btn-primary" id="startTestBtn" onclick="startTest()"><i class="fas fa-play"></i> Start Free Test</button>
+        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
@@ -417,7 +440,7 @@
     let answers = {};
 
     // ============================================================
-    // 🔒 CHECK LOGIN + LOAD USER PLAN
+    // CHECK LOGIN + LOAD USER PLAN
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
@@ -440,148 +463,242 @@
             console.log('Error loading user plan:', e);
         }
 
-        updatePlanUI();
-        renderTest();
+        updatePlanBadge();
+        renderSections();
     });
 
     // ============================================================
-    // UPDATE PLAN UI
+    // UPDATE PLAN BADGE
     // ============================================================
-    function updatePlanUI() {
-        const planBadge = document.getElementById('planBadge');
-        const limitText = document.getElementById('limitText');
-        const freeBadge = document.getElementById('freeBadge');
-        const proBadge = document.getElementById('proBadge');
-        const upgradeLink = document.getElementById('upgradeLink');
-
+    function updatePlanBadge() {
+        const badge = document.getElementById('planBadge');
         if (userPlan === 'free') {
-            planBadge.textContent = 'Free — 100 Qs';
-            planBadge.className = 'plan-badge';
-            limitText.textContent = '📚 You have access to 100 free questions.';
-            freeBadge.style.display = 'inline-block';
-            proBadge.style.display = 'none';
-            upgradeLink.style.display = 'inline-block';
-            upgradeLink.textContent = '🚀 Upgrade for Unlimited →';
+            badge.textContent = '🟢 Free Plan';
+            badge.className = 'plan-badge';
+        } else if (userPlan === 'pro') {
+            badge.textContent = '⭐ Pro Plan';
+            badge.className = 'plan-badge pro';
         } else {
-            planBadge.textContent = '⭐ Pro — Unlimited Qs';
-            planBadge.className = 'plan-badge pro';
-            limitText.textContent = '🌟 You have unlimited access to all questions!';
-            freeBadge.style.display = 'none';
-            proBadge.style.display = 'inline-block';
-            upgradeLink.style.display = 'none';
+            badge.textContent = '🚀 Pro+ Plan';
+            badge.className = 'plan-badge proplus';
         }
     }
 
     // ============================================================
-    // RENDER TEST
+    // RENDER SECTIONS
     // ============================================================
-    function renderTest() {
-        const allQuestions = getQuestions('listening', userPlan);
-        const shuffled = shuffleArray([...allQuestions]);
-        const limit = userPlan === 'free' ? Math.min(10, shuffled.length) : Math.min(40, shuffled.length);
-        selectedQuestions = shuffled.slice(0, limit);
+    function renderSections() {
+        const container = document.getElementById('sectionsContainer');
+        
+        // Get listening data
+        const freeSections = getQuestions('listening', 'free').sections || [];
+        const proSections = getQuestions('listening', 'pro').sections || [];
+        const proPlusSections = getQuestions('listening', 'proplus').sections || [];
+
+        const isPro = userPlan === 'pro' || userPlan === 'proplus';
+        const isProPlus = userPlan === 'proplus';
+
+        let html = '';
+
+        // ===== FREE SECTION =====
+        const freeSample = freeSections.slice(0, 1);
+        const freeQuestions = freeSample.reduce((acc, s) => acc + (s.questions || []).length, 0);
+        
+        html += `
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="title">🟢 Free Access</span>
+                    <span class="badge free">Free — ${freeQuestions} Questions</span>
+                </div>
+                <div class="section-body">
+                    <div class="question-count">
+                        📊 <span class="available">${freeQuestions}</span> free questions available
+                    </div>
+                    <div class="audio-preview">
+                        <i class="fas fa-headphones"></i> ${freeSample[0]?.title || 'No section available'}
+                    </div>
+                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.5rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
+                        <i class="fas fa-play"></i> Start Free Test
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // ===== PRO SECTION =====
+        const proQuestions = proSections.reduce((acc, s) => acc + (s.questions || []).length, 0);
+        html += `
+            <div class="section-card ${isPro ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">⭐ Pro Access</span>
+                    <span class="badge pro">${isPro ? `${proQuestions} Questions` : '🔒 Locked'}</span>
+                </div>
+                <div class="section-body">
+                    <div class="question-count">
+                        📊 <span class="${isPro ? 'available' : 'locked'}">${isPro ? proQuestions : '🔒'}</span> pro questions available
+                    </div>
+                    ${isPro ? `
+                        <div class="audio-preview">
+                            <i class="fas fa-headphones"></i> ${proSections[0]?.title || 'No section available'}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🔒</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro to unlock 50+ listening sections</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get full access to all listening scripts</p>
+                            <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        // ===== PRO+ SECTION =====
+        const proPlusQuestions = proPlusSections.reduce((acc, s) => acc + (s.questions || []).length, 0);
+        html += `
+            <div class="section-card ${isProPlus ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">🚀 Pro+ Access</span>
+                    <span class="badge proplus">${isProPlus ? `${proPlusQuestions} Questions` : '🔒 Locked'}</span>
+                </div>
+                <div class="section-body">
+                    <div class="question-count">
+                        📊 <span class="${isProPlus ? 'available' : 'locked'}">${isProPlus ? proPlusQuestions : '🔒'}</span> pro+ questions available
+                    </div>
+                    ${isProPlus ? `
+                        <div class="audio-preview">
+                            <i class="fas fa-headphones"></i> ${proPlusSections[0]?.title || 'No section available'}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🚀</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 100+ listening sections</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get unlimited access + AI feedback</p>
+                            <a href="checkout.html" class="upgrade-link">🚀 Upgrade to Pro+</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // START TEST
+    // ============================================================
+    function startTest() {
+        const freeSections = getQuestions('listening', 'free').sections || [];
+        if (freeSections.length === 0) {
+            alert('No listening sections available. Please try again later.');
+            return;
+        }
+
+        const section = freeSections[0];
+        const questions = section.questions || [];
+        selectedQuestions = shuffleArray(questions);
 
         answers = {};
         selectedQuestions.forEach(q => {
             answers[`q${q.id}`] = q.answer;
         });
 
-        const container = document.getElementById('testForm');
-        const sectionContainer = document.getElementById('sectionContainer');
-        const totalSpan = document.getElementById('totalQuestions');
+        const container = document.getElementById('sectionsContainer');
+        let html = `
+            <div class="audio-player">
+                <button class="play-btn" id="playAudioBtn"><i class="fas fa-play"></i> Play Audio</button>
+                <div class="audio-status" id="audioStatus">
+                    <i class="fas fa-info-circle"></i> 
+                    <span>Click play to hear the recording. You will only hear it once.</span>
+                </div>
+            </div>
+            <div style="background:#faf7ff;padding:0.8rem 1.2rem;border-radius:12px;margin-bottom:1rem;font-size:0.9rem;color:#7B6A8A;">
+                <i class="fas fa-info-circle"></i> ${section.script || 'Listen carefully and answer the questions.'}
+            </div>
+        `;
 
-        totalSpan.textContent = selectedQuestions.length;
-
-        // Show section info if available
-        if (selectedQuestions.length > 0 && selectedQuestions[0].section) {
-            sectionContainer.innerHTML = `
-                <div class="section-label">${selectedQuestions[0].section}</div>
-                <p style="margin-bottom:1rem; color:#7B6A8A; font-size:0.95rem;">
-                    <i class="fas fa-info-circle"></i> ${selectedQuestions[0].script || 'Listen carefully and answer the questions.'}
-                </p>
-            `;
-        } else {
-            sectionContainer.innerHTML = '';
-        }
-
-        let html = '';
         selectedQuestions.forEach((q, index) => {
             const qNum = index + 1;
             const labels = ['A', 'B', 'C', 'D'];
-            html += `<div class="question" data-index="${index}">
-                <div class="q-number">Question ${qNum}</div>
-                <p>${q.text}</p>`;
-            q.options.forEach((opt, i) => {
-                html += `<label>
-                    <input type="radio" name="q${q.id}" value="${labels[i]}" onchange="updateProgress()" />
-                    ${labels[i]}) ${opt}
-                </label>`;
-            });
-            html += `</div>`;
+            html += `
+                <div class="question">
+                    <div class="q-number">Question ${qNum}</div>
+                    <p style="margin:0.3rem 0;">${q.text}</p>
+                    ${q.options.map((opt, i) => `
+                        <label>
+                            <input type="radio" name="q${q.id}" value="${labels[i]}" />
+                            ${labels[i]}) ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
         });
 
+        html += `
+            <div class="actions">
+                <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
+                <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
+            </div>
+        `;
+
         container.innerHTML = html;
-        updateProgress();
+
+        // Setup audio player
+        setupAudioPlayer();
+
+        // Start timer
+        startTimer();
     }
 
     // ============================================================
-    // UPDATE PROGRESS
+    // AUDIO PLAYER
     // ============================================================
-    function updateProgress() {
-        const total = selectedQuestions.length;
-        let answered = 0;
-        selectedQuestions.forEach(q => {
-            const checked = document.querySelector(`input[name="q${q.id}"]:checked`);
-            if (checked) answered++;
+    function setupAudioPlayer() {
+        let isPlaying = false;
+        const btn = document.getElementById('playAudioBtn');
+        const status = document.getElementById('audioStatus');
+
+        btn.addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            this.innerHTML = isPlaying ? '<i class="fas fa-pause"></i> Playing...' : '<i class="fas fa-play"></i> Play Audio';
+            this.classList.toggle('playing');
+            if (isPlaying) {
+                status.innerHTML = '<i class="fas fa-volume-up"></i> <span style="color:#4A148C;font-weight:600;">🔊 Audio is playing... Listen carefully.</span>';
+                setTimeout(() => {
+                    if (isPlaying) {
+                        isPlaying = false;
+                        this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
+                        this.classList.remove('playing');
+                        status.innerHTML = '<i class="fas fa-check-circle" style="color:#2e7d32;"></i> <span style="color:#2e7d32;font-weight:600;">✅ Audio finished. You can now answer the questions.</span>';
+                    }
+                }, 30000);
+            } else {
+                status.innerHTML = '<i class="fas fa-info-circle"></i> <span>Click play to hear the recording. You will only hear it once.</span>';
+            }
         });
-        document.getElementById('progressText').textContent = `Question ${answered} of ${total}`;
-        document.getElementById('progressFill').style.width = `${(answered / total) * 100}%`;
     }
 
     // ============================================================
     // TIMER (30 minutes)
     // ============================================================
     let timeLeft = 1800;
-    const timerDisplay = document.getElementById('timerDisplay');
+    let timerInterval = null;
 
-    function updateTimer() {
-        const mins = Math.floor(timeLeft / 60);
-        const secs = timeLeft % 60;
-        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up!');
-            submitTest();
-        }
-        timeLeft--;
+    function startTimer() {
+        const timerDisplay = document.getElementById('timerDisplay');
+        timeLeft = 1800;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('⏰ Time is up!');
+                submitTest();
+            }
+            timeLeft--;
+        }, 1000);
     }
-
-    const timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
-
-    // ============================================================
-    // AUDIO PLAYER
-    // ============================================================
-    let isPlaying = false;
-    document.getElementById('playAudioBtn').addEventListener('click', function() {
-        isPlaying = !isPlaying;
-        this.innerHTML = isPlaying ? '<i class="fas fa-pause"></i> Playing...' : '<i class="fas fa-play"></i> Play Audio';
-        this.classList.toggle('playing');
-        const status = document.getElementById('audioStatus');
-        if (isPlaying) {
-            status.innerHTML = '<i class="fas fa-volume-up"></i> <span style="color:#4A148C;font-weight:600;">🔊 Audio is playing... Listen carefully.</span>';
-            setTimeout(() => {
-                if (isPlaying) {
-                    isPlaying = false;
-                    this.innerHTML = '<i class="fas fa-play"></i> Play Audio';
-                    this.classList.remove('playing');
-                    status.innerHTML = '<i class="fas fa-check-circle" style="color:#2e7d32;"></i> <span style="color:#2e7d32;font-weight:600;">✅ Audio finished. You can now answer the questions.</span>';
-                }
-            }, 30000);
-        } else {
-            status.innerHTML = '<i class="fas fa-info-circle"></i> <span>Click play to hear the recording. You will only hear it once.</span>';
-        }
-    });
 
     // ============================================================
     // SUBMIT TEST
@@ -599,8 +716,8 @@
 
         const resultBox = document.getElementById('resultBox');
         resultBox.classList.add('show');
-
         document.getElementById('scoreDisplay').textContent = score;
+        document.getElementById('totalQuestions').textContent = total;
 
         const feedback = document.getElementById('feedbackText');
         const percentage = (score / total) * 100;
@@ -615,7 +732,6 @@
         }
 
         document.querySelectorAll('input').forEach(input => input.disabled = true);
-        document.querySelector('.btn-primary').disabled = true;
         clearInterval(timerInterval);
 
         const scoreData = {
@@ -630,7 +746,6 @@
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
 
         const saveStatus = document.getElementById('saveStatus');
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
@@ -658,6 +773,7 @@
     // RESET
     // ============================================================
     function resetTest() {
+        clearInterval(timerInterval);
         location.reload();
     }
 
@@ -674,4 +790,4 @@
 </script>
 
 </body>
-                                   </html>
+    </html>
