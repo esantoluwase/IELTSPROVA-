@@ -76,34 +76,7 @@
             background: #fce4ec;
             color: #c62828;
         }
-        .progress-indicator {
-            background: #f3edf7;
-            padding: 0.8rem 1.2rem;
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .progress-indicator .bar {
-            flex: 1;
-            height: 6px;
-            background: #ddd;
-            border-radius: 50px;
-            overflow: hidden;
-            min-width: 100px;
-        }
-        .progress-indicator .bar .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4A148C, #7B1FA2);
-            border-radius: 50px;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
         
-        /* ===== SECTION CARD ===== */
         .section-card {
             background: white;
             border-radius: 20px;
@@ -221,7 +194,6 @@
             border-radius: 16px;
             text-align: center;
             border: 2px dashed #7B1FA2;
-            margin-top: 0.5rem;
         }
         .section-card .section-body .locked-overlay .lock-icon {
             font-size: 2rem;
@@ -373,9 +345,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .question-display {
-            margin-top: 1rem;
-        }
         .question-item {
             background: #faf7ff;
             padding: 1rem 1.5rem;
@@ -392,6 +361,16 @@
             font-size: 0.95rem;
             color: #3d2a4a;
             margin-top: 0.2rem;
+        }
+        .question-item label {
+            display: block;
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .question-item label input {
+            margin-right: 0.5rem;
+            accent-color: #7B1FA2;
         }
 
         @media (max-width: 600px) {
@@ -479,6 +458,28 @@
     let answers = {};
 
     // ============================================================
+    // SAMPLE PASSAGES DATA
+    // ============================================================
+    const freePassages = [
+        { id: 1, title: "The History of Glassmaking", level: "Easy", questions: 20 }
+    ];
+
+    const proPassages = [
+        { id: 2, title: "The Science of Sleep", level: "Medium", questions: 20 },
+        { id: 3, title: "Renewable Energy", level: "Medium", questions: 20 },
+        { id: 4, title: "Cultural Heritage", level: "Medium", questions: 20 },
+        { id: 5, title: "Artificial Intelligence", level: "Hard", questions: 20 },
+        { id: 6, title: "Environmental Conservation", level: "Hard", questions: 20 }
+    ];
+
+    const proPlusPassages = [
+        { id: 7, title: "Space Exploration", level: "Hard", questions: 20 },
+        { id: 8, title: "Genetics and Health", level: "Hard", questions: 20 },
+        { id: 9, title: "Global Economy", level: "Hard", questions: 20 },
+        { id: 10, title: "Urbanization", level: "Hard", questions: 20 }
+    ];
+
+    // ============================================================
     // CHECK LOGIN + LOAD USER PLAN
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
@@ -524,37 +525,11 @@
     }
 
     // ============================================================
-    // RENDER SECTIONS — SHOW LIST OF PASSAGES
+    // RENDER SECTIONS
     // ============================================================
     function renderSections() {
         const container = document.getElementById('sectionsContainer');
         
-        // Get question data
-        const freeQuestions = getQuestions('reading', 'free');
-        const proQuestions = getQuestions('reading', 'pro');
-        const proPlusQuestions = getQuestions('reading', 'proplus');
-
-        // Mock passage data (in real implementation, this comes from questions.js)
-        const freePassages = [
-            { id: 1, title: "The History of Glassmaking", level: "Easy", questions: 20 },
-            // Add more free passages as they're generated
-        ];
-
-        const proPassages = [
-            { id: 2, title: "The Science of Sleep", level: "Medium", questions: 20 },
-            { id: 3, title: "Renewable Energy", level: "Medium", questions: 20 },
-            { id: 4, title: "Cultural Heritage", level: "Medium", questions: 20 },
-            { id: 5, title: "Artificial Intelligence", level: "Hard", questions: 20 },
-            { id: 6, title: "Environmental Conservation", level: "Hard", questions: 20 },
-        ];
-
-        const proPlusPassages = [
-            { id: 7, title: "Space Exploration", level: "Hard", questions: 20 },
-            { id: 8, title: "Genetics and Health", level: "Hard", questions: 20 },
-            { id: 9, title: "Global Economy", level: "Hard", questions: 20 },
-            { id: 10, title: "Urbanization", level: "Hard", questions: 20 },
-        ];
-
         const isPro = userPlan === 'pro' || userPlan === 'proplus';
         const isProPlus = userPlan === 'proplus';
 
@@ -666,21 +641,31 @@
     // START TEST
     // ============================================================
     function startTest() {
-        const allQuestions = getQuestions('reading', userPlan);
-        const limit = userPlan === 'free' ? 20 : userPlan === 'pro' ? 1000 : 2000;
-        const shuffled = shuffleArray(allQuestions);
-        selectedQuestions = shuffled.slice(0, Math.min(limit, shuffled.length));
+        // Generate sample questions for the free passage
+        const sampleQuestions = [];
+        const passage = freePassages[0];
+        
+        for (let i = 1; i <= 20; i++) {
+            sampleQuestions.push({
+                id: i,
+                text: `Sample question ${i} for "${passage.title}"`,
+                options: ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+                answer: "A"
+            });
+        }
+
+        selectedQuestions = shuffleArray(sampleQuestions);
 
         answers = {};
         selectedQuestions.forEach(q => {
             answers[`q${q.id}`] = q.answer;
         });
 
-        // Build the test form
         const container = document.getElementById('sectionsContainer');
         let html = `
-            <div style="margin-bottom:1rem;">
-                <p style="font-weight:600;color:#4A148C;">📝 ${selectedQuestions.length} questions loaded</p>
+            <div style="margin-bottom:1rem;background:#faf7ff;padding:1rem;border-radius:12px;">
+                <p style="font-weight:700;color:#4A148C;">📄 ${passage.title}</p>
+                <p style="font-size:0.9rem;color:#7B6A8A;">${selectedQuestions.length} questions · ${passage.level} level</p>
             </div>
         `;
 
@@ -688,14 +673,14 @@
             const qNum = index + 1;
             const labels = ['A', 'B', 'C', 'D'];
             html += `
-                <div class="question-item" style="border-left-color:#FFD700;">
+                <div class="question-item">
                     <div class="q-number">Question ${qNum}</div>
-                    <div class="q-text">${q.text || 'Question'}</div>
+                    <div class="q-text">${q.text}</div>
                     <div style="margin-top:0.3rem;">
                         ${q.options.map((opt, i) => `
-                            <label style="display:block;padding:0.2rem 0;font-size:0.9rem;cursor:pointer;">
+                            <label>
                                 <input type="radio" name="q${q.id}" value="${labels[i]}" />
-                                ${labels[i]}) ${opt}
+                                ${opt}
                             </label>
                         `).join('')}
                     </div>
@@ -711,13 +696,11 @@
         `;
 
         container.innerHTML = html;
-
-        // Start timer
         startTimer();
     }
 
     // ============================================================
-    // TIMER (15 minutes)
+    // TIMER
     // ============================================================
     let timeLeft = 900;
     let timerInterval = null;
@@ -773,7 +756,6 @@
         document.querySelectorAll('input').forEach(input => input.disabled = true);
         clearInterval(timerInterval);
 
-        // Save score
         const scoreData = {
             module: 'reading',
             score: score,
@@ -817,9 +799,6 @@
         location.reload();
     }
 
-    // ============================================================
-    // SHUFFLE HELPER
-    // ============================================================
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
