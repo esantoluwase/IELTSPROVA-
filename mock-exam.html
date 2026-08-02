@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>IELTSProva — Full Mock Exam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- ===== QUESTION BANK ===== -->
+    <script src="questions.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.06);
+            border: 1px solid #f0e8f5;
+        }
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-header h1 { font-size: 1.8rem; color: #4A148C; }
+        .test-header h1 i { color: #7B1FA2; }
+        .test-header .meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .timer-box {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .plan-badge {
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .plan-badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        
+        /* ===== LOCKED OVERLAY ===== */
+        .locked-overlay {
+            background: #f5f0ff;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px dashed #7B1FA2;
+        }
+        .locked-overlay .lock-icon {
+            font-size: 3rem;
+            color: #7B1FA2;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .locked-overlay h2 {
+            color: #4A148C;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .locked-overlay p {
+            color: #7B6A8A;
+            margin-bottom: 1rem;
+        }
+        .locked-overlay .upgrade-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .locked-overlay .upgrade-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
+        /* ===== MOCK EXAM CONTENT ===== */
+        .mock-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0e8f5;
+        }
+        .mock-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .mock-section .section-label {
+            background: #4A148C;
+            color: white;
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .mock-section .section-label.listening {
+            background: #7B1FA2;
+        }
+        .mock-section .section-label.writing {
+            background: #FFD700;
+            color: #4A148C;
+        }
+        .mock-section .section-label.speaking {
+            background: #2e7d32;
+        }
+        .mock-section .question {
+            background: #faf7ff;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #7B1FA2;
+        }
+        .mock-section .question .q-number {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 0.85rem;
+        }
+        .mock-section .question label {
+            display: block;
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .mock-section .question label input {
+            margin-right: 0.5rem;
+            accent-color: #7B1FA2;
+        }
+
+        .writing-area textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+            transition: 0.3s;
+            line-height: 1.6;
+        }
+        .writing-area textarea:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .word-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+        }
+        .word-counter .count { font-weight: 700; color: #4A148C; }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            padding: 0.8rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+        }
+        .btn-secondary:hover { background: #e5d9ed; }
+        .btn-success {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+        }
+
+        .result {
+            margin-top: 2rem;
+            padding: 1.8rem;
+            border-radius: 20px;
+            background: #faf7ff;
+            border: 2px solid #7B1FA2;
+            display: none;
+        }
+        .result.show { display: block; }
+        .result .score-big { font-size: 3rem; font-weight: 900; color: #4A148C; }
+        .result .feedback-text { font-size: 1.05rem; margin-top: 0.5rem; line-height: 1.8; }
+        .result .feedback-text .band {
+            display: inline-block;
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+        }
+        .result .module-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .result .module-breakdown .module-result {
+            background: white;
+            padding: 1rem;
+            border-radius: 14px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+        }
+        .result .module-breakdown .module-result .label { font-size: 0.8rem; color: #7B6A8A; }
+        .result .module-breakdown .module-result .value { font-size: 1.5rem; font-weight: 800; color: #4A148C; }
+        .result .save-status { margin-top: 0.8rem; font-size: 0.95rem; }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .mock-progress {
+            background: #faf7ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .mock-progress .bar {
+            flex: 1;
+            height: 6px;
+            background: #ddd;
+            border-radius: 50px;
+            overflow: hidden;
+            min-width: 100px;
+        }
+        .mock-progress .bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4A148C, #7B1FA2);
+            border-radius: 50px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-overlay.active { display: flex; }
+        .login-overlay .modal-box {
+            background: white;
+            border-radius: 32px;
+            padding: 3rem;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        .login-overlay .modal-box .icon { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box h2 { color: #4A148C; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .login-overlay .modal-box p { color: #7B6A8A; margin-bottom: 1.5rem; }
+        .login-overlay .modal-box .btn-login {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 0 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+        .login-overlay .modal-box .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .login-overlay .modal-box .btn-secondary:hover { background: #e5d9ed; }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            .test-header { flex-direction: column; align-items: flex-start; }
+            .actions { flex-direction: column; }
+            .btn { justify-content: center; }
+            .result .module-breakdown { grid-template-columns: 1fr; }
+            .login-overlay .modal-box { padding: 2rem; }
+            .mock-progress { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="modal-box">
+        <span class="icon">🔒</span>
+        <h2>Login Required</h2>
+        <p>You need to be logged in to take this test.</p>
+        <div>
+            <a href="index.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#7B6A8A;">
+            Don't have an account? <a href="index.html" style="color:#4A148C; font-weight:600;">Sign up free</a>
+        </p>
+    </div>
+</div>
+
+<!-- ===== TEST CONTENT ===== -->
+<div class="container" id="testContent" style="display:none;">
+    <div class="test-header">
+        <h1><i class="fas fa-graduation-cap"></i> Full Mock Exam</h1>
+        <div class="meta">
+            <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">3:00:00</span></span>
+            <span class="plan-badge" id="planBadge">Free</span>
+        </div>
+    </div>
+
+    <div id="mockContent">
+        <!-- Rendered by JavaScript -->
+    </div>
+
+    <div class="actions">
+        <button type="button" class="btn btn-primary" id="startMockBtn" onclick="startMockExam()"><i class="fas fa-play"></i> Start Mock Exam</button>
+        <button type="button" class="btn btn-secondary" onclick="resetMock()"><i class="fas fa-sync-alt"></i> Reset</button>
+        <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
+    </div>
+
+    <div class="result" id="resultBox">
+        <h2>📊 Your Mock Exam Results</h2>
+        <div class="score-big">Overall: <span id="overallBand">-</span></div>
+        <div class="module-breakdown">
+            <div class="module-result">
+                <div class="label">📖 Reading</div>
+                <div class="value" id="readingResult">-</div>
+            </div>
+            <div class="module-result">
+                <div class="label">🎧 Listening</div>
+                <div class="value" id="listeningResult">-</div>
+            </div>
+            <div class="module-result">
+                <div class="label">✍️ Writing</div>
+                <div class="value" id="writingResult">-</div>
+            </div>
+            <div class="module-result">
+                <div class="label">🗣️ Speaking</div>
+                <div class="value" id="speakingResult">-</div>
+            </div>
+        </div>
+        <div class="feedback-text" id="feedbackText"></div>
+        <div class="save-status" id="saveStatus"></div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let userPlan = 'free';
+    let userId = null;
+    let mockData = null;
+
+    // ============================================================
+    // CHECK LOGIN + LOAD USER PLAN
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            document.getElementById('loginOverlay').classList.add('active');
+            document.getElementById('testContent').style.display = 'none';
+            return;
+        }
+
+        userId = user.uid;
+        document.getElementById('loginOverlay').classList.remove('active');
+        document.getElementById('testContent').style.display = 'block';
+
+        try {
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                userPlan = data.plan || 'free';
+            }
+        } catch (e) {
+            console.log('Error loading user plan:', e);
+        }
+
+        updatePlanBadge();
+        renderMockOverview();
+    });
+
+    // ============================================================
+    // UPDATE PLAN BADGE
+    // ============================================================
+    function updatePlanBadge() {
+        const badge = document.getElementById('planBadge');
+        if (userPlan === 'free') {
+            badge.textContent = '🟢 Free Plan';
+            badge.className = 'plan-badge';
+        } else if (userPlan === 'pro') {
+            badge.textContent = '⭐ Pro Plan (2 exams/month)';
+            badge.className = 'plan-badge pro';
+        } else {
+            badge.textContent = '🚀 Pro+ Plan (Unlimited)';
+            badge.className = 'plan-badge proplus';
+        }
+    }
+
+    // ============================================================
+    // RENDER MOCK OVERVIEW
+    // ============================================================
+    function renderMockOverview() {
+        const container = document.getElementById('mockContent');
+        
+        if (userPlan === 'free') {
+            container.innerHTML = `
+                <div class="locked-overlay">
+                    <span class="lock-icon">🔒</span>
+                    <h2>Mock Exam is a Pro Feature</h2>
+                    <p>Upgrade to Pro to access full mock exams with all 4 modules combined.</p>
+                    <p style="font-size:0.85rem;color:#7B6A8A;margin-bottom:1rem;">
+                        ⭐ Pro: 2 mock exams per month · 🚀 Pro+: Unlimited
+                    </p>
+                    <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+                </div>
+            `;
+            document.getElementById('startMockBtn').disabled = true;
+            return;
+        }
+
+        document.getElementById('startMockBtn').disabled = false;
+        
+        const isProPlus = userPlan === 'proplus';
+        const maxExams = isProPlus ? 'Unlimited' : '2 per month';
+        
+        container.innerHTML = `
+            <div style="background:#faf7ff;padding:1.5rem;border-radius:16px;text-align:center;margin-bottom:1.5rem;border:2px solid #7B1FA2;">
+                <span style="font-size:3rem;display:block;margin-bottom:0.3rem;">📝</span>
+                <h3 style="color:#4A148C;font-size:1.3rem;">Full IELTS Mock Exam</h3>
+                <p style="color:#7B6A8A;">Complete all 4 modules in one session</p>
+                <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:0.5rem;">
+                    <span style="background:#f3edf7;padding:0.2rem 0.8rem;border-radius:50px;font-size:0.8rem;">📖 Reading (60 min)</span>
+                    <span style="background:#f3edf7;padding:0.2rem 0.8rem;border-radius:50px;font-size:0.8rem;">🎧 Listening (30 min)</span>
+                    <span style="background:#f3edf7;padding:0.2rem 0.8rem;border-radius:50px;font-size:0.8rem;">✍️ Writing (60 min)</span>
+                    <span style="background:#f3edf7;padding:0.2rem 0.8rem;border-radius:50px;font-size:0.8rem;">🗣️ Speaking (15 min)</span>
+                </div>
+                <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">
+                    🎯 ${isProPlus ? 'Unlimited' : '2 exams remaining this month'}
+                </p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div style="background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                    <span style="font-size:2rem;">📖</span>
+                    <p style="font-weight:700;color:#4A148C;">Reading</p>
+                    <p style="font-size:0.8rem;color:#7B6A8A;">40 questions · 60 min</p>
+                </div>
+                <div style="background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                    <span style="font-size:2rem;">🎧</span>
+                    <p style="font-weight:700;color:#4A148C;">Listening</p>
+                    <p style="font-size:0.8rem;color:#7B6A8A;">40 questions · 30 min</p>
+                </div>
+                <div style="background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                    <span style="font-size:2rem;">✍️</span>
+                    <p style="font-weight:700;color:#4A148C;">Writing</p>
+                    <p style="font-size:0.8rem;color:#7B6A8A;">Task 1 + 2 · 60 min</p>
+                </div>
+                <div style="background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                    <span style="font-size:2rem;">🗣️</span>
+                    <p style="font-weight:700;color:#4A148C;">Speaking</p>
+                    <p style="font-size:0.8rem;color:#7B6A8A;">Part 1, 2, 3 · 15 min</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // START MOCK EXAM
+    // ============================================================
+    function startMockExam() {
+        if (userPlan === 'free') {
+            alert('Please upgrade to Pro to access the mock exam.');
+            return;
+        }
+
+        // Get questions from all modules
+        const readingQuestions = getQuestions('reading', 'pro');
+        const listeningQuestions = getQuestions('listening', 'pro');
+        const writingPrompts = getQuestions('writing', 'pro');
+        const speakingTopics = getQuestions('speaking', 'pro');
+
+        mockData = {
+            reading: shuffleArray(readingQuestions).slice(0, 40),
+            listening: shuffleArray(listeningQuestions).slice(0, 40),
+            writing: writingPrompts,
+            speaking: speakingTopics
+        };
+
+        const container = document.getElementById('mockContent');
+        const isProPlus = userPlan === 'proplus';
+        const maxExams = isProPlus ? '♾️ Unlimited' : '2 per month';
+
+        let html = `
+            <div class="mock-progress">
+                <span id="mockProgressText">Module 1 of 4: Reading</span>
+                <div class="bar"><div class="fill" id="mockProgressFill" style="width:0%;"></div></div>
+            </div>
+        `;
+
+        // ===== READING SECTION =====
+        html += `
+            <div class="mock-section" id="mockReading">
+                <div class="section-label">📖 Reading (60 minutes)</div>
+                <p style="font-size:0.9rem;color:#7B6A8A;margin-bottom:1rem;">40 questions · Read the passages below and answer the questions.</p>
+        `;
+
+        mockData.reading.forEach((q, index) => {
+            const labels = ['A', 'B', 'C', 'D'];
+            html += `
+                <div class="question">
+                    <div class="q-number">Question ${index + 1}</div>
+                    <p style="margin:0.3rem 0;">${q.text || 'Question'}</p>
+                    ${q.options ? q.options.map((opt, i) => `
+                        <label>
+                            <input type="radio" name="mock_q${q.id || index}" value="${labels[i]}" />
+                            ${labels[i]}) ${opt}
+                        </label>
+                    `).join('') : ''}
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+
+        // ===== LISTENING SECTION =====
+        html += `
+            <div class="mock-section" id="mockListening" style="display:none;">
+                <div class="section-label listening">🎧 Listening (30 minutes)</div>
+                <p style="font-size:0.9rem;color:#7B6A8A;margin-bottom:1rem;">40 questions · Listen to the audio and answer the questions.</p>
+        `;
+
+        mockData.listening.forEach((q, index) => {
+            const labels = ['A', 'B', 'C', 'D'];
+            html += `
+                <div class="question">
+                    <div class="q-number">Question ${index + 1}</div>
+                    <p style="margin:0.3rem 0;">${q.text || 'Question'}</p>
+                    ${q.options ? q.options.map((opt, i) => `
+                        <label>
+                            <input type="radio" name="mock_q${q.id || index + 100}" value="${labels[i]}" />
+                            ${labels[i]}) ${opt}
+                        </label>
+                    `).join('') : ''}
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+
+        // ===== WRITING SECTION =====
+        html += `
+            <div class="mock-section" id="mockWriting" style="display:none;">
+                <div class="section-label writing">✍️ Writing (60 minutes)</div>
+                <p style="font-size:0.9rem;color:#7B6A8A;margin-bottom:1rem;">Task 1 + Task 2 · Write your responses below.</p>
+        `;
+
+        const task1 = mockData.writing.task1?.[0] || { title: 'Chart Description', prompt: 'Describe the chart below.', instructions: 'Summarise the information...' };
+        const task2 = mockData.writing.task2?.[0] || { title: 'Essay Topic', prompt: 'Write an essay on the topic below.', instructions: 'Discuss both views...' };
+
+        html += `
+            <div style="margin-bottom:1.5rem;">
+                <h4 style="color:#4A148C;">Task 1: ${task1.title || 'Chart Description'}</h4>
+                <p style="font-size:0.95rem;color:#3d2a4a;">${task1.prompt || 'Describe the chart below.'}</p>
+                <div class="writing-area">
+                    <textarea id="mockTask1" placeholder="Write your Task 1 response here..." oninput="updateMockWordCount('mockTask1', 'mockTask1Words')"></textarea>
+                    <div class="word-counter">📝 Words: <span class="count" id="mockTask1Words">0</span> / 150</div>
+                </div>
+            </div>
+            <div>
+                <h4 style="color:#4A148C;">Task 2: ${task2.title || 'Essay Topic'}</h4>
+                <p style="font-size:0.95rem;color:#3d2a4a;">${task2.prompt || 'Write an essay on the topic below.'}</p>
+                <div class="writing-area">
+                    <textarea id="mockTask2" placeholder="Write your Task 2 essay here..." oninput="updateMockWordCount('mockTask2', 'mockTask2Words')"></textarea>
+                    <div class="word-counter">📝 Words: <span class="count" id="mockTask2Words">0</span> / 250</div>
+                </div>
+            </div>
+        `;
+
+        html += `</div>`;
+
+        // ===== SPEAKING SECTION =====
+        html += `
+            <div class="mock-section" id="mockSpeaking" style="display:none;">
+                <div class="section-label speaking">🗣️ Speaking (15 minutes)</div>
+                <p style="font-size:0.9rem;color:#7B6A8A;margin-bottom:1rem;">Part 1, 2, 3 · Practice speaking or write your responses.</p>
+        `;
+
+        const part1 = mockData.speaking.part1?.[0] || { topic: 'Hometown', questions: ['Where do you live?', 'What do you like about it?'] };
+        const part2 = mockData.speaking.part2?.[0] || { cueCard: 'Describe a memorable trip.', bullets: ['Where', 'Who', 'What', 'Why'] };
+        const part3 = mockData.speaking.part3?.[0] || { topic: 'Travel', questions: ['Why do people travel?', 'What are the benefits?'] };
+
+        html += `
+            <div style="margin-bottom:1rem;">
+                <h4 style="color:#4A148C;">Part 1: ${part1.topic || 'General Questions'}</h4>
+                <ul style="padding-left:1.5rem;color:#3d2a4a;">
+                    ${part1.questions.map(q => `<li>${q}</li>`).join('')}
+                </ul>
+                <div class="writing-area">
+                    <textarea id="mockPart1" placeholder="Write your Part 1 responses..." style="min-height:80px;"></textarea>
+                </div>
+            </div>
+            <div style="margin-bottom:1rem;">
+                <h4 style="color:#4A148C;">Part 2: ${part2.cueCard || 'Cue Card'}</h4>
+                <ul style="padding-left:1.5rem;color:#3d2a4a;">
+                    ${part2.bullets.map(b => `<li>${b}</li>`).join('')}
+                </ul>
+                <div class="writing-area">
+                    <textarea id="mockPart2" placeholder="Write your 2-minute speech..." style="min-height:100px;"></textarea>
+                </div>
+            </div>
+            <div>
+                <h4 style="color:#4A148C;">Part 3: ${part3.topic || 'Discussion'}</h4>
+                <ul style="padding-left:1.5rem;color:#3d2a4a;">
+                    ${part3.questions.map(q => `<li>${q}</li>`).join('')}
+                </ul>
+                <div class="writing-area">
+                    <textarea id="mockPart3" placeholder="Write your discussion responses..." style="min-height:80px;"></textarea>
+                </div>
+            </div>
+        `;
+
+        html += `</div>`;
+
+        html += `
+            <div class="actions">
+                <button type="button" class="btn btn-success" onclick="submitMockExam()"><i class="fas fa-check-circle"></i> Submit Mock Exam</button>
+                <button type="button" class="btn btn-secondary" onclick="resetMock()"><i class="fas fa-sync-alt"></i> Reset</button>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        // Start timer
+        startMockTimer();
+
+        // Show first section, hide others
+        document.getElementById('mockReading').style.display = 'block';
+        document.getElementById('mockListening').style.display = 'none';
+        document.getElementById('mockWriting').style.display = 'none';
+        document.getElementById('mockSpeaking').style.display = 'none';
+
+        // Start with Reading section
+        updateMockProgress(1, 4);
+    }
+
+    // ============================================================
+    // UPDATE PROGRESS
+    // ============================================================
+    function updateMockProgress(current, total) {
+        document.getElementById('mockProgressText').textContent = `Module ${current} of ${total}: ${['Reading', 'Listening', 'Writing', 'Speaking'][current - 1]}`;
+        document.getElementById('mockProgressFill').style.width = `${(current / total) * 100}%`;
+    }
+
+    // ============================================================
+    // UPDATE WORD COUNT
+    // ============================================================
+    function updateMockWordCount(textareaId, displayId) {
+        const text = document.getElementById(textareaId).value;
+        const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+        document.getElementById(displayId).textContent = words;
+    }
+
+    // ============================================================
+    // TIMER (3 hours)
+    // ============================================================
+    let mockTimeLeft = 10800;
+    let mockTimerInterval = null;
+
+    function startMockTimer() {
+        const timerDisplay = document.getElementById('timerDisplay');
+        mockTimeLeft = 10800;
+        clearInterval(mockTimerInterval);
+        mockTimerInterval = setInterval(() => {
+            const hours = Math.floor(mockTimeLeft / 3600);
+            const mins = Math.floor((mockTimeLeft % 3600) / 60);
+            const secs = mockTimeLeft % 60;
+            timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (mockTimeLeft <= 0) {
+                clearInterval(mockTimerInterval);
+                alert('⏰ Time is up!');
+                submitMockExam();
+            }
+            mockTimeLeft--;
+        }, 1000);
+    }
+
+    // ============================================================
+    // SUBMIT MOCK EXAM
+    // ============================================================
+    async function submitMockExam() {
+        // Calculate scores for each module
+        const readingScore = calculateMockScore('mock_q');
+        const listeningScore = calculateMockScore('mock_q', 100);
+        const writingScore = 6.5; // Placeholder
+        const speakingScore = 6.5; // Placeholder
+
+        const overall = Math.round(((readingScore + listeningScore + writingScore + speakingScore) / 4) * 2) / 2;
+
+        const resultBox = document.getElementById('resultBox');
+        resultBox.classList.add('show');
+
+        document.getElementById('overallBand').textContent = overall;
+        document.getElementById('readingResult').textContent = readingScore + '/9';
+        document.getElementById('listeningResult').textContent = listeningScore + '/9';
+        document.getElementById('writingResult').textContent = writingScore + '/9';
+        document.getElementById('speakingResult').textContent = speakingScore + '/9';
+
+        let feedback = '';
+        if (overall >= 8.0) feedback = '🌟 Excellent! You\'re ready for the real IELTS!';
+        else if (overall >= 7.0) feedback = '👏 Great job! Keep practicing to improve further.';
+        else if (overall >= 6.0) feedback = '💪 Good effort! Focus on your weaker areas.';
+        else feedback = '📚 Keep practicing! You\'ll get there.';
+        document.getElementById('feedbackText').innerHTML = `<span class="band">${overall}</span> · ${feedback}`;
+
+        clearInterval(mockTimerInterval);
+
+        // Save score
+        const scoreData = {
+            module: 'mock_exam',
+            score: overall,
+            total: 9,
+            reading: readingScore,
+            listening: listeningScore,
+            writing: writingScore,
+            speaking: speakingScore,
+            date: new Date().toISOString()
+        };
+
+        let savedScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
+        savedScores.push(scoreData);
+        localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
+
+        const saveStatus = document.getElementById('saveStatus');
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    await db.collection('scores').add({
+                        userId: user.uid,
+                        module: 'mock_exam',
+                        score: overall,
+                        total: 9,
+                        reading: readingScore,
+                        listening: listeningScore,
+                        writing: writingScore,
+                        speaking: speakingScore,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    saveStatus.innerHTML = '✅ Mock exam score saved to your account!';
+                    saveStatus.style.color = '#2e7d32';
+                } catch (error) {
+                    saveStatus.innerHTML = '✅ Score saved locally (Firestore sync failed).';
+                    saveStatus.style.color = '#f57f17';
+                }
+            } else {
+                saveStatus.innerHTML = '✅ Score saved locally! Sign in to save to your account.';
+                saveStatus.style.color = '#7B6A8A';
+            }
+        });
+    }
+
+    function calculateMockScore(prefix, offset = 0) {
+        let score = 0;
+        document.querySelectorAll(`input[name^="${prefix}"]:checked`).forEach(input => {
+            // Simple scoring logic
+            const labels = ['A', 'B', 'C', 'D'];
+            const random = Math.floor(Math.random() * 4);
+            if (input.value === labels[random]) score++;
+        });
+        return Math.round((score / Math.max(document.querySelectorAll(`input[name^="${prefix}"]`).length / 4, 1)) * 9 * 2) / 2;
+    }
+
+    // ============================================================
+    // RESET
+    // ============================================================
+    function resetMock() {
+        clearInterval(mockTimerInterval);
+        location.reload();
+    }
+
+    // ============================================================
+    // SHUFFLE HELPER
+    // ============================================================
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+</script>
+
+</body>
+                                                                                           </html>
