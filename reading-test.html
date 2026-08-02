@@ -130,7 +130,6 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 0.5rem;
-            cursor: pointer;
         }
         .section-card .section-header .title {
             font-weight: 700;
@@ -171,13 +170,50 @@
             color: #c62828;
             font-weight: 700;
         }
-        .section-card .section-body .question-preview {
-            font-size: 0.9rem;
-            color: #3d2a4a;
+        .section-card .section-body .passage-list {
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .passage-item {
             background: #faf7ff;
             padding: 0.8rem 1rem;
             border-radius: 12px;
-            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            border-left: 4px solid #7B1FA2;
+        }
+        .section-card .section-body .passage-item .p-title {
+            font-weight: 600;
+            color: #4A148C;
+            font-size: 0.95rem;
+        }
+        .section-card .section-body .passage-item .p-questions {
+            font-size: 0.8rem;
+            color: #7B6A8A;
+            background: #f3edf7;
+            padding: 0.1rem 0.6rem;
+            border-radius: 50px;
+        }
+        .section-card .section-body .passage-item .p-level {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.1rem 0.6rem;
+            border-radius: 50px;
+        }
+        .section-card .section-body .passage-item .p-level.easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .section-card .section-body .passage-item .p-level.medium {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .section-card .section-body .passage-item .p-level.hard {
+            background: #fce4ec;
+            color: #c62828;
         }
         .section-card .section-body .locked-overlay {
             background: #f5f0ff;
@@ -366,6 +402,7 @@
             .actions { flex-direction: column; }
             .btn { justify-content: center; }
             .login-overlay .modal-box { padding: 2rem; }
+            .section-card .section-body .passage-item { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -487,75 +524,98 @@
     }
 
     // ============================================================
-    // RENDER SECTIONS
+    // RENDER SECTIONS — SHOW LIST OF PASSAGES
     // ============================================================
     function renderSections() {
         const container = document.getElementById('sectionsContainer');
-        const allQuestions = getQuestions('reading', userPlan);
-        const total = allQuestions.length;
+        
+        // Get question data
+        const freeQuestions = getQuestions('reading', 'free');
+        const proQuestions = getQuestions('reading', 'pro');
+        const proPlusQuestions = getQuestions('reading', 'proplus');
+
+        // Mock passage data (in real implementation, this comes from questions.js)
+        const freePassages = [
+            { id: 1, title: "The History of Glassmaking", level: "Easy", questions: 20 },
+            // Add more free passages as they're generated
+        ];
+
+        const proPassages = [
+            { id: 2, title: "The Science of Sleep", level: "Medium", questions: 20 },
+            { id: 3, title: "Renewable Energy", level: "Medium", questions: 20 },
+            { id: 4, title: "Cultural Heritage", level: "Medium", questions: 20 },
+            { id: 5, title: "Artificial Intelligence", level: "Hard", questions: 20 },
+            { id: 6, title: "Environmental Conservation", level: "Hard", questions: 20 },
+        ];
+
+        const proPlusPassages = [
+            { id: 7, title: "Space Exploration", level: "Hard", questions: 20 },
+            { id: 8, title: "Genetics and Health", level: "Hard", questions: 20 },
+            { id: 9, title: "Global Economy", level: "Hard", questions: 20 },
+            { id: 10, title: "Urbanization", level: "Hard", questions: 20 },
+        ];
+
+        const isPro = userPlan === 'pro' || userPlan === 'proplus';
+        const isProPlus = userPlan === 'proplus';
 
         let html = '';
 
-        // Show how many questions are available
-        const freeCount = getQuestionCount('reading', 'free');
-        const proCount = getQuestionCount('reading', 'pro');
-        const proPlusCount = getQuestionCount('reading', 'proplus');
-
-        // FREE SECTION (Always visible)
-        const freeQuestions = shuffleArray(allQuestions.slice(0, Math.min(20, freeCount)));
+        // ===== FREE SECTION =====
         html += `
             <div class="section-card">
                 <div class="section-header">
                     <span class="title">🟢 Free Access</span>
-                    <span class="badge free">Free — ${freeQuestions.length} Questions</span>
+                    <span class="badge free">${freePassages.length} Passages · ${freePassages.length * 20} Questions</span>
                 </div>
                 <div class="section-body">
                     <div class="question-count">
-                        📊 <span class="available">${freeQuestions.length}</span> / ${freeCount} free questions available
+                        📊 <span class="available">${freePassages.length}</span> passages available for free
                     </div>
-                    <div class="question-preview">
-                        ${freeQuestions.slice(0, 3).map(q => `
-                            <div class="question-item">
-                                <div class="q-number">Q${q.id || '?'}</div>
-                                <div class="q-text">${q.text || 'Question'}</div>
+                    <div class="passage-list">
+                        ${freePassages.map(p => `
+                            <div class="passage-item">
+                                <span class="p-title">${p.title}</span>
+                                <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                                    <span class="p-level ${p.level.toLowerCase()}">${p.level}</span>
+                                    <span class="p-questions">${p.questions} Questions</span>
+                                </div>
                             </div>
                         `).join('')}
-                        ${freeQuestions.length > 3 ? `<div style="color:#7B6A8A;font-size:0.85rem;margin-top:0.3rem;">+ ${freeQuestions.length - 3} more questions...</div>` : ''}
                     </div>
-                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.5rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
+                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.8rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
                         <i class="fas fa-play"></i> Start Free Test
                     </button>
                 </div>
             </div>
         `;
 
-        // PRO SECTION (Locked for Free users)
-        const proQuestions = allQuestions.slice(0, Math.min(proCount, 1000));
-        const isPro = userPlan === 'pro' || userPlan === 'proplus';
+        // ===== PRO SECTION =====
         html += `
             <div class="section-card ${isPro ? '' : 'locked'}">
                 <div class="section-header">
                     <span class="title">⭐ Pro Access</span>
-                    <span class="badge pro">${isPro ? `${proQuestions.length} Questions` : '🔒 Locked'}</span>
+                    <span class="badge pro">${isPro ? `${proPassages.length} Passages · ${proPassages.length * 20} Questions` : '🔒 Locked'}</span>
                 </div>
                 <div class="section-body">
                     <div class="question-count">
-                        📊 <span class="${isPro ? 'available' : 'locked'}">${isPro ? proQuestions.length : '🔒'}</span> / ${proCount} pro questions available
+                        📊 <span class="${isPro ? 'available' : 'locked'}">${isPro ? proPassages.length : '🔒'}</span> pro passages available
                     </div>
                     ${isPro ? `
-                        <div class="question-preview">
-                            ${proQuestions.slice(0, 3).map(q => `
-                                <div class="question-item">
-                                    <div class="q-number">Q${q.id || '?'}</div>
-                                    <div class="q-text">${q.text || 'Question'}</div>
+                        <div class="passage-list">
+                            ${proPassages.map(p => `
+                                <div class="passage-item">
+                                    <span class="p-title">${p.title}</span>
+                                    <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                                        <span class="p-level ${p.level.toLowerCase()}">${p.level}</span>
+                                        <span class="p-questions">${p.questions} Questions</span>
+                                    </div>
                                 </div>
                             `).join('')}
-                            ${proQuestions.length > 3 ? `<div style="color:#7B6A8A;font-size:0.85rem;margin-top:0.3rem;">+ ${proQuestions.length - 3} more questions...</div>` : ''}
                         </div>
                     ` : `
                         <div class="locked-overlay">
                             <span class="lock-icon">🔒</span>
-                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro to unlock 1,000+ questions</p>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro to unlock 50+ reading passages</p>
                             <p style="font-size:0.85rem;color:#7B6A8A;">Get full access to all reading passages</p>
                             <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
                         </div>
@@ -564,33 +624,33 @@
             </div>
         `;
 
-        // PRO+ SECTION (Locked for Free and Pro users)
-        const proPlusQuestions = allQuestions.slice(0, Math.min(proPlusCount, 2000));
-        const isProPlus = userPlan === 'proplus';
+        // ===== PRO+ SECTION =====
         html += `
             <div class="section-card ${isProPlus ? '' : 'locked'}">
                 <div class="section-header">
                     <span class="title">🚀 Pro+ Access</span>
-                    <span class="badge proplus">${isProPlus ? `${proPlusQuestions.length} Questions` : '🔒 Locked'}</span>
+                    <span class="badge proplus">${isProPlus ? `${proPlusPassages.length} Passages · ${proPlusPassages.length * 20} Questions` : '🔒 Locked'}</span>
                 </div>
                 <div class="section-body">
                     <div class="question-count">
-                        📊 <span class="${isProPlus ? 'available' : 'locked'}">${isProPlus ? proPlusQuestions.length : '🔒'}</span> / ${proPlusCount} pro+ questions available
+                        📊 <span class="${isProPlus ? 'available' : 'locked'}">${isProPlus ? proPlusPassages.length : '🔒'}</span> pro+ passages available
                     </div>
                     ${isProPlus ? `
-                        <div class="question-preview">
-                            ${proPlusQuestions.slice(0, 3).map(q => `
-                                <div class="question-item">
-                                    <div class="q-number">Q${q.id || '?'}</div>
-                                    <div class="q-text">${q.text || 'Question'}</div>
+                        <div class="passage-list">
+                            ${proPlusPassages.map(p => `
+                                <div class="passage-item">
+                                    <span class="p-title">${p.title}</span>
+                                    <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                                        <span class="p-level ${p.level.toLowerCase()}">${p.level}</span>
+                                        <span class="p-questions">${p.questions} Questions</span>
+                                    </div>
                                 </div>
                             `).join('')}
-                            ${proPlusQuestions.length > 3 ? `<div style="color:#7B6A8A;font-size:0.85rem;margin-top:0.3rem;">+ ${proPlusQuestions.length - 3} more questions...</div>` : ''}
                         </div>
                     ` : `
                         <div class="locked-overlay">
                             <span class="lock-icon">🚀</span>
-                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 2,000+ questions</p>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 100+ reading passages</p>
                             <p style="font-size:0.85rem;color:#7B6A8A;">Get unlimited access + AI feedback</p>
                             <a href="checkout.html" class="upgrade-link">🚀 Upgrade to Pro+</a>
                         </div>
@@ -770,4 +830,4 @@
 </script>
 
 </body>
-    </html> 
+    </html>
