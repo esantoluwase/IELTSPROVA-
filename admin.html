@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>Admin Panel — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+        .admin-header h1 span { color: #FFD700; }
+        .admin-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .admin-header .user-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+        }
+        .stat-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+        .stat-card .stat-label {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+        }
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        .table-container h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th {
+            text-align: left;
+            padding: 0.8rem 0.5rem;
+            font-weight: 700;
+            color: #4A148C;
+            border-bottom: 2px solid #f0e8f5;
+        }
+        table td {
+            padding: 0.8rem 0.5rem;
+            border-bottom: 1px solid #f0e8f5;
+            font-size: 0.9rem;
+            color: #3d2a4a;
+        }
+        table tr:hover td {
+            background: #faf7ff;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .badge.free { background: #e8f5e9; color: #2e7d32; }
+        .badge.pro { background: #fff8e1; color: #f57f17; }
+        .badge.proplus { background: #fce4ec; color: #c62828; }
+
+        .btn {
+            padding: 0.4rem 1.2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+        .btn-danger {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .btn-danger:hover {
+            background: #f44336;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #7B6A8A;
+        }
+        .loading i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .admin-header { flex-direction: column; align-items: flex-start; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            table { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== ADMIN HEADER ===== -->
+    <div class="admin-header">
+        <h1>🔐 Admin <span>Panel</span></h1>
+        <div class="user-info" id="userInfo">
+            <div class="avatar" id="userAvatar">A</div>
+            <div>
+                <strong id="userName">Admin</strong>
+                <span style="font-size:0.7rem;color:#7B6A8A;">⭐ Super Admin</span>
+            </div>
+            <button class="btn btn-danger" onclick="logoutUser()" style="padding:0.3rem 1rem;font-size:0.75rem;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== LOADING ===== -->
+    <div id="loadingMessage" class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading admin data...
+    </div>
+
+    <!-- ===== ADMIN CONTENT ===== -->
+    <div id="adminContent" style="display:none;">
+
+        <!-- ===== STATS ===== -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <div class="stat-number" id="totalUsers">0</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <div class="stat-number" id="proUsers">0</div>
+                <div class="stat-label">Pro Users</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🚀</span>
+                <div class="stat-number" id="proPlusUsers">0</div>
+                <div class="stat-label">Pro+ Users</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📝</span>
+                <div class="stat-number" id="totalScores">0</div>
+                <div class="stat-label">Total Tests Taken</div>
+            </div>
+        </div>
+
+        <!-- ===== USERS TABLE ===== -->
+        <div class="table-container">
+            <h2>👥 Users</h2>
+            <div style="overflow-x:auto;">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Plan</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersBody">
+                        <tr><td colspan="5" style="text-align:center;color:#7B6A8A;">Loading users...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== SCORES TABLE ===== -->
+        <div class="table-container">
+            <h2>📊 Recent Scores</h2>
+            <div style="overflow-x:auto;">
+                <table id="scoresTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Module</th>
+                            <th>Score</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoresBody">
+                        <tr><td colspan="5" style="text-align:center;color:#7B6A8A;">Loading scores...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== PAYMENTS TABLE ===== -->
+        <div class="table-container">
+            <h2>💳 Recent Payments</h2>
+            <div style="overflow-x:auto;">
+                <table id="paymentsTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Plan</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsBody">
+                        <tr><td colspan="4" style="text-align:center;color:#7B6A8A;">Loading payments...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // ✅ YOUR ADMIN UID (Already Added)
+    // ============================================================
+    const ADMIN_UID = "76h6NtId0UM6aMySKfNIT09ubLe2";
+
+    // ============================================================
+    // CHECK ADMIN ACCESS
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // Check if user is admin
+        if (user.uid !== ADMIN_UID) {
+            document.getElementById('loadingMessage').innerHTML = `
+                <i class="fas fa-lock" style="color:#c62828;"></i>
+                <p style="font-weight:700;color:#c62828;">⛔ Access Denied</p>
+                <p style="color:#7B6A8A;">You do not have permission to access this page.</p>
+                <a href="index.html" style="color:#4A148C;font-weight:600;">← Back to Home</a>
+            `;
+            return;
+        }
+
+        // Show admin content
+        document.getElementById('userName').textContent = user.displayName || 'Admin';
+        document.getElementById('userAvatar').textContent = (user.displayName || 'A')[0].toUpperCase();
+
+        document.getElementById('loadingMessage').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+
+        // Load data
+        await loadAdminData();
+    });
+
+    // ============================================================
+    // LOAD ADMIN DATA
+    // ============================================================
+    async function loadAdminData() {
+        try {
+            // Load users
+            const usersSnapshot = await db.collection('users').get();
+            const users = [];
+            usersSnapshot.forEach(doc => {
+                users.push({ id: doc.id, ...doc.data() });
+            });
+
+            // Load scores
+            const scoresSnapshot = await db.collection('scores').get();
+            const scores = [];
+            scoresSnapshot.forEach(doc => {
+                scores.push({ id: doc.id, ...doc.data() });
+            });
+
+            // Load payments
+            const paymentsSnapshot = await db.collection('payments').get();
+            const payments = [];
+            paymentsSnapshot.forEach(doc => {
+                payments.push({ id: doc.id, ...doc.data() });
+            });
+
+            // Update stats
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('proUsers').textContent = users.filter(u => u.plan === 'pro').length;
+            document.getElementById('proPlusUsers').textContent = users.filter(u => u.plan === 'proplus').length;
+            document.getElementById('totalScores').textContent = scores.length;
+
+            // Render users table
+            renderUsers(users);
+
+            // Render scores table
+            renderScores(scores, users);
+
+            // Render payments table
+            renderPayments(payments, users);
+
+        } catch (error) {
+            console.error('Error loading admin data:', error);
+            document.getElementById('usersBody').innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;">Error loading data</td></tr>`;
+        }
+    }
+
+    // ============================================================
+    // RENDER FUNCTIONS
+    // ============================================================
+    function renderUsers(users) {
+        const tbody = document.getElementById('usersBody');
+        if (users.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#7B6A8A;">No users found</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = users.map(u => `
+            <tr>
+                <td><strong>${u.name || 'N/A'}</strong></td>
+                <td>${u.email || 'N/A'}</td>
+                <td><span class="badge ${u.plan || 'free'}">${u.plan || 'Free'}</span></td>
+                <td>${u.createdAt ? new Date(u.createdAt.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="changeUserPlan('${u.id}', '${u.plan || 'free'}')" style="font-size:0.7rem;padding:0.2rem 0.8rem;">
+                        <i class="fas fa-edit"></i> Change Plan
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function renderScores(scores, users) {
+        const tbody = document.getElementById('scoresBody');
+        if (scores.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#7B6A8A;">No scores found</td></tr>`;
+            return;
+        }
+
+        const userMap = {};
+        users.forEach(u => { userMap[u.id] = u.name || u.email || 'Unknown'; });
+
+        const sorted = scores.slice(0, 20);
+        tbody.innerHTML = sorted.map(s => `
+            <tr>
+                <td>${userMap[s.userId] || 'Unknown'}</td>
+                <td><strong>${s.module || 'N/A'}</strong></td>
+                <td><span style="font-weight:700;color:#4A148C;">${s.score || 0}</span></td>
+                <td>${s.total || 10}</td>
+                <td>${s.date ? new Date(s.date.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+            </tr>
+        `).join('');
+    }
+
+    function renderPayments(payments, users) {
+        const tbody = document.getElementById('paymentsBody');
+        if (payments.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#7B6A8A;">No payments found</td></tr>`;
+            return;
+        }
+
+        const userMap = {};
+        users.forEach(u => { userMap[u.id] = u.name || u.email || 'Unknown'; });
+
+        const sorted = payments.slice(0, 20);
+        tbody.innerHTML = sorted.map(p => `
+            <tr>
+                <td>${userMap[p.userId] || 'Unknown'}</td>
+                <td><span class="badge ${p.plan || 'free'}">${p.plan || 'Free'}</span></td>
+                <td><strong>$${(p.amount || 0) / 100}</strong></td>
+                <td>${p.date ? new Date(p.date.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+            </tr>
+        `).join('');
+    }
+
+    // ============================================================
+    // CHANGE USER PLAN
+    // ============================================================
+    async function changeUserPlan(userId, currentPlan) {
+        const plans = ['free', 'pro', 'proplus'];
+        const planNames = ['Free', '⭐ Pro', '🚀 Pro+'];
+        const currentIndex = plans.indexOf(currentPlan);
+        const nextIndex = (currentIndex + 1) % plans.length;
+        const newPlan = plans[nextIndex];
+
+        if (confirm(`Change user plan from "${planNames[currentIndex]}" to "${planNames[nextIndex]}"?`)) {
+            try {
+                await db.collection('users').doc(userId).set({
+                    plan: newPlan,
+                    planUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                alert('✅ Plan updated successfully!');
+                location.reload();
+            } catch (error) {
+                alert('❌ Error updating plan: ' + error.message);
+            }
+        }
+    }
+
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+    function logoutUser() {
+        auth.signOut().then(() => {
+            window.location.href = 'index.html';
+        });
+    }
+</script>
+
+</body>
+</html>
