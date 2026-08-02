@@ -72,55 +72,104 @@
             background: #fff8e1;
             color: #f57f17;
         }
-        .task-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2.5rem;
-            border-bottom: 2px dashed #f0e8f5;
+        .plan-badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
         }
-        .task-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        
+        /* ===== SECTION CARD ===== */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            border: 2px solid #f0e8f5;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: 0.3s;
         }
-        .task-label {
-            background: #4A148C;
-            color: white;
-            padding: 0.3rem 1.2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            display: inline-block;
-            margin-bottom: 0.8rem;
+        .section-card:hover {
+            border-color: #7B1FA2;
         }
-        .task-prompt {
+        .section-card.locked {
+            opacity: 0.7;
+            border-color: #e0d6e8;
+        }
+        .section-card.locked .section-header {
+            background: #f5f0ff;
+        }
+        .section-card .section-header {
+            padding: 1.2rem 1.8rem;
             background: #faf7ff;
-            padding: 1.5rem;
-            border-radius: 16px;
-            border-left: 6px solid #7B1FA2;
-            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
-        .task-prompt h3 {
+        .section-card .section-header .title {
+            font-weight: 700;
             color: #4A148C;
             font-size: 1.1rem;
-            margin-bottom: 0.5rem;
         }
-        .task-prompt p { color: #3d2a4a; font-size: 0.95rem; }
-        .task-prompt .chart-placeholder {
-            background: #f3edf7;
-            padding: 1.5rem;
+        .section-card .section-header .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+        }
+        .section-card .section-header .badge.free {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .section-card .section-header .badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .section-card .section-header .badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .section-card .section-body {
+            padding: 1.2rem 1.8rem;
+        }
+        .section-card .section-body .prompt-preview {
+            background: #faf7ff;
+            padding: 1rem;
             border-radius: 12px;
+            font-size: 0.95rem;
+            color: #3d2a4a;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay {
+            background: #f5f0ff;
+            padding: 1.5rem;
+            border-radius: 16px;
             text-align: center;
-            margin: 1rem 0;
             border: 2px dashed #7B1FA2;
-            font-size: 0.9rem;
-            color: #7B6A8A;
+            margin-top: 0.5rem;
         }
-        .task-prompt .chart-placeholder i {
+        .section-card .section-body .locked-overlay .lock-icon {
             font-size: 2rem;
-            display: block;
-            margin-bottom: 0.5rem;
             color: #7B1FA2;
+            display: block;
+            margin-bottom: 0.3rem;
         }
+        .section-card .section-body .locked-overlay .upgrade-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: 0.3s;
+        }
+        .section-card .section-body .locked-overlay .upgrade-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
         .writing-area { margin-top: 0.5rem; }
         .writing-area label {
             font-weight: 600;
@@ -151,6 +200,7 @@
             margin-top: 0.3rem;
         }
         .word-counter .count { font-weight: 700; color: #4A148C; }
+
         .actions {
             display: flex;
             gap: 1rem;
@@ -189,10 +239,7 @@
             color: #4A148C;
         }
         .btn-secondary:hover { background: #e5d9ed; }
-        .btn-success {
-            background: linear-gradient(135deg, #2e7d32, #43a047);
-            color: white;
-        }
+        
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -283,7 +330,7 @@
         }
         .login-overlay .modal-box .btn-login:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
         .login-overlay .modal-box .btn-secondary {
             background: #f3edf7;
@@ -304,41 +351,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .question-limit-info {
-            background: #faf7ff;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #f0e8f5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .question-limit-info .free-badge {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .pro-badge {
-            background: #FFD700;
-            color: #4A148C;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .upgrade-link {
-            color: #4A148C;
-            font-weight: 600;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
@@ -348,6 +360,7 @@
             .result .task-breakdown { grid-template-columns: 1fr; }
             .writing-area textarea { min-height: 150px; }
             .login-overlay .modal-box { padding: 2rem; }
+            .section-card .section-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -375,25 +388,17 @@
         <h1><i class="fas fa-pen-fancy"></i> Writing Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">60:00</span></span>
-            <span class="plan-badge" id="planBadge">Loading...</span>
+            <span class="plan-badge" id="planBadge">Free</span>
         </div>
     </div>
 
-    <!-- ===== QUESTION LIMIT INFO ===== -->
-    <div class="question-limit-info" id="questionLimitInfo">
-        <span id="limitText">Loading question limit...</span>
-        <span>
-            <span class="free-badge" id="freeBadge">Free: 50 Prompts</span>
-            <span class="pro-badge" id="proBadge" style="display:none;">⭐ Pro: Unlimited</span>
-            <a href="checkout.html" class="upgrade-link" id="upgradeLink" style="display:none;">Upgrade →</a>
-        </span>
+    <div id="sectionsContainer">
+        <!-- Sections will be rendered by JavaScript -->
     </div>
 
-    <div id="taskContainer"></div>
-
     <div class="actions">
-        <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
-        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Test</button>
+        <button type="button" class="btn btn-primary" id="startTestBtn" onclick="startTest()"><i class="fas fa-play"></i> Start Free Test</button>
+        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
@@ -442,7 +447,7 @@
     let selectedTask2 = null;
 
     // ============================================================
-    // 🔒 CHECK LOGIN + LOAD USER PLAN
+    // CHECK LOGIN + LOAD USER PLAN
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
@@ -465,110 +470,195 @@
             console.log('Error loading user plan:', e);
         }
 
-        updatePlanUI();
-        renderTest();
+        updatePlanBadge();
+        renderSections();
     });
 
     // ============================================================
-    // UPDATE PLAN UI
+    // UPDATE PLAN BADGE
     // ============================================================
-    function updatePlanUI() {
-        const planBadge = document.getElementById('planBadge');
-        const limitText = document.getElementById('limitText');
-        const freeBadge = document.getElementById('freeBadge');
-        const proBadge = document.getElementById('proBadge');
-        const upgradeLink = document.getElementById('upgradeLink');
-
+    function updatePlanBadge() {
+        const badge = document.getElementById('planBadge');
         if (userPlan === 'free') {
-            planBadge.textContent = 'Free — 50 Prompts';
-            planBadge.className = 'plan-badge';
-            limitText.textContent = '📚 You have access to 50 free writing prompts.';
-            freeBadge.style.display = 'inline-block';
-            proBadge.style.display = 'none';
-            upgradeLink.style.display = 'inline-block';
-            upgradeLink.textContent = '🚀 Upgrade for Unlimited →';
+            badge.textContent = '🟢 Free Plan';
+            badge.className = 'plan-badge';
+        } else if (userPlan === 'pro') {
+            badge.textContent = '⭐ Pro Plan';
+            badge.className = 'plan-badge pro';
         } else {
-            planBadge.textContent = '⭐ Pro — Unlimited Prompts';
-            planBadge.className = 'plan-badge pro';
-            limitText.textContent = '🌟 You have unlimited access to all writing prompts!';
-            freeBadge.style.display = 'none';
-            proBadge.style.display = 'inline-block';
-            upgradeLink.style.display = 'none';
+            badge.textContent = '🚀 Pro+ Plan';
+            badge.className = 'plan-badge proplus';
         }
     }
 
     // ============================================================
-    // RENDER TEST
+    // RENDER SECTIONS
     // ============================================================
-    function renderTest() {
-        const allQuestions = getQuestions('writing', userPlan);
-        const shuffled = shuffleArray([...allQuestions]);
+    function renderSections() {
+        const container = document.getElementById('sectionsContainer');
         
-        // Separate Task 1 and Task 2
-        const task1Prompts = shuffled.filter(q => q.type === 'task1');
-        const task2Prompts = shuffled.filter(q => q.type === 'task2');
-        
-        // Select one random from each
-        selectedTask1 = task1Prompts.length > 0 ? task1Prompts[0] : null;
-        selectedTask2 = task2Prompts.length > 0 ? task2Prompts[0] : null;
+        // Get writing data
+        const freeTask1 = getQuestions('writing', 'free').task1 || [];
+        const freeTask2 = getQuestions('writing', 'free').task2 || [];
+        const proTask1 = getQuestions('writing', 'pro').task1 || [];
+        const proTask2 = getQuestions('writing', 'pro').task2 || [];
+        const proPlusTask1 = getQuestions('writing', 'proplus').task1 || [];
+        const proPlusTask2 = getQuestions('writing', 'proplus').task2 || [];
 
-        const container = document.getElementById('taskContainer');
+        const isPro = userPlan === 'pro' || userPlan === 'proplus';
+        const isProPlus = userPlan === 'proplus';
+
         let html = '';
 
-        // Task 1
-        if (selectedTask1) {
-            const chartData = selectedTask1.data;
-            let chartHTML = '';
-            if (chartData) {
-                chartHTML = `
-                    <div class="chart-placeholder">
-                        <i class="fas fa-chart-line"></i>
-                        <strong>${chartData.labels ? chartData.labels.join(' | ') : 'Chart Data'}</strong>
-                        <br />
-                        ${chartData.values ? chartData.values.join(' | ') : ''}
-                    </div>
-                `;
-            }
-            html += `
-                <div class="task-section">
-                    <div class="task-label">📊 Task 1</div>
-                    <div class="task-prompt">
-                        <h3>${selectedTask1.title || 'Chart Description'}</h3>
-                        <p>${selectedTask1.prompt || 'Describe the chart below.'}</p>
-                        ${chartHTML}
-                        <p><strong>${selectedTask1.instructions || 'Summarise the information by selecting and reporting the main features.'}</strong></p>
-                        <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum 150 words</p>
-                    </div>
-                    <div class="writing-area">
-                        <label for="task1Response">✏️ Your response:</label>
-                        <textarea id="task1Response" placeholder="Write your Task 1 response here..." oninput="updateWordCount('task1Response', 'task1Words')"></textarea>
-                        <div class="word-counter">📝 Words: <span class="count" id="task1Words">0</span> / 150</div>
-                    </div>
+        // ===== FREE SECTION =====
+        const freeTask1Sample = freeTask1.slice(0, 1);
+        const freeTask2Sample = freeTask2.slice(0, 1);
+        
+        html += `
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="title">🟢 Free Access</span>
+                    <span class="badge free">Free — ${freeTask1.length + freeTask2.length} Prompts</span>
                 </div>
-            `;
-        }
+                <div class="section-body">
+                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
+                        📝 Task 1: ${freeTask1.length} charts · Task 2: ${freeTask2.length} essays
+                    </div>
+                    <div class="prompt-preview">
+                        <strong style="color:#4A148C;">Task 1:</strong> ${freeTask1Sample[0]?.title || 'No Task 1 available'}
+                    </div>
+                    <div class="prompt-preview" style="margin-top:0.3rem;">
+                        <strong style="color:#4A148C;">Task 2:</strong> ${freeTask2Sample[0]?.title || 'No Task 2 available'}
+                    </div>
+                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.5rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
+                        <i class="fas fa-play"></i> Start Free Test
+                    </button>
+                </div>
+            </div>
+        `;
 
-        // Task 2
-        if (selectedTask2) {
-            html += `
-                <div class="task-section">
-                    <div class="task-label">📝 Task 2</div>
-                    <div class="task-prompt">
-                        <h3>${selectedTask2.title || 'Essay Topic'}</h3>
-                        <p>${selectedTask2.prompt || 'Write an essay on the topic below.'}</p>
-                        <p><strong>${selectedTask2.instructions || 'Discuss both views and give your own opinion.'}</strong></p>
-                        <p style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">📝 Minimum ${selectedTask2.minWords || 250} words</p>
-                    </div>
-                    <div class="writing-area">
-                        <label for="task2Response">✏️ Your essay:</label>
-                        <textarea id="task2Response" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('task2Response', 'task2Words')"></textarea>
-                        <div class="word-counter">📝 Words: <span class="count" id="task2Words">0</span> / ${selectedTask2.minWords || 250}</div>
-                    </div>
+        // ===== PRO SECTION =====
+        html += `
+            <div class="section-card ${isPro ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">⭐ Pro Access</span>
+                    <span class="badge pro">${isPro ? `${proTask1.length + proTask2.length} Prompts` : '🔒 Locked'}</span>
                 </div>
-            `;
-        }
+                <div class="section-body">
+                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
+                        📝 Task 1: ${proTask1.length} charts · Task 2: ${proTask2.length} essays
+                    </div>
+                    ${isPro ? `
+                        <div class="prompt-preview">
+                            <strong style="color:#4A148C;">Task 1:</strong> ${proTask1[0]?.title || 'No Task 1 available'}
+                        </div>
+                        <div class="prompt-preview" style="margin-top:0.3rem;">
+                            <strong style="color:#4A148C;">Task 2:</strong> ${proTask2[0]?.title || 'No Task 2 available'}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🔒</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro to unlock 50+ writing prompts</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get full access to all Task 1 & 2 prompts</p>
+                            <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        // ===== PRO+ SECTION =====
+        html += `
+            <div class="section-card ${isProPlus ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">🚀 Pro+ Access</span>
+                    <span class="badge proplus">${isProPlus ? `${proPlusTask1.length + proPlusTask2.length} Prompts` : '🔒 Locked'}</span>
+                </div>
+                <div class="section-body">
+                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
+                        📝 Task 1: ${proPlusTask1.length} charts · Task 2: ${proPlusTask2.length} essays
+                    </div>
+                    ${isProPlus ? `
+                        <div class="prompt-preview">
+                            <strong style="color:#4A148C;">Task 1:</strong> ${proPlusTask1[0]?.title || 'No Task 1 available'}
+                        </div>
+                        <div class="prompt-preview" style="margin-top:0.3rem;">
+                            <strong style="color:#4A148C;">Task 2:</strong> ${proPlusTask2[0]?.title || 'No Task 2 available'}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🚀</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 100+ writing prompts</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get unlimited access + AI feedback</p>
+                            <a href="checkout.html" class="upgrade-link">🚀 Upgrade to Pro+</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
 
         container.innerHTML = html;
+    }
+
+    // ============================================================
+    // START TEST
+    // ============================================================
+    function startTest() {
+        const freeTask1 = getQuestions('writing', 'free').task1 || [];
+        const freeTask2 = getQuestions('writing', 'free').task2 || [];
+
+        if (freeTask1.length === 0 || freeTask2.length === 0) {
+            alert('No writing prompts available. Please try again later.');
+            return;
+        }
+
+        selectedTask1 = freeTask1[0];
+        selectedTask2 = freeTask2[0];
+
+        const container = document.getElementById('sectionsContainer');
+        let html = `
+            <div class="task-section" style="margin-bottom:2rem;padding-bottom:2rem;border-bottom:2px dashed #f0e8f5;">
+                <div class="task-label" style="background:#4A148C;color:white;padding:0.3rem 1.2rem;border-radius:50px;font-weight:700;font-size:0.75rem;display:inline-block;margin-bottom:0.8rem;">📊 Task 1</div>
+                <div class="task-prompt" style="background:#faf7ff;padding:1.5rem;border-radius:16px;border-left:6px solid #7B1FA2;margin-bottom:1rem;">
+                    <h3 style="color:#4A148C;font-size:1.1rem;margin-bottom:0.5rem;">${selectedTask1.title || 'Chart Description'}</h3>
+                    <p style="color:#3d2a4a;font-size:0.95rem;">${selectedTask1.prompt || 'Describe the chart below.'}</p>
+                    <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">📝 Minimum 150 words</p>
+                </div>
+                <div class="writing-area">
+                    <label for="task1Response">✏️ Your response:</label>
+                    <textarea id="task1Response" placeholder="Write your Task 1 response here..." oninput="updateWordCount('task1Response', 'task1Words')"></textarea>
+                    <div class="word-counter">📝 Words: <span class="count" id="task1Words">0</span> / 150</div>
+                </div>
+            </div>
+        `;
+
+        html += `
+            <div class="task-section">
+                <div class="task-label" style="background:#4A148C;color:white;padding:0.3rem 1.2rem;border-radius:50px;font-weight:700;font-size:0.75rem;display:inline-block;margin-bottom:0.8rem;">📝 Task 2</div>
+                <div class="task-prompt" style="background:#faf7ff;padding:1.5rem;border-radius:16px;border-left:6px solid #7B1FA2;margin-bottom:1rem;">
+                    <h3 style="color:#4A148C;font-size:1.1rem;margin-bottom:0.5rem;">${selectedTask2.title || 'Essay Topic'}</h3>
+                    <p style="color:#3d2a4a;font-size:0.95rem;">${selectedTask2.prompt || 'Write an essay on the topic below.'}</p>
+                    <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">📝 Minimum ${selectedTask2.minWords || 250} words</p>
+                </div>
+                <div class="writing-area">
+                    <label for="task2Response">✏️ Your essay:</label>
+                    <textarea id="task2Response" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('task2Response', 'task2Words')"></textarea>
+                    <div class="word-counter">📝 Words: <span class="count" id="task2Words">0</span> / ${selectedTask2.minWords || 250}</div>
+                </div>
+            </div>
+        `;
+
+        html += `
+            <div class="actions">
+                <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
+                <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        // Start timer
+        startTimer();
     }
 
     // ============================================================
@@ -584,22 +674,24 @@
     // TIMER (60 minutes)
     // ============================================================
     let timeLeft = 3600;
-    const timerDisplay = document.getElementById('timerDisplay');
+    let timerInterval = null;
 
-    function updateTimer() {
-        const mins = Math.floor(timeLeft / 60);
-        const secs = timeLeft % 60;
-        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up!');
-            submitTest();
-        }
-        timeLeft--;
+    function startTimer() {
+        const timerDisplay = document.getElementById('timerDisplay');
+        timeLeft = 3600;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('⏰ Time is up!');
+                submitTest();
+            }
+            timeLeft--;
+        }, 1000);
     }
-
-    const timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
 
     // ============================================================
     // EVALUATE WRITING
@@ -715,20 +807,10 @@
     // RESET
     // ============================================================
     function resetTest() {
+        clearInterval(timerInterval);
         location.reload();
-    }
-
-    // ============================================================
-    // SHUFFLE HELPER
-    // ============================================================
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
     }
 </script>
 
 </body>
-            </html>
+    </html>
