@@ -97,6 +97,61 @@
             box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
 
+        /* ===== ONBOARDING CARD ===== */
+        .onboarding-card {
+            background: linear-gradient(135deg, #faf7ff, #f3edf7);
+            border-radius: 24px;
+            padding: 1.5rem 2rem;
+            border: 2px solid #7B1FA2;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .onboarding-card .onboarding-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .onboarding-card .onboarding-content .icon {
+            font-size: 2.5rem;
+        }
+        .onboarding-card .onboarding-content h3 {
+            color: #4A148C;
+            font-size: 1.2rem;
+        }
+        .onboarding-card .onboarding-content p {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+        }
+        .onboarding-card .onboarding-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .onboarding-card .onboarding-progress .progress-text {
+            font-size: 0.8rem;
+            color: #7B6A8A;
+            font-weight: 700;
+        }
+        .onboarding-card .onboarding-progress .bar {
+            width: 120px;
+            height: 6px;
+            background: #ddd;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        .onboarding-card .onboarding-progress .bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4A148C, #7B1FA2);
+            border-radius: 50px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
         .loading-spinner {
             text-align: center;
             padding: 3rem;
@@ -298,6 +353,8 @@
             .history-item { flex-wrap: wrap; gap: 0.5rem; }
             .dashboard-header .user-info { width: 100%; justify-content: center; }
             .mock-exam-card { flex-direction: column; text-align: center; }
+            .onboarding-card { flex-direction: column; text-align: center; }
+            .onboarding-card .onboarding-progress { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -320,6 +377,38 @@
         </div>
     </div>
 
+    <!-- ===== ONBOARDING CARD ===== -->
+    <div class="onboarding-card" id="onboardingCard">
+        <div class="onboarding-content">
+            <span class="icon">🎯</span>
+            <div>
+                <h3 id="onboardingTitle">Welcome to IELTSProva!</h3>
+                <p id="onboardingDesc">Complete your first test to unlock personalized feedback.</p>
+            </div>
+        </div>
+        <div class="onboarding-progress">
+            <span class="progress-text" id="onboardingProgressText">0 / 3</span>
+            <div class="bar"><div class="fill" id="onboardingProgressFill"></div></div>
+            <a href="reading-test.html" class="btn-upgrade" id="onboardingActionBtn" style="font-size:0.8rem;">
+                <i class="fas fa-play"></i> Start Test
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== MOCK EXAM CARD ===== -->
+    <div class="mock-exam-card" id="mockExamCard">
+        <div class="mock-info">
+            <h3>📝 Full Mock Exam</h3>
+            <p id="mockExamStatus">Upgrade to Pro to access mock exams</p>
+        </div>
+        <div>
+            <span class="mock-badge" id="mockBadge">🔒 Locked</span>
+            <a href="mock-exam.html" class="mock-btn" id="mockBtn" style="display:none;">
+                <i class="fas fa-play"></i> Start Mock Exam
+            </a>
+        </div>
+    </div>
+
     <!-- ===== LOADING ===== -->
     <div id="loadingMessage" class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
@@ -328,20 +417,6 @@
 
     <!-- ===== DASHBOARD CONTENT ===== -->
     <div id="dashboardContent" style="display:none;">
-
-        <!-- ===== MOCK EXAM CARD ===== -->
-        <div class="mock-exam-card" id="mockExamCard">
-            <div class="mock-info">
-                <h3>📝 Full Mock Exam</h3>
-                <p id="mockExamStatus">Upgrade to Pro to access mock exams</p>
-            </div>
-            <div>
-                <span class="mock-badge" id="mockBadge">🔒 Locked</span>
-                <a href="mock-exam.html" class="mock-btn" id="mockBtn" style="display:none;">
-                    <i class="fas fa-play"></i> Start Mock Exam
-                </a>
-            </div>
-        </div>
 
         <!-- ===== STATS ===== -->
         <div class="stats-grid" id="statsGrid">
@@ -425,7 +500,7 @@
 
 <script>
     // ============================================================
-    // 🔥 FIREBASE CONFIG
+    // FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -547,6 +622,9 @@
 
         console.log('📊 Total merged scores:', mergedScores.length);
 
+        // ===== UPDATE ONBOARDING =====
+        updateOnboarding(mergedScores);
+
         // ===== SHOW DASHBOARD =====
         document.getElementById('loadingMessage').style.display = 'none';
         document.getElementById('dashboardContent').style.display = 'block';
@@ -563,6 +641,60 @@
         updateProgress(mergedScores);
         updateHistory(mergedScores);
     });
+
+    // ============================================================
+    // UPDATE ONBOARDING
+    // ============================================================
+    function updateOnboarding(scores) {
+        const totalTests = scores.length;
+        const steps = [
+            { id: 'first_test', label: 'Take your first test', done: totalTests >= 1 },
+            { id: 'second_test', label: 'Complete a second test', done: totalTests >= 2 },
+            { id: 'third_test', label: 'Achieve 60% or higher', done: scores.some(s => s.score >= 6) }
+        ];
+
+        const completed = steps.filter(s => s.done).length;
+        const total = steps.length;
+
+        document.getElementById('onboardingProgressText').textContent = `${completed} / ${total}`;
+        document.getElementById('onboardingProgressFill').style.width = `${(completed / total) * 100}%`;
+
+        const title = document.getElementById('onboardingTitle');
+        const desc = document.getElementById('onboardingDesc');
+        const actionBtn = document.getElementById('onboardingActionBtn');
+
+        if (completed === total) {
+            title.textContent = '🎉 You\'re on fire!';
+            desc.textContent = 'You\'ve completed all onboarding steps. Keep practicing!';
+            actionBtn.textContent = '🎯 View Progress';
+            actionBtn.href = '#progressBars';
+        } else if (completed === 0) {
+            title.textContent = '👋 Welcome to IELTSProva!';
+            desc.textContent = 'Take your first test to start your journey.';
+            actionBtn.textContent = '📖 Start Test';
+            actionBtn.href = 'reading-test.html';
+        } else if (completed === 1) {
+            title.textContent = '💪 Great start!';
+            desc.textContent = 'Complete one more test to unlock more features.';
+            actionBtn.textContent = '📖 Take Another Test';
+            actionBtn.href = 'reading-test.html';
+        } else {
+            title.textContent = '🌟 Almost there!';
+            desc.textContent = 'Score 60% or higher to complete your onboarding.';
+            actionBtn.textContent = '📖 Practice More';
+            actionBtn.href = 'reading-test.html';
+        }
+
+        // Show/hide onboarding card
+        const card = document.getElementById('onboardingCard');
+        if (completed === total) {
+            card.style.borderColor = '#FFD700';
+            card.style.background = 'linear-gradient(135deg, #fffef5, #fefcf0)';
+        } else {
+            card.style.borderColor = '#7B1FA2';
+            card.style.background = 'linear-gradient(135deg, #faf7ff, #f3edf7)';
+        }
+    }
 
     // ============================================================
     // UPDATE STATS
