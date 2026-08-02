@@ -68,15 +68,9 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
-        .plan-badge.pro {
-            background: #fff8e1;
-            color: #f57f17;
-        }
-        .plan-badge.proplus {
-            background: #fce4ec;
-            color: #c62828;
-        }
-        
+        .plan-badge.pro { background: #fff8e1; color: #f57f17; }
+        .plan-badge.proplus { background: #fce4ec; color: #c62828; }
+
         /* ===== SECTION CARD ===== */
         .section-card {
             background: white;
@@ -86,16 +80,9 @@
             overflow: hidden;
             transition: 0.3s;
         }
-        .section-card:hover {
-            border-color: #7B1FA2;
-        }
-        .section-card.locked {
-            opacity: 0.7;
-            border-color: #e0d6e8;
-        }
-        .section-card.locked .section-header {
-            background: #f5f0ff;
-        }
+        .section-card:hover { border-color: #7B1FA2; }
+        .section-card.locked { opacity: 0.7; border-color: #e0d6e8; }
+        .section-card.locked .section-header { background: #f5f0ff; }
         .section-card .section-header {
             padding: 1.2rem 1.8rem;
             background: #faf7ff;
@@ -116,43 +103,46 @@
             padding: 0.2rem 0.8rem;
             border-radius: 50px;
         }
-        .section-card .section-header .badge.free {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        .section-card .section-header .badge.pro {
-            background: #fff8e1;
-            color: #f57f17;
-        }
-        .section-card .section-header .badge.proplus {
-            background: #fce4ec;
-            color: #c62828;
-        }
-        .section-card .section-body {
-            padding: 1.2rem 1.8rem;
-        }
-        .section-card .section-body .prompt-preview {
+        .section-card .section-header .badge.free { background: #e8f5e9; color: #2e7d32; }
+        .section-card .section-header .badge.pro { background: #fff8e1; color: #f57f17; }
+        .section-card .section-header .badge.proplus { background: #fce4ec; color: #c62828; }
+        .section-card .section-body { padding: 1.2rem 1.8rem; }
+        .section-card .section-body .topic-list { margin-top: 0.5rem; }
+        .section-card .section-body .topic-item {
             background: #faf7ff;
-            padding: 1rem;
+            padding: 0.8rem 1rem;
             border-radius: 12px;
-            font-size: 0.95rem;
-            color: #3d2a4a;
-            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            border-left: 4px solid #7B1FA2;
         }
+        .section-card .section-body .topic-item .t-title {
+            font-weight: 600;
+            color: #4A148C;
+            font-size: 0.95rem;
+        }
+        .section-card .section-body .topic-item .t-type {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.1rem 0.6rem;
+            border-radius: 50px;
+            background: #f3edf7;
+            color: #7B6A8A;
+        }
+        .section-card .section-body .topic-item .t-type.task1 { background: #e3f2fd; color: #0d47a1; }
+        .section-card .section-body .topic-item .t-type.task2 { background: #fff8e1; color: #f57f17; }
         .section-card .section-body .locked-overlay {
             background: #f5f0ff;
             padding: 1.5rem;
             border-radius: 16px;
             text-align: center;
             border: 2px dashed #7B1FA2;
-            margin-top: 0.5rem;
         }
-        .section-card .section-body .locked-overlay .lock-icon {
-            font-size: 2rem;
-            color: #7B1FA2;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
+        .section-card .section-body .locked-overlay .lock-icon { font-size: 2rem; color: #7B1FA2; display: block; margin-bottom: 0.3rem; }
         .section-card .section-body .locked-overlay .upgrade-link {
             display: inline-block;
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
@@ -169,37 +159,6 @@
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
-
-        .writing-area { margin-top: 0.5rem; }
-        .writing-area label {
-            font-weight: 600;
-            color: #4A148C;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-        .writing-area textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #f0e8f5;
-            border-radius: 16px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            min-height: 200px;
-            resize: vertical;
-            transition: 0.3s;
-            line-height: 1.6;
-        }
-        .writing-area textarea:focus {
-            outline: none;
-            border-color: #7B1FA2;
-        }
-        .word-counter {
-            text-align: right;
-            font-size: 0.85rem;
-            color: #7B6A8A;
-            margin-top: 0.3rem;
-        }
-        .word-counter .count { font-weight: 700; color: #4A148C; }
 
         .actions {
             display: flex;
@@ -229,17 +188,26 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
         }
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .btn-secondary {
-            background: #f3edf7;
-            color: #4A148C;
-        }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-secondary { background: #f3edf7; color: #4A148C; }
         .btn-secondary:hover { background: #e5d9ed; }
-        
+
+        .writing-area textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+            transition: 0.3s;
+            line-height: 1.6;
+        }
+        .writing-area textarea:focus { outline: none; border-color: #7B1FA2; }
+        .word-counter { text-align: right; font-size: 0.85rem; color: #7B6A8A; margin-top: 0.3rem; }
+        .word-counter .count { font-weight: 700; color: #4A148C; }
+
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -259,7 +227,6 @@
             border-radius: 50px;
             font-weight: 700;
         }
-        .result .save-status { margin-top: 0.8rem; font-size: 0.95rem; }
         .result .task-breakdown {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -274,11 +241,8 @@
             text-align: center;
         }
         .result .task-breakdown .task-result .label { font-size: 0.8rem; color: #7B6A8A; }
-        .result .task-breakdown .task-result .value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #4A148C;
-        }
+        .result .task-breakdown .task-result .value { font-size: 1.8rem; font-weight: 800; color: #4A148C; }
+        .result .save-status { margin-top: 0.8rem; font-size: 0.95rem; }
         .back-link {
             display: inline-block;
             margin-top: 1.5rem;
@@ -358,9 +322,9 @@
             .actions { flex-direction: column; }
             .btn { justify-content: center; }
             .result .task-breakdown { grid-template-columns: 1fr; }
-            .writing-area textarea { min-height: 150px; }
             .login-overlay .modal-box { padding: 2rem; }
             .section-card .section-header { flex-direction: column; align-items: flex-start; }
+            .section-card .section-body .topic-item { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -447,6 +411,50 @@
     let selectedTask2 = null;
 
     // ============================================================
+    // SAMPLE TOPICS DATA
+    // ============================================================
+    const freeTopics = {
+        task1: [
+            { id: 1, title: "Internet Access in UK Households", type: "Chart" },
+            { id: 2, title: "Population Growth in Major Cities", type: "Chart" }
+        ],
+        task2: [
+            { id: 3, title: "Technology and Society", type: "Opinion Essay" },
+            { id: 4, title: "Education System Reform", type: "Discussion Essay" }
+        ]
+    };
+
+    const proTopics = {
+        task1: [
+            { id: 5, title: "Energy Consumption Trends", type: "Chart" },
+            { id: 6, title: "Global Temperature Changes", type: "Line Graph" },
+            { id: 7, title: "Employment Rates by Sector", type: "Chart" },
+            { id: 8, title: "Household Spending Patterns", type: "Chart" },
+            { id: 9, title: "International Tourism Growth", type: "Chart" }
+        ],
+        task2: [
+            { id: 10, title: "Environmental Protection", type: "Problem/Solution Essay" },
+            { id: 11, title: "Healthcare Access", type: "Discussion Essay" },
+            { id: 12, title: "Urban Development", type: "Advantages/Disadvantages Essay" },
+            { id: 13, title: "Cultural Preservation", type: "Discussion Essay" },
+            { id: 14, title: "Economic Inequality", type: "Problem/Solution Essay" }
+        ]
+    };
+
+    const proPlusTopics = {
+        task1: [
+            { id: 15, title: "Global Food Production", type: "Chart" },
+            { id: 16, title: "Educational Attainment by Country", type: "Chart" },
+            { id: 17, title: "Technology Adoption Rates", type: "Chart" }
+        ],
+        task2: [
+            { id: 18, title: "Artificial Intelligence Ethics", type: "Discussion Essay" },
+            { id: 19, title: "Sustainable Development", type: "Problem/Solution Essay" },
+            { id: 20, title: "Remote Work Impact", type: "Advantages/Disadvantages Essay" }
+        ]
+    };
+
+    // ============================================================
     // CHECK LOGIN + LOAD USER PLAN
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
@@ -497,40 +505,38 @@
     function renderSections() {
         const container = document.getElementById('sectionsContainer');
         
-        // Get writing data
-        const freeTask1 = getQuestions('writing', 'free').task1 || [];
-        const freeTask2 = getQuestions('writing', 'free').task2 || [];
-        const proTask1 = getQuestions('writing', 'pro').task1 || [];
-        const proTask2 = getQuestions('writing', 'pro').task2 || [];
-        const proPlusTask1 = getQuestions('writing', 'proplus').task1 || [];
-        const proPlusTask2 = getQuestions('writing', 'proplus').task2 || [];
-
         const isPro = userPlan === 'pro' || userPlan === 'proplus';
         const isProPlus = userPlan === 'proplus';
+
+        const totalFree = freeTopics.task1.length + freeTopics.task2.length;
+        const totalPro = proTopics.task1.length + proTopics.task2.length;
+        const totalProPlus = proPlusTopics.task1.length + proPlusTopics.task2.length;
 
         let html = '';
 
         // ===== FREE SECTION =====
-        const freeTask1Sample = freeTask1.slice(0, 1);
-        const freeTask2Sample = freeTask2.slice(0, 1);
-        
         html += `
             <div class="section-card">
                 <div class="section-header">
                     <span class="title">🟢 Free Access</span>
-                    <span class="badge free">Free — ${freeTask1.length + freeTask2.length} Prompts</span>
+                    <span class="badge free">${totalFree} Prompts</span>
                 </div>
                 <div class="section-body">
-                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
-                        📝 Task 1: ${freeTask1.length} charts · Task 2: ${freeTask2.length} essays
+                    <div class="topic-list">
+                        ${freeTopics.task1.map(t => `
+                            <div class="topic-item">
+                                <span class="t-title">📊 ${t.title}</span>
+                                <span class="t-type task1">Task 1 · ${t.type}</span>
+                            </div>
+                        `).join('')}
+                        ${freeTopics.task2.map(t => `
+                            <div class="topic-item">
+                                <span class="t-title">📝 ${t.title}</span>
+                                <span class="t-type task2">Task 2 · ${t.type}</span>
+                            </div>
+                        `).join('')}
                     </div>
-                    <div class="prompt-preview">
-                        <strong style="color:#4A148C;">Task 1:</strong> ${freeTask1Sample[0]?.title || 'No Task 1 available'}
-                    </div>
-                    <div class="prompt-preview" style="margin-top:0.3rem;">
-                        <strong style="color:#4A148C;">Task 2:</strong> ${freeTask2Sample[0]?.title || 'No Task 2 available'}
-                    </div>
-                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.5rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
+                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.8rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
                         <i class="fas fa-play"></i> Start Free Test
                     </button>
                 </div>
@@ -542,18 +548,23 @@
             <div class="section-card ${isPro ? '' : 'locked'}">
                 <div class="section-header">
                     <span class="title">⭐ Pro Access</span>
-                    <span class="badge pro">${isPro ? `${proTask1.length + proTask2.length} Prompts` : '🔒 Locked'}</span>
+                    <span class="badge pro">${isPro ? `${totalPro} Prompts` : '🔒 Locked'}</span>
                 </div>
                 <div class="section-body">
-                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
-                        📝 Task 1: ${proTask1.length} charts · Task 2: ${proTask2.length} essays
-                    </div>
                     ${isPro ? `
-                        <div class="prompt-preview">
-                            <strong style="color:#4A148C;">Task 1:</strong> ${proTask1[0]?.title || 'No Task 1 available'}
-                        </div>
-                        <div class="prompt-preview" style="margin-top:0.3rem;">
-                            <strong style="color:#4A148C;">Task 2:</strong> ${proTask2[0]?.title || 'No Task 2 available'}
+                        <div class="topic-list">
+                            ${proTopics.task1.map(t => `
+                                <div class="topic-item">
+                                    <span class="t-title">📊 ${t.title}</span>
+                                    <span class="t-type task1">Task 1 · ${t.type}</span>
+                                </div>
+                            `).join('')}
+                            ${proTopics.task2.map(t => `
+                                <div class="topic-item">
+                                    <span class="t-title">📝 ${t.title}</span>
+                                    <span class="t-type task2">Task 2 · ${t.type}</span>
+                                </div>
+                            `).join('')}
                         </div>
                     ` : `
                         <div class="locked-overlay">
@@ -572,18 +583,23 @@
             <div class="section-card ${isProPlus ? '' : 'locked'}">
                 <div class="section-header">
                     <span class="title">🚀 Pro+ Access</span>
-                    <span class="badge proplus">${isProPlus ? `${proPlusTask1.length + proPlusTask2.length} Prompts` : '🔒 Locked'}</span>
+                    <span class="badge proplus">${isProPlus ? `${totalProPlus} Prompts` : '🔒 Locked'}</span>
                 </div>
                 <div class="section-body">
-                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
-                        📝 Task 1: ${proPlusTask1.length} charts · Task 2: ${proPlusTask2.length} essays
-                    </div>
                     ${isProPlus ? `
-                        <div class="prompt-preview">
-                            <strong style="color:#4A148C;">Task 1:</strong> ${proPlusTask1[0]?.title || 'No Task 1 available'}
-                        </div>
-                        <div class="prompt-preview" style="margin-top:0.3rem;">
-                            <strong style="color:#4A148C;">Task 2:</strong> ${proPlusTask2[0]?.title || 'No Task 2 available'}
+                        <div class="topic-list">
+                            ${proPlusTopics.task1.map(t => `
+                                <div class="topic-item">
+                                    <span class="t-title">📊 ${t.title}</span>
+                                    <span class="t-type task1">Task 1 · ${t.type}</span>
+                                </div>
+                            `).join('')}
+                            ${proPlusTopics.task2.map(t => `
+                                <div class="topic-item">
+                                    <span class="t-title">📝 ${t.title}</span>
+                                    <span class="t-type task2">Task 2 · ${t.type}</span>
+                                </div>
+                            `).join('')}
                         </div>
                     ` : `
                         <div class="locked-overlay">
@@ -604,65 +620,46 @@
     // START TEST
     // ============================================================
     function startTest() {
-        const freeTask1 = getQuestions('writing', 'free').task1 || [];
-        const freeTask2 = getQuestions('writing', 'free').task2 || [];
+        const task1 = freeTopics.task1[0];
+        const task2 = freeTopics.task2[0];
 
-        if (freeTask1.length === 0 || freeTask2.length === 0) {
-            alert('No writing prompts available. Please try again later.');
-            return;
-        }
-
-        selectedTask1 = freeTask1[0];
-        selectedTask2 = freeTask2[0];
+        selectedTask1 = task1;
+        selectedTask2 = task2;
 
         const container = document.getElementById('sectionsContainer');
         let html = `
-            <div class="task-section" style="margin-bottom:2rem;padding-bottom:2rem;border-bottom:2px dashed #f0e8f5;">
-                <div class="task-label" style="background:#4A148C;color:white;padding:0.3rem 1.2rem;border-radius:50px;font-weight:700;font-size:0.75rem;display:inline-block;margin-bottom:0.8rem;">📊 Task 1</div>
-                <div class="task-prompt" style="background:#faf7ff;padding:1.5rem;border-radius:16px;border-left:6px solid #7B1FA2;margin-bottom:1rem;">
-                    <h3 style="color:#4A148C;font-size:1.1rem;margin-bottom:0.5rem;">${selectedTask1.title || 'Chart Description'}</h3>
-                    <p style="color:#3d2a4a;font-size:0.95rem;">${selectedTask1.prompt || 'Describe the chart below.'}</p>
-                    <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">📝 Minimum 150 words</p>
-                </div>
+            <div style="margin-bottom:1.5rem;background:#faf7ff;padding:1rem;border-radius:12px;">
+                <p style="font-weight:700;color:#4A148C;">📝 Free Writing Test</p>
+                <p style="font-size:0.9rem;color:#7B6A8A;">Task 1 + Task 2 · 60 minutes</p>
+            </div>
+            <div style="margin-bottom:1.5rem;">
+                <h4 style="color:#4A148C;">Task 1: ${task1.title}</h4>
+                <p style="font-size:0.95rem;color:#3d2a4a;">Describe the chart below and make comparisons where relevant.</p>
                 <div class="writing-area">
-                    <label for="task1Response">✏️ Your response:</label>
-                    <textarea id="task1Response" placeholder="Write your Task 1 response here..." oninput="updateWordCount('task1Response', 'task1Words')"></textarea>
-                    <div class="word-counter">📝 Words: <span class="count" id="task1Words">0</span> / 150</div>
+                    <textarea id="mockTask1" placeholder="Write your Task 1 response here..." oninput="updateWordCount('mockTask1', 'mockTask1Words')"></textarea>
+                    <div class="word-counter">📝 Words: <span class="count" id="mockTask1Words">0</span> / 150</div>
                 </div>
             </div>
-        `;
-
-        html += `
-            <div class="task-section">
-                <div class="task-label" style="background:#4A148C;color:white;padding:0.3rem 1.2rem;border-radius:50px;font-weight:700;font-size:0.75rem;display:inline-block;margin-bottom:0.8rem;">📝 Task 2</div>
-                <div class="task-prompt" style="background:#faf7ff;padding:1.5rem;border-radius:16px;border-left:6px solid #7B1FA2;margin-bottom:1rem;">
-                    <h3 style="color:#4A148C;font-size:1.1rem;margin-bottom:0.5rem;">${selectedTask2.title || 'Essay Topic'}</h3>
-                    <p style="color:#3d2a4a;font-size:0.95rem;">${selectedTask2.prompt || 'Write an essay on the topic below.'}</p>
-                    <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">📝 Minimum ${selectedTask2.minWords || 250} words</p>
-                </div>
+            <div>
+                <h4 style="color:#4A148C;">Task 2: ${task2.title}</h4>
+                <p style="font-size:0.95rem;color:#3d2a4a;">Write an essay on the topic below. Discuss both views and give your own opinion.</p>
                 <div class="writing-area">
-                    <label for="task2Response">✏️ Your essay:</label>
-                    <textarea id="task2Response" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('task2Response', 'task2Words')"></textarea>
-                    <div class="word-counter">📝 Words: <span class="count" id="task2Words">0</span> / ${selectedTask2.minWords || 250}</div>
+                    <textarea id="mockTask2" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('mockTask2', 'mockTask2Words')"></textarea>
+                    <div class="word-counter">📝 Words: <span class="count" id="mockTask2Words">0</span> / 250</div>
                 </div>
             </div>
-        `;
-
-        html += `
-            <div class="actions">
+            <div class="actions" style="margin-top:1.5rem;">
                 <button type="button" class="btn btn-primary" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>
                 <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
             </div>
         `;
 
         container.innerHTML = html;
-
-        // Start timer
         startTimer();
     }
 
     // ============================================================
-    // WORD COUNTER
+    // UPDATE WORD COUNT
     // ============================================================
     function updateWordCount(textareaId, displayId) {
         const text = document.getElementById(textareaId).value;
@@ -698,50 +695,26 @@
     // ============================================================
     function evaluateWriting(text, minWords) {
         const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-        const avgWordLength = text.length / (words || 1);
         let band = 5.0;
-        
-        if (words >= minWords && words <= minWords + 50) band = 6.5;
-        else if (words > minWords + 50 && words <= minWords + 100) band = 7.0;
-        else if (words > minWords + 100) band = 7.5;
+        if (words >= minWords) band = 6.5;
         else if (words >= minWords - 20) band = 6.0;
         else if (words >= minWords - 50) band = 5.5;
         else if (words >= minWords - 100) band = 5.0;
         else band = 4.5;
-        
-        if (sentences >= 8 && sentences <= 18) band += 0.5;
-        if (avgWordLength > 5 && avgWordLength < 7.5) band += 0.3;
-        
         band = Math.min(band, 9.0);
         band = Math.round(band * 2) / 2;
-        return { band, words, sentences };
-    }
-
-    function getFeedback(band, words, minWords) {
-        const wordFeedback = words < minWords 
-            ? `<br />⚠️ Needs more words (${words}/${minWords}).` 
-            : `<br />✅ Good word count (${words}).`;
-        if (band >= 8.5) return `🌟 Excellent work!${wordFeedback}`;
-        if (band >= 7.5) return `👏 Great job! Strong writing skills.${wordFeedback}`;
-        if (band >= 6.5) return `💪 Good effort! You're on the right track.${wordFeedback}`;
-        if (band >= 5.5) return `📚 You're developing your skills. Keep practicing!${wordFeedback}`;
-        return `📝 Keep practicing! Focus on developing your ideas.${wordFeedback}`;
+        return { band, words };
     }
 
     // ============================================================
     // SUBMIT TEST
     // ============================================================
     async function submitTest() {
-        const task1Text = document.getElementById('task1Response')?.value || '';
-        const task2Text = document.getElementById('task2Response')?.value || '';
+        const task1Text = document.getElementById('mockTask1')?.value || '';
+        const task2Text = document.getElementById('mockTask2')?.value || '';
 
-        const minWords1 = 150;
-        const minWords2 = selectedTask2?.minWords || 250;
-
-        const task1Result = evaluateWriting(task1Text, minWords1);
-        const task2Result = evaluateWriting(task2Text, minWords2);
-
+        const task1Result = evaluateWriting(task1Text, 150);
+        const task2Result = evaluateWriting(task2Text, 250);
         const overallBand = Math.round(((task1Result.band + task2Result.band) / 2) * 2) / 2;
 
         const resultBox = document.getElementById('resultBox');
@@ -754,10 +727,10 @@
         document.getElementById('feedbackText').innerHTML = `
             <div style="margin-bottom:1rem;"><span class="band">Overall Band: ${overallBand}</span></div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${getFeedback(task1Result.band, task1Result.words, minWords1)}
+                <strong>📊 Task 1:</strong> Band ${task1Result.band} — ${task1Result.words} words
             </div>
             <div style="background:white;padding:1rem;border-radius:14px;margin:0.5rem 0;">
-                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${getFeedback(task2Result.band, task2Result.words, minWords2)}
+                <strong>📝 Task 2:</strong> Band ${task2Result.band} — ${task2Result.words} words
             </div>
         `;
 
