@@ -72,6 +72,104 @@
             background: #fff8e1;
             color: #f57f17;
         }
+        .plan-badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        
+        /* ===== SECTION CARD ===== */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            border: 2px solid #f0e8f5;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .section-card:hover {
+            border-color: #7B1FA2;
+        }
+        .section-card.locked {
+            opacity: 0.7;
+            border-color: #e0d6e8;
+        }
+        .section-card.locked .section-header {
+            background: #f5f0ff;
+        }
+        .section-card .section-header {
+            padding: 1.2rem 1.8rem;
+            background: #faf7ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .section-card .section-header .title {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 1.1rem;
+        }
+        .section-card .section-header .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+        }
+        .section-card .section-header .badge.free {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .section-card .section-header .badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .section-card .section-header .badge.proplus {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .section-card .section-body {
+            padding: 1.2rem 1.8rem;
+        }
+        .section-card .section-body .topic-preview {
+            background: #faf7ff;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #3d2a4a;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay {
+            background: #f5f0ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px dashed #7B1FA2;
+            margin-top: 0.5rem;
+        }
+        .section-card .section-body .locked-overlay .lock-icon {
+            font-size: 2rem;
+            color: #7B1FA2;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .section-card .section-body .locked-overlay .upgrade-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: 0.3s;
+        }
+        .section-card .section-body .locked-overlay .upgrade-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
         .ai-examiner {
             background: linear-gradient(135deg, #f3edf7, #faf7ff);
             border-radius: 20px;
@@ -98,10 +196,10 @@
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white;
             border: none;
-            padding: 1rem 3rem;
+            padding: 0.8rem 2.5rem;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: 0.3s;
             box-shadow: 0 4px 20px rgba(74, 20, 140, 0.3);
@@ -117,36 +215,48 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .part-section {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px dashed #f0e8f5;
+
+        .speaking-area {
+            margin-top: 1rem;
         }
-        .part-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .part-label {
-            background: #4A148C;
-            color: white;
-            padding: 0.3rem 1.2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            display: inline-block;
-            margin-bottom: 0.8rem;
+        .speaking-area label {
+            font-weight: 600;
+            color: #4A148C;
+            display: block;
+            margin-bottom: 0.3rem;
         }
-        .part-label.part2 { background: #FFD700; color: #4A148C; }
-        .part-label.part3 { background: #7B1FA2; color: white; }
+        .speaking-area textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+            transition: 0.3s;
+            line-height: 1.6;
+        }
+        .speaking-area textarea:focus { outline: none; border-color: #7B1FA2; }
+
         .cue-card {
             background: #faf7ff;
             padding: 1.5rem;
             border-radius: 16px;
             border: 2px solid #7B1FA2;
-            margin-bottom: 1rem;
+            margin: 1rem 0;
         }
-        .cue-card h3 { color: #4A148C; font-size: 1.1rem; margin-bottom: 0.5rem; }
-        .cue-card .topic { font-weight: 700; color: #4A148C; font-size: 1.2rem; margin: 0.5rem 0; }
+        .cue-card .topic { font-weight: 700; color: #4A148C; font-size: 1.2rem; }
         .cue-card .bullets { list-style: none; padding-left: 0; }
         .cue-card .bullets li { padding: 0.2rem 0; color: #3d2a4a; }
         .cue-card .bullets li::before { content: "• "; color: #7B1FA2; font-weight: 700; }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
         .btn {
             padding: 0.8rem 2.5rem;
             border: none;
@@ -169,10 +279,21 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
         }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .btn-secondary { background: #f3edf7; color: #4A148C; }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+        }
         .btn-secondary:hover { background: #e5d9ed; }
-        .btn-success { background: linear-gradient(135deg, #2e7d32, #43a047); color: white; }
+        .btn-success {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+        }
+        
         .result {
             margin-top: 2rem;
             padding: 1.8rem;
@@ -216,12 +337,6 @@
             text-decoration: none;
         }
         .back-link:hover { text-decoration: underline; }
-        .actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
 
         .login-overlay {
             display: none;
@@ -265,7 +380,7 @@
         }
         .login-overlay .modal-box .btn-login:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
         .login-overlay .modal-box .btn-secondary {
             background: #f3edf7;
@@ -286,41 +401,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .question-limit-info {
-            background: #faf7ff;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #f0e8f5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .question-limit-info .free-badge {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .pro-badge {
-            background: #FFD700;
-            color: #4A148C;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .question-limit-info .upgrade-link {
-            color: #4A148C;
-            font-weight: 600;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .container { padding: 1.5rem; }
@@ -330,6 +410,7 @@
             .result .part-breakdown { grid-template-columns: 1fr; }
             .mic-btn { width: 100%; }
             .login-overlay .modal-box { padding: 2rem; }
+            .section-card .section-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -354,50 +435,20 @@
 <!-- ===== TEST CONTENT ===== -->
 <div class="container" id="testContent" style="display:none;">
     <div class="test-header">
-        <h1><i class="fas fa-robot"></i> AI Speaking Test</h1>
+        <h1><i class="fas fa-microphone"></i> AI Speaking Test</h1>
         <div class="meta">
             <span class="timer-box"><i class="fas fa-clock"></i> <span id="timerDisplay">15:00</span></span>
-            <span class="plan-badge" id="planBadge">Loading...</span>
+            <span class="plan-badge" id="planBadge">Free</span>
         </div>
     </div>
 
-    <!-- ===== QUESTION LIMIT INFO ===== -->
-    <div class="question-limit-info" id="questionLimitInfo">
-        <span id="limitText">Loading question limit...</span>
-        <span>
-            <span class="free-badge" id="freeBadge">Free: 100 Topics</span>
-            <span class="pro-badge" id="proBadge" style="display:none;">⭐ Pro: Unlimited</span>
-            <a href="checkout.html" class="upgrade-link" id="upgradeLink" style="display:none;">Upgrade →</a>
-        </span>
+    <div id="sectionsContainer">
+        <!-- Sections will be rendered by JavaScript -->
     </div>
-
-    <div class="ai-examiner">
-        <span class="avatar">🤖</span>
-        <div class="status" id="aiStatus">
-            <i class="fas fa-circle" style="color:#2e7d32; font-size:0.6rem;"></i> 
-            <span id="statusText">AI Examiner ready. Click "Start Speaking" to begin.</span>
-        </div>
-        <div class="transcript-box">
-            <span class="label"><i class="fas fa-comment"></i> AI Examiner says:</span>
-            <span id="aiMessage">Hello! I'm your AI IELTS examiner. Click the button below to start the test.</span>
-        </div>
-        <div class="transcript-box" style="border-color:#FFD700;">
-            <span class="label"><i class="fas fa-user"></i> You said:</span>
-            <span id="userMessage"><em>Your speech will appear here...</em></span>
-        </div>
-        <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
-            <i class="fas fa-microphone"></i> Start Speaking
-        </button>
-        <div style="margin-top:0.5rem; font-size:0.8rem; color:#7B6A8A;">
-            <i class="fas fa-info-circle"></i> Click and speak into your microphone. AI will evaluate your fluency, vocabulary, and pronunciation.
-        </div>
-    </div>
-
-    <div id="speakingTopicsContainer"></div>
 
     <div class="actions">
-        <button type="button" class="btn btn-success" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit & Evaluate</button>
-        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> New Topic</button>
+        <button type="button" class="btn btn-primary" id="startTestBtn" onclick="startTest()"><i class="fas fa-play"></i> Start Free Test</button>
+        <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
         <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Dashboard</a>
     </div>
 
@@ -452,13 +503,9 @@
     let part1Answers = '';
     let part2Answers = '';
     let part3Answers = '';
-    let isRecording = false;
-    let recognition = null;
-    let userSpeech = '';
-    let currentPart = 1;
 
     // ============================================================
-    // 🔒 CHECK LOGIN + LOAD USER PLAN
+    // CHECK LOGIN + LOAD USER PLAN
     // ============================================================
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
@@ -481,131 +528,263 @@
             console.log('Error loading user plan:', e);
         }
 
-        updatePlanUI();
-        renderTest();
+        updatePlanBadge();
+        renderSections();
     });
 
     // ============================================================
-    // UPDATE PLAN UI
+    // UPDATE PLAN BADGE
     // ============================================================
-    function updatePlanUI() {
-        const planBadge = document.getElementById('planBadge');
-        const limitText = document.getElementById('limitText');
-        const freeBadge = document.getElementById('freeBadge');
-        const proBadge = document.getElementById('proBadge');
-        const upgradeLink = document.getElementById('upgradeLink');
-
+    function updatePlanBadge() {
+        const badge = document.getElementById('planBadge');
         if (userPlan === 'free') {
-            planBadge.textContent = 'Free — 100 Topics';
-            planBadge.className = 'plan-badge';
-            limitText.textContent = '📚 You have access to 100 free speaking topics.';
-            freeBadge.style.display = 'inline-block';
-            proBadge.style.display = 'none';
-            upgradeLink.style.display = 'inline-block';
-            upgradeLink.textContent = '🚀 Upgrade for Unlimited →';
+            badge.textContent = '🟢 Free Plan';
+            badge.className = 'plan-badge';
+        } else if (userPlan === 'pro') {
+            badge.textContent = '⭐ Pro Plan';
+            badge.className = 'plan-badge pro';
         } else {
-            planBadge.textContent = '⭐ Pro — Unlimited Topics';
-            planBadge.className = 'plan-badge pro';
-            limitText.textContent = '🌟 You have unlimited access to all speaking topics!';
-            freeBadge.style.display = 'none';
-            proBadge.style.display = 'inline-block';
-            upgradeLink.style.display = 'none';
+            badge.textContent = '🚀 Pro+ Plan';
+            badge.className = 'plan-badge proplus';
         }
     }
 
     // ============================================================
-    // RENDER TEST
+    // RENDER SECTIONS
     // ============================================================
-    function renderTest() {
-        const allQuestions = getQuestions('speaking', userPlan);
-        const shuffled = shuffleArray([...allQuestions]);
+    function renderSections() {
+        const container = document.getElementById('sectionsContainer');
         
-        // Separate parts
-        const part1Topics = shuffled.filter(q => q.part === 1);
-        const part2Topics = shuffled.filter(q => q.part === 2);
-        const part3Topics = shuffled.filter(q => q.part === 3);
-        
-        selectedPart1 = part1Topics.length > 0 ? part1Topics[0] : null;
-        selectedPart2 = part2Topics.length > 0 ? part2Topics[0] : null;
-        selectedPart3 = part3Topics.length > 0 ? part3Topics[0] : null;
+        // Get speaking data
+        const freePart1 = getQuestions('speaking', 'free').part1 || [];
+        const freePart2 = getQuestions('speaking', 'free').part2 || [];
+        const freePart3 = getQuestions('speaking', 'free').part3 || [];
+        const proPart1 = getQuestions('speaking', 'pro').part1 || [];
+        const proPart2 = getQuestions('speaking', 'pro').part2 || [];
+        const proPart3 = getQuestions('speaking', 'pro').part3 || [];
+        const proPlusPart1 = getQuestions('speaking', 'proplus').part1 || [];
+        const proPlusPart2 = getQuestions('speaking', 'proplus').part2 || [];
+        const proPlusPart3 = getQuestions('speaking', 'proplus').part3 || [];
 
-        const container = document.getElementById('speakingTopicsContainer');
+        const isPro = userPlan === 'pro' || userPlan === 'proplus';
+        const isProPlus = userPlan === 'proplus';
+
+        const totalFree = freePart1.length + freePart2.length + freePart3.length;
+        const totalPro = proPart1.length + proPart2.length + proPart3.length;
+        const totalProPlus = proPlusPart1.length + proPlusPart2.length + proPlusPart3.length;
+
         let html = '';
 
-        // Part 1
-        if (selectedPart1) {
-            const questionsList = selectedPart1.questions.map(q => `<li>${q}</li>`).join('');
-            html += `
-                <div class="part-section">
-                    <div class="part-label">🗣️ Part 1</div>
-                    <div class="cue-card">
-                        <h3>🎯 Topic: ${selectedPart1.topic || 'General Questions'}</h3>
-                        <ul class="bullets">${questionsList}</ul>
-                    </div>
-                    <div class="writing-area" style="margin-top:0.5rem;">
-                        <label for="part1Response">✏️ Write your answers (practice script):</label>
-                        <textarea id="part1Response" placeholder="Write your Part 1 responses here..." style="width:100%;padding:1rem;border:2px solid #f0e8f5;border-radius:16px;font-family:'Inter',sans-serif;font-size:1rem;min-height:100px;resize:vertical;transition:0.3s;line-height:1.6;"></textarea>
-                        <div class="hint" style="font-size:0.85rem;color:#7B6A8A;margin-top:0.3rem;">💡 Tip: Practice speaking your answers out loud first, then write them down.</div>
-                    </div>
+        // ===== FREE SECTION =====
+        html += `
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="title">🟢 Free Access</span>
+                    <span class="badge free">Free — ${totalFree} Topics</span>
                 </div>
-            `;
-        }
+                <div class="section-body">
+                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
+                        🗣️ Part 1: ${freePart1.length} · Part 2: ${freePart2.length} · Part 3: ${freePart3.length}
+                    </div>
+                    <div class="topic-preview">
+                        <strong style="color:#4A148C;">Part 1:</strong> ${freePart1[0]?.topic || 'No topics available'}
+                    </div>
+                    <button class="btn btn-primary" onclick="startTest()" style="margin-top:0.5rem;padding:0.5rem 1.5rem;font-size:0.9rem;">
+                        <i class="fas fa-play"></i> Start Free Test
+                    </button>
+                </div>
+            </div>
+        `;
 
-        // Part 2
-        if (selectedPart2) {
-            const bulletsList = selectedPart2.bullets.map(b => `<li>${b}</li>`).join('');
-            html += `
-                <div class="part-section">
-                    <div class="part-label part2">🎤 Part 2</div>
-                    <div class="cue-card">
-                        <h3>📋 Cue Card</h3>
-                        <div class="topic">${selectedPart2.cueCard || 'Describe a topic.'}</div>
-                        <p style="font-weight:600; margin:0.5rem 0;">You should say:</p>
-                        <ul class="bullets">${bulletsList}</ul>
-                        <div style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">
-                            <i class="fas fa-stopwatch"></i> Prepare for 1 minute, then speak for 2 minutes.
+        // ===== PRO SECTION =====
+        html += `
+            <div class="section-card ${isPro ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">⭐ Pro Access</span>
+                    <span class="badge pro">${isPro ? `${totalPro} Topics` : '🔒 Locked'}</span>
+                </div>
+                <div class="section-body">
+                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
+                        🗣️ Part 1: ${proPart1.length} · Part 2: ${proPart2.length} · Part 3: ${proPart3.length}
+                    </div>
+                    ${isPro ? `
+                        <div class="topic-preview">
+                            <strong style="color:#4A148C;">Part 1:</strong> ${proPart1[0]?.topic || 'No topics available'}
                         </div>
-                    </div>
-                    <div class="writing-area" style="margin-top:0.5rem;">
-                        <label for="part2Response">✏️ Write your speech (2-minute script):</label>
-                        <textarea id="part2Response" placeholder="Write your Part 2 speech here..." style="width:100%;padding:1rem;border:2px solid #f0e8f5;border-radius:16px;font-family:'Inter',sans-serif;font-size:1rem;min-height:120px;resize:vertical;transition:0.3s;line-height:1.6;"></textarea>
-                        <div class="hint" style="font-size:0.85rem;color:#7B6A8A;margin-top:0.3rem;">💡 Tip: Speak for 2 minutes without stopping. Practice with a timer!</div>
-                    </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🔒</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro to unlock 50+ speaking topics</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get full access to all parts</p>
+                            <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+                        </div>
+                    `}
                 </div>
-            `;
-        }
+            </div>
+        `;
 
-        // Part 3
-        if (selectedPart3) {
-            const questionsList = selectedPart3.questions.map(q => `<li>${q}</li>`).join('');
-            html += `
-                <div class="part-section">
-                    <div class="part-label part3">💬 Part 3</div>
-                    <div class="cue-card">
-                        <h3>🎯 Discussion Questions</h3>
-                        <ul class="bullets">${questionsList}</ul>
-                    </div>
-                    <div class="writing-area" style="margin-top:0.5rem;">
-                        <label for="part3Response">✏️ Write your answers (discussion script):</label>
-                        <textarea id="part3Response" placeholder="Write your Part 3 responses here..." style="width:100%;padding:1rem;border:2px solid #f0e8f5;border-radius:16px;font-family:'Inter',sans-serif;font-size:1rem;min-height:100px;resize:vertical;transition:0.3s;line-height:1.6;"></textarea>
-                        <div class="hint" style="font-size:0.85rem;color:#7B6A8A;margin-top:0.3rem;">💡 Tip: Give extended answers. Explain your ideas with examples.</div>
-                    </div>
+        // ===== PRO+ SECTION =====
+        html += `
+            <div class="section-card ${isProPlus ? '' : 'locked'}">
+                <div class="section-header">
+                    <span class="title">🚀 Pro+ Access</span>
+                    <span class="badge proplus">${isProPlus ? `${totalProPlus} Topics` : '🔒 Locked'}</span>
                 </div>
-            `;
-        }
+                <div class="section-body">
+                    <div style="font-size:0.9rem;color:#7B6A8A;margin-bottom:0.5rem;">
+                        🗣️ Part 1: ${proPlusPart1.length} · Part 2: ${proPlusPart2.length} · Part 3: ${proPlusPart3.length}
+                    </div>
+                    ${isProPlus ? `
+                        <div class="topic-preview">
+                            <strong style="color:#4A148C;">Part 1:</strong> ${proPlusPart1[0]?.topic || 'No topics available'}
+                        </div>
+                    ` : `
+                        <div class="locked-overlay">
+                            <span class="lock-icon">🚀</span>
+                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 100+ speaking topics</p>
+                            <p style="font-size:0.85rem;color:#7B6A8A;">Get unlimited access + AI feedback</p>
+                            <a href="checkout.html" class="upgrade-link">🚀 Upgrade to Pro+</a>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
 
         container.innerHTML = html;
     }
 
     // ============================================================
+    // START TEST
+    // ============================================================
+    function startTest() {
+        const freePart1 = getQuestions('speaking', 'free').part1 || [];
+        const freePart2 = getQuestions('speaking', 'free').part2 || [];
+        const freePart3 = getQuestions('speaking', 'free').part3 || [];
+
+        if (freePart1.length === 0 || freePart2.length === 0 || freePart3.length === 0) {
+            alert('No speaking topics available. Please try again later.');
+            return;
+        }
+
+        selectedPart1 = freePart1[0];
+        selectedPart2 = freePart2[0];
+        selectedPart3 = freePart3[0];
+
+        const container = document.getElementById('sectionsContainer');
+        let html = `
+            <div class="ai-examiner">
+                <span class="avatar">🤖</span>
+                <div class="status" id="aiStatus">
+                    <i class="fas fa-circle" style="color:#2e7d32; font-size:0.6rem;"></i> 
+                    <span id="statusText">AI Examiner ready. Click "Start Speaking" to begin.</span>
+                </div>
+                <div class="transcript-box">
+                    <span class="label"><i class="fas fa-comment"></i> AI Examiner says:</span>
+                    <span id="aiMessage">Hello! I'm your AI IELTS examiner. Click the button below to start the test.</span>
+                </div>
+                <div class="transcript-box" style="border-color:#FFD700;">
+                    <span class="label"><i class="fas fa-user"></i> You said:</span>
+                    <span id="userMessage"><em>Your speech will appear here...</em></span>
+                </div>
+                <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
+                    <i class="fas fa-microphone"></i> Start Speaking
+                </button>
+                <div style="margin-top:0.5rem; font-size:0.8rem; color:#7B6A8A;">
+                    <i class="fas fa-info-circle"></i> Click and speak into your microphone. AI will evaluate your fluency, vocabulary, and pronunciation.
+                </div>
+            </div>
+        `;
+
+        // PART 1
+        html += `
+            <div style="background:white;border-radius:16px;padding:1.2rem;border:1px solid #f0e8f5;margin-bottom:1rem;">
+                <div style="background:#4A148C;color:white;padding:0.2rem 0.8rem;border-radius:50px;display:inline-block;font-weight:700;font-size:0.7rem;margin-bottom:0.5rem;">🗣️ Part 1</div>
+                <div class="cue-card">
+                    <h3 style="color:#4A148C;font-size:1rem;">🎯 Topic: ${selectedPart1.topic || 'General Questions'}</h3>
+                    <ul class="bullets">
+                        ${selectedPart1.questions.map(q => `<li>${q}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="speaking-area">
+                    <label for="part1Response">✏️ Write your answers (practice script):</label>
+                    <textarea id="part1Response" placeholder="Write your Part 1 responses here..."></textarea>
+                    <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.3rem;">💡 Tip: Practice speaking your answers out loud first, then write them down.</div>
+                </div>
+            </div>
+        `;
+
+        // PART 2
+        html += `
+            <div style="background:white;border-radius:16px;padding:1.2rem;border:1px solid #f0e8f5;margin-bottom:1rem;">
+                <div style="background:#FFD700;color:#4A148C;padding:0.2rem 0.8rem;border-radius:50px;display:inline-block;font-weight:700;font-size:0.7rem;margin-bottom:0.5rem;">🎤 Part 2</div>
+                <div class="cue-card">
+                    <h3 style="color:#4A148C;font-size:1rem;">📋 Cue Card</h3>
+                    <div class="topic">${selectedPart2.cueCard || 'Describe a topic.'}</div>
+                    <p style="font-weight:600; margin:0.5rem 0;">You should say:</p>
+                    <ul class="bullets">
+                        ${selectedPart2.bullets.map(b => `<li>${b}</li>`).join('')}
+                    </ul>
+                    <div style="font-size:0.85rem; color:#7B6A8A; margin-top:0.5rem;">
+                        <i class="fas fa-stopwatch"></i> Prepare for 1 minute, then speak for 2 minutes.
+                    </div>
+                </div>
+                <div class="speaking-area">
+                    <label for="part2Response">✏️ Write your speech (2-minute script):</label>
+                    <textarea id="part2Response" placeholder="Write your Part 2 speech here..."></textarea>
+                    <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.3rem;">💡 Tip: Speak for 2 minutes without stopping. Practice with a timer!</div>
+                </div>
+            </div>
+        `;
+
+        // PART 3
+        html += `
+            <div style="background:white;border-radius:16px;padding:1.2rem;border:1px solid #f0e8f5;">
+                <div style="background:#7B1FA2;color:white;padding:0.2rem 0.8rem;border-radius:50px;display:inline-block;font-weight:700;font-size:0.7rem;margin-bottom:0.5rem;">💬 Part 3</div>
+                <div class="cue-card">
+                    <h3 style="color:#4A148C;font-size:1rem;">🎯 Discussion Questions</h3>
+                    <ul class="bullets">
+                        ${selectedPart3.questions.map(q => `<li>${q}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="speaking-area">
+                    <label for="part3Response">✏️ Write your answers (discussion script):</label>
+                    <textarea id="part3Response" placeholder="Write your Part 3 responses here..."></textarea>
+                    <div style="font-size:0.85rem;color:#7B6A8A;margin-top:0.3rem;">💡 Tip: Give extended answers. Explain your ideas with examples.</div>
+                </div>
+            </div>
+        `;
+
+        html += `
+            <div class="actions" style="margin-top:1.5rem;">
+                <button type="button" class="btn btn-success" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit & Evaluate</button>
+                <button type="button" class="btn btn-secondary" onclick="resetTest()"><i class="fas fa-sync-alt"></i> Reset</button>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        // Setup speech recognition
+        setupSpeechRecognition();
+
+        // Start timer
+        startTimer();
+    }
+
+    // ============================================================
     // SPEECH RECOGNITION
     // ============================================================
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const SpeechSynthesis = window.speechSynthesis;
+    let isRecording = false;
+    let recognition = null;
+    let userSpeech = '';
+    let currentPart = 1;
 
-    if (!SpeechRecognition) {
-        document.getElementById('micBtn').disabled = true;
-        document.getElementById('statusText').textContent = '❌ Speech recognition not supported. Please use Chrome.';
+    function setupSpeechRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('statusText').textContent = '❌ Speech recognition not supported. Please use Chrome.';
+            return;
+        }
     }
 
     function toggleRecording() {
@@ -614,7 +793,9 @@
     }
 
     function startRecording() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) return;
+
         recognition = new SpeechRecognition();
         recognition.lang = 'en-US';
         recognition.continuous = true;
@@ -662,6 +843,7 @@
     }
 
     function speakText(text) {
+        const SpeechSynthesis = window.speechSynthesis;
         if (!SpeechSynthesis) return;
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 0.9;
@@ -679,9 +861,9 @@
         SpeechSynthesis.speak(utterance);
     }
 
-    if (SpeechSynthesis) {
-        SpeechSynthesis.getVoices();
-        SpeechSynthesis.onvoiceschanged = function() { SpeechSynthesis.getVoices(); };
+    if (window.speechSynthesis) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
     }
 
     function handleAIResponse(text) {
@@ -728,16 +910,25 @@
     // TIMER (15 minutes)
     // ============================================================
     let timeLeft = 900;
-    const timerDisplay = document.getElementById('timerDisplay');
-    function updateTimer() {
-        const mins = Math.floor(timeLeft / 60);
-        const secs = timeLeft % 60;
-        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        if (timeLeft <= 0) { clearInterval(timerInterval); alert('⏰ Time is up!'); stopRecording(); submitTest(); }
-        timeLeft--;
+    let timerInterval = null;
+
+    function startTimer() {
+        const timerDisplay = document.getElementById('timerDisplay');
+        timeLeft = 900;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('⏰ Time is up!');
+                stopRecording();
+                submitTest();
+            }
+            timeLeft--;
+        }, 1000);
     }
-    const timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
 
     // ============================================================
     // EVALUATE SPEAKING
@@ -792,7 +983,6 @@
     // SUBMIT TEST
     // ============================================================
     async function submitTest() {
-        // Get text from textareas if speech wasn't used
         const part1Textarea = document.getElementById('part1Response');
         const part2Textarea = document.getElementById('part2Response');
         const part3Textarea = document.getElementById('part3Response');
@@ -856,7 +1046,6 @@
         localStorage.setItem('ieltsprova_scores', JSON.stringify(savedScores));
 
         const saveStatus = document.getElementById('saveStatus');
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
@@ -888,18 +1077,8 @@
     // ============================================================
     function resetTest() {
         stopRecording();
+        clearInterval(timerInterval);
         location.reload();
-    }
-
-    // ============================================================
-    // SHUFFLE HELPER
-    // ============================================================
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
     }
 </script>
 
