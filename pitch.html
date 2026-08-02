@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>Investor Pitch — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        /* ===== NAV ===== */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 1rem 0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #4A148C;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo span { color: #FFD700; }
+        .logo small {
+            display: block;
+            font-size: 0.55rem;
+            font-weight: 400;
+            color: #7B6A8A;
+            letter-spacing: 1px;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.4rem;
+        }
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: #4A148C;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #2A004F;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        .nav-links a:hover { color: #7B1FA2; }
+        .nav-links a.active { color: #4A148C; border-bottom: 2px solid #FFD700; }
+        .nav-cta {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.4);
+        }
+        .nav-cta-outline {
+            background: transparent;
+            border: 2px solid #4A148C;
+            color: #4A148C !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .nav-cta-outline:hover {
+            background: #4A148C;
+            color: white !important;
+        }
+        .user-greeting { font-weight: 600; color: #4A148C; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: white;
+                padding: 1.5rem;
+                border-radius: 16px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                margin-top: 0.5rem;
+                gap: 1rem;
+                align-items: center;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1rem; }
+            .nav-cta, .nav-cta-outline { width: 100%; text-align: center; }
+            #userGreeting { flex-direction: column; width: 100%; gap: 0.5rem; }
+        }
+
+        /* ===== PITCH SLIDES ===== */
+        .pitch-container {
+            padding: 2rem 0 3rem;
+        }
+        .slide {
+            background: white;
+            border-radius: 28px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.04);
+            border: 1px solid #f0e8f5;
+            transition: 0.3s;
+        }
+        .slide:hover {
+            border-color: #7B1FA2;
+            box-shadow: 0 20px 60px rgba(74, 20, 140, 0.06);
+        }
+        .slide .slide-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #7B6A8A;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .slide h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+            margin-bottom: 0.5rem;
+        }
+        .slide h2 span {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .slide .subtitle {
+            color: #7B6A8A;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .slide .highlight-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #4A148C;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        .slide .highlight-number.gold {
+            color: #FFD700;
+        }
+        .slide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .slide-grid .item {
+            background: #faf7ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+        }
+        .slide-grid .item .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .slide-grid .item h4 {
+            color: #4A148C;
+            font-size: 1.1rem;
+        }
+        .slide-grid .item p {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+        }
+
+        .slide .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .slide .two-col .col {
+            background: #faf7ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #f0e8f5;
+        }
+        .slide .two-col .col h4 {
+            color: #4A148C;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .slide .two-col .col ul {
+            list-style: none;
+            padding: 0;
+        }
+        .slide .two-col .col ul li {
+            padding: 0.4rem 0;
+            color: #3d2a4a;
+            font-size: 0.95rem;
+        }
+        .slide .two-col .col ul li i {
+            color: #7B1FA2;
+            margin-right: 0.5rem;
+            width: 1.2rem;
+        }
+
+        .slide .progress-bar {
+            background: #f0e8f5;
+            height: 12px;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        .slide .progress-bar .fill {
+            height: 100%;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #4A148C, #7B1FA2);
+            transition: width 1s ease;
+        }
+        .slide .progress-bar .fill.gold {
+            background: linear-gradient(90deg, #FFD700, #f5c500);
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .cta-box h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .cta-box p { opacity: 0.9; margin-bottom: 1.5rem; }
+        .cta-box .btn-cta {
+            background: #FFD700;
+            color: #4A148C;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .cta-box .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: white;
+            color: #4A148C;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            border: 2px solid #4A148C;
+        }
+        .btn-download:hover {
+            background: #4A148C;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .slide { padding: 1.5rem; }
+            .slide .two-col { grid-template-columns: 1fr; }
+            .slide h2 { font-size: 1.5rem; }
+            .slide .highlight-number { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAV ===== -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">
+                💜 IELTS<span>Prova</span>
+                <small>by Prova Technologies</small>
+            </div>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="pitch.html" class="active">Investor Pitch</a>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <span id="authButtons">
+                    <button class="nav-cta-outline" onclick="openModal('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
+                </span>
+                <span id="userGreeting" style="display:none;">
+                    <span class="user-greeting" id="greetingText"><i class="fas fa-user-circle"></i> Hi, User</span>
+                    <button class="nav-cta-outline" onclick="logoutUser()" style="padding:0.4rem 1.2rem; font-size:0.8rem;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== PITCH SLIDES ===== -->
+    <section class="pitch-container">
+        <div class="container">
+
+            <!-- SLIDE 1: TITLE -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 1</div>
+                <h1 style="font-size:3rem; font-weight:900; color:#4A148C; margin-bottom:0.5rem;">
+                    IELTS<span style="color:#FFD700;">Prova</span>
+                </h1>
+                <h2 style="font-size:2rem; font-weight:700; color:#1a0a2e; margin-bottom:0.5rem;">
+                    AI-Powered IELTS Preparation
+                </h2>
+                <p class="subtitle" style="font-size:1.2rem;">
+                    <strong>CEO &amp; Founder:</strong> Toluwase Victor
+                </p>
+                <p style="color:#7B6A8A; font-size:1.1rem; max-width:600px; margin:0 auto 1rem;">
+                    "Making quality exam preparation accessible to every student, anywhere in the world."
+                </p>
+                <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+                    <span style="background:#f3edf7; padding:0.3rem 1rem; border-radius:50px; font-size:0.85rem;">📚 8,000+ Questions</span>
+                    <span style="background:#f3edf7; padding:0.3rem 1rem; border-radius:50px; font-size:0.85rem;">🤖 AI-Powered</span>
+                    <span style="background:#f3edf7; padding:0.3rem 1rem; border-radius:50px; font-size:0.85rem;">🌍 Global EdTech</span>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: PROBLEM -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 2</div>
+                <h2>The <span>Problem</span></h2>
+                <p class="subtitle">Millions of students struggle with exam preparation.</p>
+                <div class="two-col">
+                    <div class="col">
+                        <h4>💰 Expensive</h4>
+                        <ul>
+                            <li><i class="fas fa-times-circle" style="color:#c62828;"></i> Prep courses cost $500+</li>
+                            <li><i class="fas fa-times-circle" style="color:#c62828;"></i> Private tutors are unaffordable</li>
+                            <li><i class="fas fa-times-circle" style="color:#c62828;"></i> Quality resources are behind paywalls</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h4>📉 Ineffective</h4>
+                        <ul>
+                            <li><i class="fas fa-times-circle" style="color:#c62828;"></i> No personalized feedback</li>
+                            <li><i class="fas fa-times-circle" style="color:#c62828;"></i> Generic content for all students</li>
+                            <li><i class="fas fa-times-circle" style="color:#c62828;"></i> Limited practice opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top:1.5rem; background:#fce4ec; padding:1rem; border-radius:12px; text-align:center;">
+                    <p style="font-weight:700; color:#c62828;">The Result: <span class="highlight-number" style="font-size:1.8rem;">40%</span> of students don't achieve their target score</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: SOLUTION -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 3</div>
+                <h2>The <span>Solution</span></h2>
+                <p class="subtitle">IELTSProva — AI-powered, accessible, and effective.</p>
+                <div class="slide-grid">
+                    <div class="item">
+                        <span class="icon">📚</span>
+                        <h4>8,000+ Questions</h4>
+                        <p>100% original, IELTS-style content</p>
+                    </div>
+                    <div class="item">
+                        <span class="icon">🤖</span>
+                        <h4>AI Feedback</h4>
+                        <p>Instant evaluation for writing &amp; speaking</p>
+                    </div>
+                    <div class="item">
+                        <span class="icon">🎯</span>
+                        <h4>Personalized</h4>
+                        <p>Adaptive learning for each student</p>
+                    </div>
+                    <div class="item">
+                        <span class="icon">💸</span>
+                        <h4>Free to Start</h4>
+                        <p>Quality test prep for everyone</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: PRODUCT -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 4</div>
+                <h2>Our <span>Product</span></h2>
+                <p class="subtitle">Complete IELTS preparation platform with 4 modules.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:1rem; margin-top:1rem;">
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span style="font-size:2rem;">📖</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">Reading</h4>
+                        <p style="font-size:0.8rem; color:#7B6A8A;">2,000+ questions</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span style="font-size:2rem;">✍️</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">Writing</h4>
+                        <p style="font-size:0.8rem; color:#7B6A8A;">2,000+ prompts</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span style="font-size:2rem;">🎧</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">Listening</h4>
+                        <p style="font-size:0.8rem; color:#7B6A8A;">2,000+ questions</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span style="font-size:2rem;">🗣️</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">Speaking</h4>
+                        <p style="font-size:0.8rem; color:#7B6A8A;">2,000+ topics</p>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:1rem;">
+                    <span style="background:#e8f5e9; padding:0.3rem 1.5rem; border-radius:50px; font-weight:700; color:#2e7d32;">
+                        ✅ Live &amp; Ready to Launch
+                    </span>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: MARKET -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 5</div>
+                <h2>Market <span>Opportunity</span></h2>
+                <p class="subtitle">The global IELTS market is massive and growing.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin-top:1rem;">
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span class="highlight-number" style="font-size:2.5rem;">$5B</span>
+                        <p style="color:#7B6A8A; font-size:0.9rem;">Global IELTS market size</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span class="highlight-number gold" style="font-size:2.5rem;">3M+</span>
+                        <p style="color:#7B6A8A; font-size:0.9rem;">Test takers annually</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <span class="highlight-number" style="font-size:2.5rem;">15%</span>
+                        <p style="color:#7B6A8A; font-size:0.9rem;">Annual market growth</p>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; background:#faf7ff; padding:1rem; border-radius:12px; text-align:center;">
+                    <p style="color:#7B6A8A;">📍 Target: Students aged 18-34 preparing for study abroad, immigration, and career advancement</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: BUSINESS MODEL -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 6</div>
+                <h2>Business <span>Model</span></h2>
+                <p class="subtitle">Freemium with clear upgrade paths to Pro and Pro+.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin-top:1rem;">
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <h4 style="color:#2e7d32;">🟢 Free</h4>
+                        <p style="font-size:1.8rem; font-weight:800; color:#1a0a2e;">$0</p>
+                        <ul style="list-style:none; padding:0; font-size:0.9rem; color:#7B6A8A;">
+                            <li>✅ 20 questions/test</li>
+                            <li>✅ All 4 modules</li>
+                            <li>✅ Basic score report</li>
+                        </ul>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; border:2px solid #FFD700; text-align:center;">
+                        <span style="background:#FFD700; padding:0.2rem 0.8rem; border-radius:50px; font-size:0.7rem; font-weight:700; color:#4A148C;">⭐ POPULAR</span>
+                        <h4 style="color:#4A148C;">⭐ Pro</h4>
+                        <p style="font-size:1.8rem; font-weight:800; color:#1a0a2e;">$9 <span style="font-size:0.9rem; font-weight:400; color:#7B6A8A;">/mo</span></p>
+                        <ul style="list-style:none; padding:0; font-size:0.9rem; color:#7B6A8A;">
+                            <li>✅ 1,000+ questions</li>
+                            <li>✅ All 4 modules</li>
+                            <li>✅ 2 mock exams/mo</li>
+                            <li>✅ Detailed feedback</li>
+                        </ul>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <h4 style="color:#4A148C;">🚀 Pro+</h4>
+                        <p style="font-size:1.8rem; font-weight:800; color:#1a0a2e;">$19 <span style="font-size:0.9rem; font-weight:400; color:#7B6A8A;">/mo</span></p>
+                        <ul style="list-style:none; padding:0; font-size:0.9rem; color:#7B6A8A;">
+                            <li>✅ 2,000+ questions</li>
+                            <li>✅ All 4 modules</li>
+                            <li>✅ Unlimited mock exams</li>
+                            <li>✅ AI writing evaluation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: FINANCIALS -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 7</div>
+                <h2>Financial <span>Projections</span></h2>
+                <p class="subtitle">Scalable revenue model with strong growth potential.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin-top:1rem;">
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <p style="font-size:0.85rem; color:#7B6A8A;">Year 1</p>
+                        <span class="highlight-number" style="font-size:2.5rem;">$50K</span>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">500 students</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <p style="font-size:0.85rem; color:#7B6A8A;">Year 2</p>
+                        <span class="highlight-number gold" style="font-size:2.5rem;">$250K</span>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">2,500 students</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; text-align:center; border:1px solid #f0e8f5;">
+                        <p style="font-size:0.85rem; color:#7B6A8A;">Year 3</p>
+                        <span class="highlight-number" style="font-size:2.5rem;">$1M</span>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">10,000 students</p>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; background:#faf7ff; padding:1rem; border-radius:12px; text-align:center;">
+                    <p style="color:#7B6A8A;"><strong>Projected ARR:</strong> $222K/year at 1,500 subscribers (Pro + Pro+)</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 8: TRACTION -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 8</div>
+                <h2>Current <span>Traction</span></h2>
+                <p class="subtitle">Live platform with proven technology and market validation.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1rem;">
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <span class="highlight-number" style="font-size:2rem;">✅</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">Live Platform</h4>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">Fully functional website</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <span class="highlight-number" style="font-size:2rem;">📚</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">8,000+ Questions</h4>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">100% original content</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <span class="highlight-number" style="font-size:2rem;">🤖</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">AI Integration</h4>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">Writing &amp; speaking feedback</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.2rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <span class="highlight-number" style="font-size:2rem;">💳</span>
+                        <h4 style="color:#4A148C; font-size:1rem;">Payments Ready</h4>
+                        <p style="font-size:0.85rem; color:#7B6A8A;">Paystack integration</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 9: TEAM -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 9</div>
+                <h2>Meet the <span>Founder</span></h2>
+                <p class="subtitle">Built with passion, powered by purpose.</p>
+                <div style="background:#faf7ff; padding:2rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center; max-width:400px; margin:0 auto;">
+                    <span style="font-size:4rem;">👨‍💻</span>
+                    <h3 style="color:#4A148C; font-size:1.5rem; margin-top:0.5rem;">Toluwase Victor</h3>
+                    <p style="color:#7B6A8A; font-weight:600;">CEO &amp; Founder</p>
+                    <p style="font-size:0.9rem; color:#7B6A8A; margin-top:0.5rem;">
+                        "I believe that with the right tools and the right mindset, every student can succeed."
+                    </p>
+                    <div style="margin-top:0.5rem; display:flex; gap:0.5rem; justify-content:center;">
+                        <span style="background:#f3edf7; padding:0.2rem 0.8rem; border-radius:50px; font-size:0.7rem;">EdTech</span>
+                        <span style="background:#f3edf7; padding:0.2rem 0.8rem; border-radius:50px; font-size:0.7rem;">AI</span>
+                        <span style="background:#f3edf7; padding:0.2rem 0.8rem; border-radius:50px; font-size:0.7rem;">EdTech</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10: ASK -->
+            <div class="slide">
+                <div class="slide-number">SLIDE 10</div>
+                <h2>The <span>Ask</span></h2>
+                <p class="subtitle">We're raising funds to accelerate growth and scale.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1rem;">
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <span class="highlight-number" style="font-size:2.5rem;">$50K</span>
+                        <p style="color:#7B6A8A;">Seed Round</p>
+                    </div>
+                    <div style="background:#faf7ff; padding:1.5rem; border-radius:16px; border:1px solid #f0e8f5; text-align:center;">
+                        <span class="highlight-number gold" style="font-size:2.5rem;">10%</span>
+                        <p style="color:#7B6A8A;">Equity Offered</p>
+                    </div>
+                </div>
+                <div style="margin-top:1.5rem;">
+                    <h4 style="color:#4A148C;">Use of Funds</h4>
+                    <div style="margin-top:0.5rem;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.95rem; color:#3d2a4a;">
+                            <span>📢 Marketing &amp; Growth</span>
+                            <span>40%</span>
+                        </div>
+                        <div class="progress-bar"><div class="fill" style="width:40%;"></div></div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.95rem; color:#3d2a4a; margin-top:0.5rem;">
+                            <span>📚 Content Development</span>
+                            <span>25%</span>
+                        </div>
+                        <div class="progress-bar"><div class="fill gold" style="width:25%;"></div></div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.95rem; color:#3d2a4a; margin-top:0.5rem;">
+                            <span>🤖 AI Development</span>
+                            <span>20%</span>
+                        </div>
+                        <div class="progress-bar"><div class="fill" style="width:20%;"></div></div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.95rem; color:#3d2a4a; margin-top:0.5rem;">
+                            <span>⚙️ Operations</span>
+                            <span>15%</span>
+                        </div>
+                        <div class="progress-bar"><div class="fill gold" style="width:15%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 11: CTA -->
+            <div class="cta-box">
+                <h3>🚀 Join Us on This Journey</h3>
+                <p>We're building the future of exam preparation. Let's make quality education accessible to every student, anywhere in the world.</p>
+                <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                    <a href="mailto:provatech9@gmail.com" class="btn-cta"><i class="fas fa-envelope"></i> Contact Us</a>
+                    <a href="index.html" class="btn-cta" style="background:white; color:#4A148C;"><i class="fas fa-globe"></i> Visit Website</a>
+                </div>
+                <p style="margin-top:1rem; font-size:0.85rem; opacity:0.6;">📧 provatech9@gmail.com</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer style="padding:2rem 0; background: linear-gradient(135deg, #1a0a2e, #4A148C); color: rgba(255,255,255,0.6); text-align:center;">
+        <div class="container">
+            <p style="font-size:0.85rem;">© 2026 Prova Technologies — Built with 💜 for exam success worldwide.</p>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:999;justify-content:center;align-items:center;">
+        <div class="modal" style="background:white;border-radius:32px;padding:2.5rem;max-width:440px;width:90%;position:relative;box-shadow:0 30px 60px rgba(0,0,0,0.2);">
+            <button class="modal-close" onclick="closeModal()" style="position:absolute;top:1rem;right:1.5rem;font-size:1.5rem;cursor:pointer;color:#888;background:none;border:none;">&times;</button>
+            <h2 id="modalTitle" style="font-size:1.8rem;color:#4A148C;margin-bottom:0.5rem;">Welcome Back</h2>
+            <p class="subtitle" id="modalSubtitle" style="color:#7B6A8A;margin-bottom:1.5rem;">Log in to continue your IELTS journey.</p>
+            <div class="error-msg" id="errorMsg" style="color:#e53935;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
+            <div class="success-msg" id="successMsg" style="color:#2e7d32;font-size:0.9rem;margin-top:0.5rem;display:none;"></div>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display:none;margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
+                </div>
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Email Address</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
+                </div>
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label style="display:block;font-weight:600;margin-bottom:0.3rem;color:#1a0a2e;">Password</label>
+                    <input type="password" id="authPassword" placeholder="Min 6 characters" required minlength="6" style="width:100%;padding:0.8rem 1rem;border:2px solid #f0e8f5;border-radius:14px;font-size:1rem;font-family:'Inter',sans-serif;" />
+                </div>
+                <button type="submit" class="btn-auth" id="authBtn" style="width:100%;padding:0.9rem;background:linear-gradient(135deg,#4A148C,#7B1FA2);color:white;border:none;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:0.3s;">Continue</button>
+            </form>
+            <div class="switch-auth" style="text-align:center;margin-top:1.2rem;color:#7B6A8A;">
+                <span id="switchText">Don't have an account?</span>
+                <a id="switchLink" onclick="toggleAuthMode()" style="color:#4A148C;font-weight:700;cursor:pointer;">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+            authDomain: "ieltsprova.firebaseapp.com",
+            projectId: "ieltsprova",
+            storageBucket: "ieltsprova.firebasestorage.app",
+            messagingSenderId: "812300970124",
+            appId: "1:812300970124:web:992398c08c151ae97df3a9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const hamburger = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(item => {
+            item.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userGreeting').style.display = 'inline-flex';
+                document.getElementById('greetingText').innerHTML = `<i class="fas fa-user-circle"></i> Hi, ${user.displayName || 'Student'}`;
+            } else {
+                document.getElementById('authButtons').style.display = 'inline-flex';
+                document.getElementById('userGreeting').style.display = 'none';
+            }
+        });
+
+        let currentMode = 'login';
+
+        function openModal(mode) {
+            currentMode = mode;
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const btn = document.getElementById('authBtn');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+            const nameGroup = document.getElementById('nameGroup');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            document.getElementById('authForm').reset();
+
+            if (mode === 'login') {
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Log in to continue your IELTS journey.';
+                btn.textContent = 'Log In';
+                switchText.textContent = "Don't have an account?";
+                switchLink.textContent = 'Sign Up';
+                nameGroup.style.display = 'none';
+            } else {
+                title.textContent = 'Create Your Account';
+                subtitle.textContent = 'Start your IELTS journey today — it\'s free!';
+                btn.textContent = 'Sign Up';
+                switchText.textContent = "Already have an account?";
+                switchLink.textContent = 'Log In';
+                nameGroup.style.display = 'block';
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function toggleAuthMode() {
+            closeModal();
+            setTimeout(() => {
+                openModal(currentMode === 'login' ? 'signup' : 'login');
+            }, 300);
+        }
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const fullName = document.getElementById('fullName').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const btn = document.getElementById('authBtn');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
+            try {
+                if (currentMode === 'login') {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    successMsg.textContent = '✅ Logged in successfully!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
+                } else {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    await userCredential.user.updateProfile({ displayName: fullName || 'Student' });
+                    successMsg.textContent = '✅ Account created! Welcome to IELTSProva!';
+                    successMsg.classList.add('show');
+                    setTimeout(() => { closeModal(); location.reload(); }, 1500);
+                }
+            } catch (error) {
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = currentMode === 'login' ? 'Log In' : 'Sign Up';
+            }
+        }
+
+        function logoutUser() {
+            auth.signOut().then(() => { location.reload(); });
+        }
+
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+
+</body>
+  </html>
