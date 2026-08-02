@@ -249,3 +249,157 @@ const questionBank = {
         proplus: getReadingQuestions('proplus')
     }
 };
+// ============================================================
+// READING PASSAGES 7-20 (14 MORE PASSAGES)
+// ============================================================
+
+    {
+        id: 7,
+        title: "Space Exploration",
+        category: "Science",
+        level: "Medium",
+        passage: "Space exploration has captivated humanity for centuries. The launch of Sputnik 1 by the Soviet Union in 1957 marked the beginning of the space age. Since then, humans have landed on the Moon, sent probes to Mars, and established the International Space Station. Space exploration has led to numerous technological innovations, including satellite communications, GPS, and weather forecasting. Despite the high costs and risks, space agencies around the world continue to push the boundaries of what is possible. The future of space exploration includes plans for manned missions to Mars, asteroid mining, and the establishment of permanent lunar bases. Private companies like SpaceX and Blue Origin are also playing an increasingly important role in making space more accessible.",
+        questions: [
+            { id: 121, text: "When was Sputnik 1 launched?", options: ["1947", "1957", "1967", "1977"], answer: "B" },
+            { id: 122, text: "What marked the beginning of the space age?", options: ["Apollo 11", "Sputnik 1", "International Space Station", "SpaceX"], answer: "B" },
+            { id: 123, text: "What has space exploration led to?", options: ["Satellite communications", "GPS", "Weather forecasting", "All of the above"], answer: "D" },
+            { id: 124, text: "What is one challenge of space exploration?", options: ["High costs", "Low risks", "Easy access", "No challenges"], answer: "A" },
+            { id: 125, text: "What is the future of space exploration?", options: ["Manned missions to Mars", "Asteroid mining", "Permanent lunar bases", "All of the above"], answer: "D" },
+            { id: 126, text: "Which private company is involved in space exploration?", options: ["SpaceX", "Blue Origin", "Both", "Neither"], answer: "C" },
+            { id: 127, text: "What does GPS stand for?", options: ["Global Positioning System", "Global Power System", "Geographic Positioning System", "General Positioning System"], answer: "A" },
+            { id: 128, text: "When did humans land on the Moon?", options: ["1957", "1969", "1972", "1980"], answer: "B" },
+            { id: 129, text: "What is the International Space Station?", options: ["A lunar base", "A space laboratory", "A Mars rover", "A satellite"], answer: "B" },
+            { id: 130, text: "What is the main purpose of space exploration?", options: ["Scientific discovery", "Military advantage", "Tourism", "Profit"], answer: "A" },
+            { id: 131, text: "What is a Mars rover?", options: ["A vehicle on Mars", "A spacecraft", "A satellite", "A telescope"], answer: "A" },
+            { id: 132, text: "What is the role of private companies?", options: ["Making space accessible", "Increasing costs", "Reducing safety", "Limiting access"], answer: "A" },
+            { id: 133, text: "What is a satellite used for?", options: ["Communication", "Navigation", "Research", "All of the above"], answer: "D" },
+            { id: 134, text: "What is the cost of space exploration?", options: ["Low", "Moderate", "High", "Free"], answer: "C" },
+            { id: 135, text: "What does the passage suggest about space exploration?", options: ["It is unnecessary", "It is important", "It is too expensive", "It is dangerous"], answer: "B" },
+            { id: 136, text: "What is the role of space agencies?", options: ["To explore space", "To build hotels", "To sell products", "To limit access"], answer: "A" },
+            { id: 137, text: "What is the benefit of satellite communications?", options: ["Global connectivity", "Local connectivity", "No connectivity", "Limited connectivity"], answer: "A" },
+            { id: 138, text: "What is the future of space travel?", options: ["More accessible", "Less accessible", "More expensive", "More dangerous"], answer: "A" },
+            { id: 139, text: "What is the author's view on space exploration?", options: ["Positive", "Negative", "Indifferent", "Hostile"], answer: "A" },
+            { id: 140, text: "What is the main message of the passage?", options: ["Space exploration is valuable", "Space exploration is a waste", "Space exploration is dangerous", "Space exploration is impossible"], answer: "A" }
+        ]
+    },
+    {
+        id: 8,
+        title: "Genetics and Health",
+        category: "Science",
+        level: "Hard",
+        passage: "Genetics is the study of genes and heredity. It has revolutionized our understanding of health and disease. The Human Genome Project, completed in 2003, mapped all the genes in human DNA. This has led to advances in personalized medicine, where treatments are tailored to an individual's genetic makeup. Genetic testing can identify risks for diseases such as cancer, heart disease, and Alzheimer's. Gene therapy, which involves replacing or repairing defective genes, has shown promise in treating rare genetic disorders. However, genetic research also raises ethical concerns, including privacy issues and the potential for genetic discrimination. Despite these challenges, genetics continues to be one of the most exciting fields in medicine.",
+        questions: [
+            { id: 141, text: "What is genetics?", options: ["The study of genes", "The study of diseases", "The study of drugs", "The study of cells"], answer: "A" },
+            { id: 142, text: "When was the Human Genome Project completed?", options: ["1993", "2003", "2013", "2023"], answer: "B" },
+            { id: 143, text: "What did the Human Genome Project map?", options: ["All human genes", "All human cells", "All human diseases", "All human drugs"], answer: "A" },
+            { id: 144, text: "What is personalized medicine?", options: ["Treatments based on genetics", "Treatments based on age", "Treatments based on location", "Treatments based on cost"], answer: "A" },
+            { id: 145, text: "What can genetic testing identify?", options: ["Disease risks", "Personality traits", "Physical appearance", "All of the above"], answer: "A" },
+            { id: 146, text: "What is gene therapy?", options: ["Replacing defective genes", "Removing genes", "Creating genes", "Ignoring genes"], answer: "A" },
+            { id: 147, text: "What disease risks can genetic testing identify?", options: ["Cancer", "Heart disease", "Alzheimer's", "All of the above"], answer: "D" },
+            { id: 148, text: "What is an ethical concern about genetics?", options: ["Privacy", "Cost", "Speed", "Safety"], answer: "A" },
+            { id: 149, text: "What is genetic discrimination?", options: ["Treating people based on genetics", "Treating people based on age", "Treating people based on location", "Treating people based on appearance"], answer: "A" },
+            { id: 150, text: "What is the author's view on genetics?", options: ["Positive", "Negative", "Indifferent", "Hostile"], answer: "A" },
+            { id: 151, text: "What is the Human Genome Project?", options: ["A gene mapping project", "A disease mapping project", "A drug mapping project", "A cell mapping project"], answer: "A" },
+            { id: 152, text: "What is the benefit of genetics?", options: ["Better treatments", "Better prevention", "Better understanding", "All of the above"], answer: "D" },
+            { id: 153, text: "What is a genetic disorder?", options: ["A disease caused by genes", "A disease caused by environment", "A disease caused by lifestyle", "A disease caused by age"], answer: "A" },
+            { id: 154, text: "What is the challenge of genetics?", options: ["Ethical concerns", "Cost", "Speed", "Safety"], answer: "A" },
+            { id: 155, text: "What is the future of genetics?", options: ["Personalized medicine", "Universal medicine", "Expensive medicine", "Ineffective medicine"], answer: "A" },
+            { id: 156, text: "What is the role of genes in health?", options: ["Important", "Irrelevant", "Minor", "No role"], answer: "A" },
+            { id: 157, text: "What is the passage about?", options: ["Genetics and health", "Disease prevention", "Drug development", "Cell biology"], answer: "A" },
+            { id: 158, text: "What is the author's tone?", options: ["Informative", "Persuasive", "Entertaining", "Critical"], answer: "A" },
+            { id: 159, text: "What is the main message?", options: ["Genetics is important", "Genetics is overrated", "Genetics is dangerous", "Genetics is expensive"], answer: "A" },
+            { id: 160, text: "What is the role of genes?", options: ["Determining traits", "Determining behavior", "Determining environment", "Determining education"], answer: "A" }
+        ]
+    },
+    {
+        id: 9,
+        title: "Global Warming",
+        category: "Environment",
+        level: "Medium",
+        passage: "Global warming refers to the long-term increase in Earth's average temperature. It is primarily caused by the burning of fossil fuels, which releases greenhouse gases such as carbon dioxide and methane into the atmosphere. These gases trap heat, leading to the greenhouse effect. The consequences of global warming include rising sea levels, more frequent and severe weather events, and loss of biodiversity. The Intergovernmental Panel on Climate Change (IPCC) has warned that urgent action is needed to limit global warming to 1.5°C above pre-industrial levels. Solutions include transitioning to renewable energy, improving energy efficiency, and reforestation. Individual actions, such as reducing waste and using public transport, can also make a difference.",
+        questions: [
+            { id: 161, text: "What is global warming?", options: ["Long-term temperature increase", "Short-term temperature increase", "Long-term temperature decrease", "Short-term temperature decrease"], answer: "A" },
+            { id: 162, text: "What causes global warming?", options: ["Burning fossil fuels", "Planting trees", "Reducing waste", "Using renewable energy"], answer: "A" },
+            { id: 163, text: "What are greenhouse gases?", options: ["Carbon dioxide", "Methane", "Both", "Neither"], answer: "C" },
+            { id: 164, text: "What is the greenhouse effect?", options: ["Trapping heat", "Releasing heat", "Absorbing heat", "Reflecting heat"], answer: "A" },
+            { id: 165, text: "What are the consequences of global warming?", options: ["Rising sea levels", "Severe weather", "Loss of biodiversity", "All of the above"], answer: "D" },
+            { id: 166, text: "What does IPCC stand for?", options: ["Intergovernmental Panel on Climate Change", "International Panel on Climate Control", "Intergovernmental Program on Climate Change", "International Program on Climate Control"], answer: "A" },
+            { id: 167, text: "What is the recommended limit for global warming?", options: ["1.0°C", "1.5°C", "2.0°C", "3.0°C"], answer: "B" },
+            { id: 168, text: "What is a solution to global warming?", options: ["Renewable energy", "Deforestation", "Burning fossil fuels", "Increasing waste"], answer: "A" },
+            { id: 169, text: "What is the role of individuals?", options: ["Reduce waste", "Use public transport", "Both", "Neither"], answer: "C" },
+            { id: 170, text: "What is the author's view on global warming?", options: ["It is serious", "It is exaggerated", "It is harmless", "It is inevitable"], answer: "A" },
+            { id: 171, text: "What is reforestation?", options: ["Planting trees", "Cutting trees", "Burning trees", "Ignoring trees"], answer: "A" },
+            { id: 172, text: "What is energy efficiency?", options: ["Using less energy", "Using more energy", "Using energy wastefully", "Using energy carelessly"], answer: "A" },
+            { id: 173, text: "What is the role of fossil fuels?", options: ["Cause global warming", "Reduce global warming", "No role", "Minor role"], answer: "A" },
+            { id: 174, text: "What is the IPCC?", options: ["A climate change panel", "A health panel", "An education panel", "A technology panel"], answer: "A" },
+            { id: 175, text: "What is the effect of rising sea levels?", options: ["Flooding", "Drought", "Wildfires", "Tornadoes"], answer: "A" },
+            { id: 176, text: "What is the message of the passage?", options: ["Act now", "Wait and see", "Do nothing", "Ignore the problem"], answer: "A" },
+            { id: 177, text: "What is the main cause of global warming?", options: ["Human activity", "Natural causes", "Animal activity", "Plant activity"], answer: "A" },
+            { id: 178, text: "What is the solution to global warming?", options: ["Renewable energy", "Fossil fuels", "Deforestation", "Pollution"], answer: "A" },
+            { id: 179, text: "What is the author's tone?", options: ["Urgent", "Calm", "Indifferent", "Optimistic"], answer: "A" },
+            { id: 180, text: "What is the main idea?", options: ["Global warming is a serious problem", "Global warming is not a problem", "Global warming is natural", "Global warming is exaggerated"], answer: "A" }
+        ]
+    },
+    {
+        id: 10,
+        title: "Education Around the World",
+        category: "Education",
+        level: "Easy",
+        passage: "Education is a fundamental human right and a key driver of economic and social development. However, access to quality education varies widely around the world. In developed countries, nearly all children complete primary and secondary education, and many go on to higher education. In developing countries, millions of children are out of school due to poverty, conflict, and lack of infrastructure. The United Nations' Sustainable Development Goal 4 aims to ensure inclusive and equitable quality education for all. Technology is playing an increasingly important role in bridging the education gap, with online learning platforms and digital resources making education more accessible. However, the digital divide remains a significant barrier in many parts of the world.",
+        questions: [
+            { id: 181, text: "What is education considered?", options: ["A human right", "A luxury", "A privilege", "A burden"], answer: "A" },
+            { id: 182, text: "What drives economic and social development?", options: ["Education", "Military", "Tourism", "Farming"], answer: "A" },
+            { id: 183, text: "What is the status of education in developed countries?", options: ["Nearly all children complete school", "Few children complete school", "No children complete school", "Only boys complete school"], answer: "A" },
+            { id: 184, text: "What is the status of education in developing countries?", options: ["Millions are out of school", "All children are in school", "Only girls are out of school", "Only boys are in school"], answer: "A" },
+            { id: 185, text: "What are the barriers to education?", options: ["Poverty", "Conflict", "Lack of infrastructure", "All of the above"], answer: "D" },
+            { id: 186, text: "What is Sustainable Development Goal 4?", options: ["Quality education", "No poverty", "Gender equality", "Good health"], answer: "A" },
+            { id: 187, text: "What role does technology play in education?", options: ["Bridging the education gap", "Widening the education gap", "No role", "Minor role"], answer: "A" },
+            { id: 188, text: "What is the digital divide?", options: ["Access gap to technology", "Access gap to books", "Access gap to teachers", "Access gap to schools"], answer: "A" },
+            { id: 189, text: "What is the goal of SDG 4?", options: ["Inclusive and equitable education", "Free education for all", "Online education only", "Higher education only"], answer: "A" },
+            { id: 190, text: "What is the author's view on education?", options: ["It is essential", "It is optional", "It is overrated", "It is expensive"], answer: "A" },
+            { id: 191, text: "What is the role of technology?", options: ["Making education accessible", "Making education expensive", "Making education difficult", "Making education irrelevant"], answer: "A" },
+            { id: 192, text: "What is the digital divide?", options: ["Technology access gap", "Education quality gap", "Teacher availability gap", "School infrastructure gap"], answer: "A" },
+            { id: 193, text: "What is the main message?", options: ["Education is important", "Education is unnecessary", "Education is outdated", "Education is expensive"], answer: "A" },
+            { id: 194, text: "What is the role of the UN?", options: ["Promoting education", "Limiting education", "Ignoring education", "Complicating education"], answer: "A" },
+            { id: 195, text: "What is the challenge?", options: ["Access inequality", "Cost inequality", "Age inequality", "Gender inequality"], answer: "A" },
+            { id: 196, text: "What is the benefit of education?", options: ["Personal growth", "Social development", "Economic growth", "All of the above"], answer: "D" },
+            { id: 197, text: "What is the author's tone?", options: ["Hopeful", "Pessimistic", "Indifferent", "Critical"], answer: "A" },
+            { id: 198, text: "What is the role of online learning?", options: ["Increasing access", "Decreasing access", "Making education expensive", "Making education difficult"], answer: "A" },
+            { id: 199, text: "What is the future of education?", options: ["More accessible", "Less accessible", "More expensive", "More difficult"], answer: "A" },
+            { id: 200, text: "What is the main idea?", options: ["Education is a fundamental right", "Education is a luxury", "Education is a privilege", "Education is a burden"], answer: "A" }
+        ]
+    },
+    {
+        id: 11,
+        title: "Mental Health Awareness",
+        category: "Health",
+        level: "Medium",
+        passage: "Mental health is an integral part of overall health and well-being. It affects how we think, feel, and act. According to the World Health Organization (WHO), one in four people will be affected by a mental health condition at some point in their lives. Common mental health conditions include depression, anxiety, and bipolar disorder. Stigma and discrimination often prevent people from seeking help. However, there is growing awareness of the importance of mental health, and more resources are being dedicated to mental health care. Treatment options include therapy, medication, and lifestyle changes. Self-care practices such as regular exercise, adequate sleep, and mindfulness can also support mental well-being.",
+        questions: [
+            { id: 201, text: "What is mental health?", options: ["Part of overall health", "Separate from health", "Only for some people", "Only for adults"], answer: "A" },
+            { id: 202, text: "What does WHO stand for?", options: ["World Health Organization", "World Health Office", "World Health Outreach", "World Health Operations"], answer: "A" },
+            { id: 203, text: "What percentage of people will be affected by mental health conditions?", options: ["1 in 4", "1 in 10", "1 in 100", "1 in 1000"], answer: "A" },
+            { id: 204, text: "What are common mental health conditions?", options: ["Depression", "Anxiety", "Bipolar disorder", "All of the above"], answer: "D" },
+            { id: 205, text: "What prevents people from seeking help?", options: ["Stigma", "Cost", "Awareness", "All of the above"], answer: "A" },
+            { id: 206, text: "What is growing?", options: ["Awareness of mental health", "Stigma", "Ignorance", "Discrimination"], answer: "A" },
+            { id: 207, text: "What are treatment options?", options: ["Therapy", "Medication", "Lifestyle changes", "All of the above"], answer: "D" },
+            { id: 208, text: "What is self-care?", options: ["Practices for well-being", "Ignoring health", "Avoiding treatment", "Isolation"], answer: "A" },
+            { id: 209, text: "What is stigma?", options: ["Negative attitudes", "Positive attitudes", "Neutral attitudes", "No attitudes"], answer: "A" },
+            { id: 210, text: "What is the author's view on mental health?", options: ["It is important", "It is unimportant", "It is overrated", "It is exaggerated"], answer: "A" },
+            { id: 211, text: "What is the role of exercise?", options: ["Supporting mental well-being", "No role", "Minor role", "Harmful role"], answer: "A" },
+            { id: 212, text: "What is mindfulness?", options: ["A self-care practice", "A medication", "A therapy", "A disorder"], answer: "A" },
+            { id: 213, text: "What is the main message?", options: ["Mental health matters", "Mental health is not important", "Mental health is rare", "Mental health is overrated"], answer: "A" },
+            { id: 214, text: "What is the role of WHO?", options: ["Promoting mental health", "Ignoring mental health", "Limiting mental health", "Complicating mental health"], answer: "A" },
+            { id: 215, text: "What is the challenge?", options: ["Stigma", "Access", "Cost", "All of the above"], answer: "D" },
+            { id: 216, text: "What is the future of mental health care?", options: ["More accessible", "Less accessible", "More stigmatized", "More expensive"], answer: "A" },
+            { id: 217, text: "What is the author's tone?", options: ["Supportive", "Critical", "Indifferent", "Pessimistic"], answer: "A" },
+            { id: 218, text: "What is the role of therapy?", options: ["Supporting mental health", "Ignoring mental health", "Harmful", "No role"], answer: "A" },
+            { id: 219, text: "What is the role of medication?", options: ["Supporting mental health", "Harmful", "No role", "Minor role"], answer: "A" },
+            { id: 220, text: "What is the main idea?", options: ["Mental health is important", "Mental health is not important", "Mental health is rare", "Mental health is overrated"], answer: "A" }
+        ]
+    }
+];
+
+// ============================================================
+// CONTINUE WITH PASSAGES 12-100
+// ============================================================
