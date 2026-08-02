@@ -61,6 +61,13 @@
             font-size: 1.6rem;
             font-weight: 900;
             color: #4A148C;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo img {
+            height: 40px;
+            width: auto;
         }
         .logo span { color: #FFD700; }
         .logo small {
@@ -105,6 +112,21 @@
             font-weight: 600;
             transition: 0.3s;
             font-size: 0.95rem;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            transition: 0.3s;
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
         }
         .nav-links a:hover { color: #7B1FA2; }
         .nav-links .dropdown {
@@ -271,38 +293,63 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        /* ===== SECTION STYLES ===== */
-        .section { padding: 4rem 0; }
-        .section-white { background: white; }
-        .section-purple { background: #faf7ff; }
-        .section-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
+        /* ===== TABS ===== */
+        .tabs-section {
+            padding: 2rem 0 0;
+            background: white;
         }
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #1a0a2e;
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #f0e8f5;
+            padding-bottom: 0.5rem;
         }
-        .section-header h2 span {
-            background: linear-gradient(135deg, #4A148C, #7B1FA2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .section-header p {
+        .tab-btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 1rem;
             color: #7B6A8A;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tab-btn:hover {
+            color: #4A148C;
+            background: #faf7ff;
+        }
+        .tab-btn.active {
+            color: #4A148C;
+            background: #faf7ff;
+            border-bottom: 3px solid #4A148C;
+        }
+        .tab-btn i { font-size: 1.1rem; }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+            padding: 2rem 0 3rem;
+            animation: fadeIn 0.5s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== FEATURES GRID ===== */
-        .features-grid {
+        /* ===== MODULES GRID ===== */
+        .modules-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
-        .feature-card {
+        .module-card {
             background: white;
             padding: 2rem;
             border-radius: 24px;
@@ -313,15 +360,15 @@
             display: block;
             color: inherit;
         }
-        .feature-card:hover {
+        .module-card:hover {
             transform: translateY(-8px);
             border-color: #7B1FA2;
             box-shadow: 0 20px 50px rgba(74,20,140,0.08);
         }
-        .feature-card .icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
-        .feature-card h3 { font-size: 1.2rem; color: #4A148C; margin-bottom: 0.3rem; }
-        .feature-card p { color: #7B6A8A; font-size: 0.95rem; }
-        .feature-card .badge {
+        .module-card .icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+        .module-card h3 { font-size: 1.2rem; color: #4A148C; margin-bottom: 0.3rem; }
+        .module-card p { color: #7B6A8A; font-size: 0.95rem; }
+        .module-card .badge {
             display: inline-block;
             background: #e8f5e9;
             color: #2e7d32;
@@ -331,67 +378,72 @@
             border-radius: 50px;
             margin-top: 0.5rem;
         }
-        .feature-card .badge.pro { background: #fff8e1; color: #f57f17; }
-        .feature-card .badge.premium { background: #fce4ec; color: #c62828; }
+        .module-card .badge.pro { background: #fff8e1; color: #f57f17; }
+        .module-card .badge.premium { background: #fce4ec; color: #c62828; }
 
-        /* ===== TESTIMONIALS ===== */
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-        .testimonial-card {
-            background: white;
-            padding: 2rem;
+        /* ===== MOCK EXAM CARD ===== */
+        .mock-exam-card {
+            background: linear-gradient(135deg, #faf7ff, #f3edf7);
             border-radius: 24px;
-            border: 1px solid #f0e8f5;
-        }
-        .testimonial-card .stars { color: #FFD700; font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .testimonial-card .text { font-size: 1rem; color: #3d2a4a; font-style: italic; }
-        .testimonial-card .author {
-            font-weight: 700;
-            color: #4A148C;
-            margin-top: 0.8rem;
-        }
-
-        /* ===== FAQ ===== */
-        .faq-grid {
-            max-width: 800px;
+            padding: 2.5rem;
+            text-align: center;
+            border: 2px solid #7B1FA2;
+            max-width: 700px;
             margin: 0 auto;
         }
-        .faq-item {
-            background: white;
-            padding: 1.2rem 1.8rem;
-            border-radius: 16px;
-            margin-bottom: 0.8rem;
-            border: 1px solid #f0e8f5;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .faq-item:hover { border-color: #7B1FA2; }
-        .faq-item .question {
-            font-weight: 700;
-            color: #4A148C;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .faq-item .question i {
-            transition: 0.3s;
+        .mock-exam-card .lock-icon {
+            font-size: 3rem;
             color: #7B1FA2;
+            display: block;
+            margin-bottom: 0.5rem;
         }
-        .faq-item .answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            color: #3d2a4a;
+        .mock-exam-card h2 { color: #4A148C; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .mock-exam-card p { color: #7B6A8A; margin-bottom: 1.5rem; }
+        .mock-exam-card .mock-btn {
+            display: inline-block;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
         }
-        .faq-item.active .answer {
-            max-height: 200px;
-            margin-top: 0.8rem;
+        .mock-exam-card .mock-btn.primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
         }
-        .faq-item.active .question i {
-            transform: rotate(180deg);
+        .mock-exam-card .mock-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+        .mock-exam-card .mock-btn.disabled {
+            background: #f3edf7;
+            color: #7B6A8A;
+            cursor: not-allowed;
+        }
+        .mock-exam-card .mock-btn.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .mock-exam-card .mock-badge {
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .mock-exam-card .mock-badge.free {
+            background: #fce4ec;
+            color: #c62828;
+        }
+        .mock-exam-card .mock-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .mock-exam-card .mock-badge.proplus {
+            background: #e8f5e9;
+            color: #2e7d32;
         }
 
         /* ===== PRICING ===== */
@@ -399,6 +451,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
+            margin-top: 2rem;
         }
         .pricing-card {
             background: white;
@@ -522,6 +575,7 @@
         .footer-social {
             display: flex;
             gap: 1rem;
+            justify-content: center;
             margin-top: 0.5rem;
         }
         .footer-social a {
@@ -554,16 +608,18 @@
         @media (max-width: 992px) {
             .hero h1 { font-size: 2.8rem; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
+            .tabs { gap: 0.3rem; }
+            .tab-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
         }
         @media (max-width: 600px) {
             .hero h1 { font-size: 2rem; }
             .footer-grid { grid-template-columns: 1fr; text-align: center; }
             .footer-social { justify-content: center; }
             .pricing-grid { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: 1fr; }
-            .testimonial-grid { grid-template-columns: 1fr; }
-            .section-header h2 { font-size: 2rem; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .tab-btn { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
             .scroll-top { bottom: 1rem; right: 1rem; width: 40px; height: 40px; font-size: 1rem; }
+            .mock-exam-card { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -573,7 +629,7 @@
     <nav>
         <div class="container nav-container">
             <div class="logo">
-                IELTS<span>Prova</span>
+                💜 IELTS<span>Prova</span>
                 <small>by Prova Technologies</small>
             </div>
             <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
@@ -582,8 +638,11 @@
                 <span></span>
             </button>
             <div class="nav-links" id="navLinks">
+                <a href="#home" class="active">Home</a>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="mock-exam.html"><i class="fas fa-graduation-cap"></i> Mock Exam</a>
                 <div class="dropdown">
-                    <a href="#">Tests <i class="fas fa-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#">Modules <i class="fas fa-chevron-down" style="font-size:0.6rem;"></i></a>
                     <div class="dropdown-content">
                         <a href="reading-test.html"><i class="fas fa-book-open"></i> Reading</a>
                         <a href="writing-test.html"><i class="fas fa-pen-fancy"></i> Writing</a>
@@ -591,11 +650,7 @@
                         <a href="speaking-test.html"><i class="fas fa-microphone"></i> Speaking</a>
                     </div>
                 </div>
-                <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
-                <a href="study-tips.html"><i class="fas fa-lightbulb"></i> Tips</a>
-<a href="blog-reading-tips.html"><i class="fas fa-newspaper"></i> Blog</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
+                <a href="#pricing">Pricing</a>
                 <span id="authButtons">
                     <button class="nav-cta-outline" onclick="openModal('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
                     <button class="nav-cta" onclick="openModal('signup')"><i class="fas fa-user-plus"></i> Sign Up</button>
@@ -609,132 +664,92 @@
     </nav>
 
     <!-- ===== HERO ===== -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="container">
             <h1>Prepare Smarter.<br /><span>Achieve Your Target Band.</span></h1>
             <p>Master all four IELTS skills with personalized practice, realistic mock tests, and an AI-powered coaching partner designed to help you reach your target score.</p>
             <div class="hero-buttons">
-                <a href="reading-test.html" class="btn-primary"><i class="fas fa-rocket"></i> Start Free Practice</a>
+                <a href="#modules" class="btn-primary"><i class="fas fa-rocket"></i> Start Free Practice</a>
                 <a href="#pricing" class="btn-secondary"><i class="fas fa-crown"></i> View Plans</a>
             </div>
         </div>
     </section>
 
-    <!-- ===== FEATURES / TESTS ===== -->
-    <section class="section section-white" id="features">
+    <!-- ===== TABS ===== -->
+    <section class="tabs-section">
         <div class="container">
-            <div class="section-header">
-                <h2>Everything You Need <span>to Improve</span></h2>
-                <p>Master all four IELTS skills with personalized practice and AI-powered feedback.</p>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="modules"><i class="fas fa-th-large"></i> Modules</button>
+                <button class="tab-btn" data-tab="mock"><i class="fas fa-graduation-cap"></i> Mock Exam</button>
+                <button class="tab-btn" data-tab="pricing"><i class="fas fa-crown"></i> Pricing</button>
             </div>
-            <div class="features-grid">
-                <a href="reading-test.html" class="feature-card">
+        </div>
+    </section>
+
+    <!-- ===== TAB 1: MODULES ===== -->
+    <div class="tab-content active" id="tab-modules">
+        <div class="container">
+            <div class="modules-grid" id="modules">
+                <a href="reading-test.html" class="module-card">
                     <span class="icon">📖</span>
                     <h3>Reading</h3>
-                    <p>Improve comprehension, learn skimming and scanning, and tackle complex passages.</p>
-                    <span class="badge">Free: 10 Qs</span>
-                    <span class="badge pro">Pro: Full</span>
+                    <p>3 passages · 40 questions · 60 mins</p>
+                    <span class="badge">Free: 20 Qs</span>
+                    <span class="badge pro">Pro: 1,000+</span>
                 </a>
-                <a href="writing-test.html" class="feature-card">
+                <a href="writing-test.html" class="module-card">
                     <span class="icon">✍️</span>
                     <h3>Writing</h3>
-                    <p>Get AI-powered feedback on Task 1 &amp; 2 and improve your writing band score.</p>
-                    <span class="badge">Free: 2 Tasks</span>
-                    <span class="badge pro">Pro: Detailed</span>
+                    <p>Task 1 &amp; 2 · with AI evaluation</p>
+                    <span class="badge">Free: 20 Prompts</span>
+                    <span class="badge pro">Pro: 1,000+</span>
                 </a>
-                <a href="listening-test.html" class="feature-card">
+                <a href="listening-test.html" class="module-card">
                     <span class="icon">🎧</span>
                     <h3>Listening</h3>
-                    <p>Train with real audio, understand different accents, and improve your listening skills.</p>
-                    <span class="badge">Free: 10 Qs</span>
-                    <span class="badge pro">Pro: Full</span>
+                    <p>4 sections · 40 questions · 30 mins</p>
+                    <span class="badge">Free: 20 Qs</span>
+                    <span class="badge pro">Pro: 1,000+</span>
                 </a>
-                <a href="speaking-test.html" class="feature-card">
+                <a href="speaking-test.html" class="module-card">
                     <span class="icon">🗣️</span>
                     <h3>Speaking</h3>
-                    <p>Practice speaking with our AI tutor and get instant personalized feedback.</p>
-                    <span class="badge">Free: Full Test</span>
-                    <span class="badge pro">Pro: Detailed</span>
+                    <p>Part 1–3 · AI voice examiner</p>
+                    <span class="badge">Free: 20 Topics</span>
+                    <span class="badge pro">Pro: 1,000+</span>
                 </a>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ===== AI COACH SECTION ===== -->
-    <section class="section section-purple">
+    <!-- ===== TAB 2: MOCK EXAM ===== -->
+    <div class="tab-content" id="tab-mock">
         <div class="container">
-            <div class="section-header">
-                <h2>Learn Smarter <span>with AI</span></h2>
-                <p>Our advanced AI understands your answers, analyzes your performance and gives you personalized feedback to help you improve faster.</p>
-            </div>
-            <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div class="feature-card" style="border-color:#7B1FA2;">
-                    <span class="icon">🧠</span>
-                    <h3>AI Speaking Tutor</h3>
-                    <p>Available 24/7 for practice</p>
+            <div class="mock-exam-card" id="mockExamCard">
+                <span class="lock-icon" id="mockLockIcon">🔒</span>
+                <h2 id="mockTitle">Full IELTS Mock Exam</h2>
+                <p id="mockDescription">Complete all 4 modules in one session — Reading, Writing, Listening, and Speaking.</p>
+                <div>
+                    <span class="mock-badge" id="mockBadge">🔒 Locked</span>
                 </div>
-                <div class="feature-card" style="border-color:#7B1FA2;">
-                    <span class="icon">📝</span>
-                    <h3>AI Writing Evaluation</h3>
-                    <p>Get accurate band scores</p>
-                </div>
-                <div class="feature-card" style="border-color:#7B1FA2;">
-                    <span class="icon">📊</span>
-                    <h3>Personalized Recommendations</h3>
-                    <p>Study what matters most</p>
-                </div>
-                <div class="feature-card" style="border-color:#7B1FA2;">
-                    <span class="icon">📈</span>
-                    <h3>Performance Analytics</h3>
-                    <p>Track your progress</p>
-                </div>
-            </div>
-            <div style="text-align:center; margin-top:2rem;">
-                <a href="speaking-test.html" class="btn-primary"><i class="fas fa-robot"></i> Try AI Coach Now →</a>
+                <br />
+                <a href="mock-exam.html" class="mock-btn" id="mockBtn">
+                    <i class="fas fa-play"></i> Start Mock Exam
+                </a>
+                <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.8rem;" id="mockExtra"></p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ===== TESTIMONIALS ===== -->
-    <section class="section section-white">
+    <!-- ===== TAB 3: PRICING ===== -->
+    <div class="tab-content" id="tab-pricing">
         <div class="container">
-            <div class="section-header">
-                <h2>Success <span>Stories</span></h2>
-                <p>Loved by IELTS learners worldwide.</p>
-            </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div class="text">"The AI speaking practice helped me improve my fluency and confidence."</div>
-                    <div class="author">— Asan K.</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div class="text">"The writing feedback is so accurate and helped me improve my band score."</div>
-                    <div class="author">— Daniel L.</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div class="text">"I improved from 6.0 to 7.5 in just 2 months. Highly recommended!"</div>
-                    <div class="author">— Sarah M.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== PRICING ===== -->
-    <section class="section section-purple" id="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>Choose Your <span>Plan</span></h2>
-                <p>Unlock all features and accelerate your progress.</p>
-            </div>
             <div class="pricing-grid">
                 <div class="pricing-card">
                     <div class="plan-name">Free</div>
                     <div class="price">$0 <small>/mo</small></div>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> 10 questions per test</li>
+                        <li><i class="fas fa-check-circle"></i> 20 questions per test</li>
                         <li><i class="fas fa-check-circle"></i> All 4 modules</li>
                         <li><i class="fas fa-check-circle"></i> Basic score report</li>
                         <li><i class="fas fa-check-circle"></i> Limited access</li>
@@ -746,9 +761,9 @@
                     <div class="plan-name">Pro</div>
                     <div class="price">$9 <small>/mo</small></div>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> Full 40-question tests</li>
+                        <li><i class="fas fa-check-circle"></i> 1,000+ questions</li>
                         <li><i class="fas fa-check-circle"></i> All 4 modules</li>
-                        <li><i class="fas fa-check-circle"></i> 15+ practice tests</li>
+                        <li><i class="fas fa-check-circle"></i> 2 mock exams/month</li>
                         <li><i class="fas fa-check-circle"></i> Progress dashboard</li>
                         <li><i class="fas fa-check-circle"></i> Detailed feedback</li>
                     </ul>
@@ -758,45 +773,17 @@
                     <div class="plan-name">🚀 Pro+</div>
                     <div class="price">$19 <small>/mo</small></div>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> Everything in Pro</li>
+                        <li><i class="fas fa-check-circle"></i> 2,000+ questions</li>
+                        <li><i class="fas fa-check-circle"></i> All 4 modules</li>
+                        <li><i class="fas fa-check-circle"></i> Unlimited mock exams</li>
                         <li><i class="fas fa-check-circle"></i> AI writing evaluation</li>
                         <li><i class="fas fa-check-circle"></i> Speaking mock exams</li>
-                        <li><i class="fas fa-check-circle"></i> Unlimited tests</li>
-                        <li><i class="fas fa-check-circle"></i> Priority support</li>
                     </ul>
                     <a href="checkout.html" class="btn-plan">Go Pro+</a>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- ===== FAQ ===== -->
-    <section class="section section-white">
-        <div class="container">
-            <div class="section-header">
-                <h2>Frequently <span>Asked Questions</span></h2>
-                <p>Everything you need to know about IELTSProva.</p>
-            </div>
-            <div class="faq-grid">
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="question">What is IELTSProva? <i class="fas fa-chevron-down"></i></div>
-                    <div class="answer">IELTSProva is an AI-powered IELTS preparation platform offering practice tests for Reading, Writing, Listening, and Speaking with personalized feedback.</div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="question">Can I use IELTSProva for free? <i class="fas fa-chevron-down"></i></div>
-                    <div class="answer">Yes! You can access free practice tests with 10 questions per module. Upgrade to Pro for unlimited access.</div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="question">How does the AI Speaking Tutor work? <i class="fas fa-chevron-down"></i></div>
-                    <div class="answer">Our AI Speaking Tutor uses speech recognition to listen to your answers and provides instant feedback on fluency, vocabulary, and pronunciation.</div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="question">Can IELTSProva guarantee my IELTS score? <i class="fas fa-chevron-down"></i></div>
-                    <div class="answer">While we can't guarantee a specific score, our platform is designed to help you improve through consistent practice and AI-powered feedback.</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- ===== FOOTER ===== -->
     <footer>
@@ -808,7 +795,7 @@
                         <small>IELTSProva · TOEFLProva · SATProva · GREProva</small>
                     </div>
                     <p style="margin-top:0.5rem; font-size:0.9rem; opacity:0.7;">
-                        📧 <a href="mailto:provatech@gmail.com" style="color:rgba(255,255,255,0.7);">provatech@gmail.com</a>
+                        📧 <a href="mailto:provatech9@gmail.com" style="color:rgba(255,255,255,0.7);">provatech9@gmail.com</a>
                     </p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -828,7 +815,7 @@
                     <h4>Resources</h4>
                     <a href="study-tips.html">💡 Study Tips</a>
                     <a href="dashboard.html">Dashboard</a>
-                    <a href="#pricing">Pricing</a>
+                    <a href="mock-exam.html">📝 Mock Exam</a>
                 </div>
                 <div>
                     <h4>Company</h4>
@@ -880,9 +867,6 @@
     </div>
 
     <script>
-        // ============================================================
-        // FIREBASE CONFIG
-        // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
             authDomain: "ieltsprova.firebaseapp.com",
@@ -896,9 +880,7 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // ============================================================
-        // HAMBURGER
-        // ============================================================
+        // ===== HAMBURGER =====
         const hamburger = document.getElementById('hamburgerBtn');
         const navLinks = document.getElementById('navLinks');
 
@@ -914,25 +896,33 @@
             });
         });
 
-        // ============================================================
-        // SCROLL TO TOP
-        // ============================================================
+        // ===== SCROLL TO TOP =====
         window.addEventListener('scroll', function() {
             const btn = document.getElementById('scrollTopBtn');
             if (window.scrollY > 300) btn.classList.add('show');
             else btn.classList.remove('show');
         });
 
-        // ============================================================
-        // FAQ TOGGLE
-        // ============================================================
-        function toggleFaq(el) {
-            el.classList.toggle('active');
-        }
+        // ===== TABS =====
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = {
+            modules: document.getElementById('tab-modules'),
+            mock: document.getElementById('tab-mock'),
+            pricing: document.getElementById('tab-pricing')
+        };
 
-        // ============================================================
-        // AUTH STATE
-        // ============================================================
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                Object.keys(tabContents).forEach(key => {
+                    tabContents[key].classList.toggle('active', key === tab);
+                });
+            });
+        });
+
+        // ===== AUTH STATE =====
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('authButtons').style.display = 'none';
@@ -944,15 +934,63 @@
                     plan: 'free',
                     createdAt: new Date()
                 }, { merge: true });
+
+                // ===== UPDATE MOCK EXAM CARD BASED ON PLAN =====
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    if (doc.exists) {
+                        const plan = doc.data().plan || 'free';
+                        updateMockExamCard(plan);
+                    }
+                });
             } else {
                 document.getElementById('authButtons').style.display = 'inline-flex';
                 document.getElementById('userGreeting').style.display = 'none';
+                updateMockExamCard('free');
             }
         });
 
-        // ============================================================
-        // MODAL
-        // ============================================================
+        function updateMockExamCard(plan) {
+            const lockIcon = document.getElementById('mockLockIcon');
+            const title = document.getElementById('mockTitle');
+            const description = document.getElementById('mockDescription');
+            const badge = document.getElementById('mockBadge');
+            const btn = document.getElementById('mockBtn');
+            const extra = document.getElementById('mockExtra');
+
+            if (plan === 'free') {
+                lockIcon.textContent = '🔒';
+                title.textContent = 'Full IELTS Mock Exam';
+                description.textContent = 'Complete all 4 modules in one session — Reading, Writing, Listening, and Speaking.';
+                badge.textContent = '🔒 Locked';
+                badge.className = 'mock-badge free';
+                btn.className = 'mock-btn disabled';
+                btn.innerHTML = '<i class="fas fa-lock"></i> Upgrade to Pro';
+                btn.href = 'checkout.html';
+                extra.textContent = 'Upgrade to Pro to access mock exams (2/month) or Pro+ (unlimited).';
+            } else if (plan === 'pro') {
+                lockIcon.textContent = '⭐';
+                title.textContent = 'Full IELTS Mock Exam';
+                description.textContent = 'Complete all 4 modules in one session — Reading, Writing, Listening, and Speaking.';
+                badge.textContent = '⭐ 2 exams/month';
+                badge.className = 'mock-badge pro';
+                btn.className = 'mock-btn primary';
+                btn.innerHTML = '<i class="fas fa-play"></i> Start Mock Exam';
+                btn.href = 'mock-exam.html';
+                extra.textContent = 'You have 2 mock exams remaining this month.';
+            } else {
+                lockIcon.textContent = '🚀';
+                title.textContent = 'Full IELTS Mock Exam';
+                description.textContent = 'Complete all 4 modules in one session — Reading, Writing, Listening, and Speaking.';
+                badge.textContent = '🚀 Unlimited';
+                badge.className = 'mock-badge proplus';
+                btn.className = 'mock-btn primary';
+                btn.innerHTML = '<i class="fas fa-play"></i> Start Mock Exam';
+                btn.href = 'mock-exam.html';
+                extra.textContent = 'You have unlimited mock exams available.';
+            }
+        }
+
+        // ===== MODAL =====
         let currentMode = 'login';
 
         function openModal(mode) {
@@ -986,7 +1024,6 @@
                 switchLink.textContent = 'Log In';
                 nameGroup.style.display = 'block';
             }
-
             modal.style.display = 'flex';
         }
 
