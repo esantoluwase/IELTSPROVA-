@@ -130,8 +130,6 @@
             font-weight: 700;
             padding: 0.1rem 0.6rem;
             border-radius: 50px;
-            background: #f3edf7;
-            color: #7B6A8A;
         }
         .section-card .section-body .topic-item .t-type.task1 { background: #e3f2fd; color: #0d47a1; }
         .section-card .section-body .topic-item .t-type.task2 { background: #fff8e1; color: #f57f17; }
@@ -159,6 +157,151 @@
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
+
+        /* ===== VISUAL CHART STYLES ===== */
+        .chart-container {
+            background: #faf7ff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+            border: 1px solid #f0e8f5;
+        }
+        .chart-container h4 {
+            color: #4A148C;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        .chart .bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .chart .bar {
+            width: 80%;
+            max-width: 60px;
+            background: linear-gradient(180deg, #7B1FA2, #4A148C);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.8s ease;
+            min-height: 10px;
+            position: relative;
+        }
+        .chart .bar .value {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4A148C;
+        }
+        .chart .bar-label {
+            font-size: 0.7rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+            text-align: center;
+        }
+        .chart .bar.gold { background: linear-gradient(180deg, #FFD700, #f5c500); }
+        .chart .bar.green { background: linear-gradient(180deg, #43a047, #2e7d32); }
+        .chart .bar.red { background: linear-gradient(180deg, #e53935, #c62828); }
+        .chart .bar.blue { background: linear-gradient(180deg, #1e88e5, #0d47a1); }
+
+        .chart-bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            padding: 0.5rem 0;
+            gap: 1rem;
+        }
+        .chart-bar-chart .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .chart-bar-chart .bar-item .bar {
+            width: 100%;
+            max-width: 50px;
+            border-radius: 4px 4px 0 0;
+            min-height: 10px;
+            transition: height 0.8s ease;
+            position: relative;
+        }
+        .chart-bar-chart .bar-item .bar .value {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4A148C;
+        }
+        .chart-bar-chart .bar-item .label {
+            font-size: 0.7rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+            text-align: center;
+        }
+
+        /* ===== LINE CHART ===== */
+        .line-chart {
+            position: relative;
+            height: 200px;
+            padding: 0.5rem 0;
+            margin: 1rem 0;
+        }
+        .line-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+        .line-chart .line {
+            fill: none;
+            stroke: #4A148C;
+            stroke-width: 3;
+        }
+        .line-chart .area {
+            fill: rgba(74, 20, 140, 0.1);
+        }
+        .line-chart .dot {
+            fill: #4A148C;
+            r: 5;
+        }
+        .line-chart .dot-label {
+            font-size: 0.65rem;
+            fill: #4A148C;
+            font-weight: 600;
+        }
+
+        .writing-area textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+            transition: 0.3s;
+            line-height: 1.6;
+        }
+        .writing-area textarea:focus { outline: none; border-color: #7B1FA2; }
+        .word-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+        }
+        .word-counter .count { font-weight: 700; color: #4A148C; }
 
         .actions {
             display: flex;
@@ -191,22 +334,6 @@
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-secondary { background: #f3edf7; color: #4A148C; }
         .btn-secondary:hover { background: #e5d9ed; }
-
-        .writing-area textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #f0e8f5;
-            border-radius: 16px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            min-height: 150px;
-            resize: vertical;
-            transition: 0.3s;
-            line-height: 1.6;
-        }
-        .writing-area textarea:focus { outline: none; border-color: #7B1FA2; }
-        .word-counter { text-align: right; font-size: 0.85rem; color: #7B6A8A; margin-top: 0.3rem; }
-        .word-counter .count { font-weight: 700; color: #4A148C; }
 
         .result {
             margin-top: 2rem;
@@ -325,6 +452,8 @@
             .login-overlay .modal-box { padding: 2rem; }
             .section-card .section-header { flex-direction: column; align-items: flex-start; }
             .section-card .section-body .topic-item { flex-direction: column; align-items: flex-start; }
+            .chart .bar { width: 60%; }
+            .chart-bar-chart .bar-item .bar { max-width: 30px; }
         }
     </style>
 </head>
@@ -415,44 +544,56 @@
     // ============================================================
     const freeTopics = {
         task1: [
-            { id: 1, title: "Internet Access in UK Households", type: "Chart" },
-            { id: 2, title: "Population Growth in Major Cities", type: "Chart" }
+            { id: 1, title: "Internet Access in UK Households", type: "Bar Chart" }
         ],
         task2: [
-            { id: 3, title: "Technology and Society", type: "Opinion Essay" },
-            { id: 4, title: "Education System Reform", type: "Discussion Essay" }
+            { id: 2, title: "Technology and Society", type: "Opinion Essay" }
         ]
     };
 
     const proTopics = {
         task1: [
-            { id: 5, title: "Energy Consumption Trends", type: "Chart" },
-            { id: 6, title: "Global Temperature Changes", type: "Line Graph" },
-            { id: 7, title: "Employment Rates by Sector", type: "Chart" },
-            { id: 8, title: "Household Spending Patterns", type: "Chart" },
-            { id: 9, title: "International Tourism Growth", type: "Chart" }
+            { id: 3, title: "Energy Consumption Trends", type: "Line Graph" },
+            { id: 4, title: "Global Temperature Changes", type: "Line Graph" },
+            { id: 5, title: "Employment Rates by Sector", type: "Bar Chart" },
+            { id: 6, title: "Household Spending Patterns", type: "Bar Chart" }
         ],
         task2: [
-            { id: 10, title: "Environmental Protection", type: "Problem/Solution Essay" },
-            { id: 11, title: "Healthcare Access", type: "Discussion Essay" },
-            { id: 12, title: "Urban Development", type: "Advantages/Disadvantages Essay" },
-            { id: 13, title: "Cultural Preservation", type: "Discussion Essay" },
-            { id: 14, title: "Economic Inequality", type: "Problem/Solution Essay" }
+            { id: 7, title: "Environmental Protection", type: "Problem/Solution Essay" },
+            { id: 8, title: "Healthcare Access", type: "Discussion Essay" }
         ]
     };
 
-    const proPlusTopics = {
-        task1: [
-            { id: 15, title: "Global Food Production", type: "Chart" },
-            { id: 16, title: "Educational Attainment by Country", type: "Chart" },
-            { id: 17, title: "Technology Adoption Rates", type: "Chart" }
-        ],
-        task2: [
-            { id: 18, title: "Artificial Intelligence Ethics", type: "Discussion Essay" },
-            { id: 19, title: "Sustainable Development", type: "Problem/Solution Essay" },
-            { id: 20, title: "Remote Work Impact", type: "Advantages/Disadvantages Essay" }
-        ]
-    };
+    // ============================================================
+    // RENDER A REAL CHART
+    // ============================================================
+    function renderChart(data) {
+        if (!data) return '<p style="color:#7B6A8A;text-align:center;">Chart data not available</p>';
+        
+        const maxVal = Math.max(...data.values) * 1.2;
+        const bars = data.labels.map((label, i) => {
+            const height = (data.values[i] / maxVal) * 150;
+            const colors = ['#4A148C', '#7B1FA2', '#FFD700', '#43a047', '#1e88e5'];
+            const color = colors[i % colors.length];
+            return `
+                <div class="bar-wrapper">
+                    <div class="bar" style="height:${Math.max(height, 10)}px; background:${color};">
+                        <span class="value">${data.values[i]}%</span>
+                    </div>
+                    <div class="bar-label">${label}</div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="chart-container">
+                <h4>${data.title || 'Chart'}</h4>
+                <div class="chart">
+                    ${bars}
+                </div>
+            </div>
+        `;
+    }
 
     // ============================================================
     // CHECK LOGIN + LOAD USER PLAN
@@ -510,7 +651,6 @@
 
         const totalFree = freeTopics.task1.length + freeTopics.task2.length;
         const totalPro = proTopics.task1.length + proTopics.task2.length;
-        const totalProPlus = proPlusTopics.task1.length + proPlusTopics.task2.length;
 
         let html = '';
 
@@ -578,41 +718,6 @@
             </div>
         `;
 
-        // ===== PRO+ SECTION =====
-        html += `
-            <div class="section-card ${isProPlus ? '' : 'locked'}">
-                <div class="section-header">
-                    <span class="title">🚀 Pro+ Access</span>
-                    <span class="badge proplus">${isProPlus ? `${totalProPlus} Prompts` : '🔒 Locked'}</span>
-                </div>
-                <div class="section-body">
-                    ${isProPlus ? `
-                        <div class="topic-list">
-                            ${proPlusTopics.task1.map(t => `
-                                <div class="topic-item">
-                                    <span class="t-title">📊 ${t.title}</span>
-                                    <span class="t-type task1">Task 1 · ${t.type}</span>
-                                </div>
-                            `).join('')}
-                            ${proPlusTopics.task2.map(t => `
-                                <div class="topic-item">
-                                    <span class="t-title">📝 ${t.title}</span>
-                                    <span class="t-type task2">Task 2 · ${t.type}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : `
-                        <div class="locked-overlay">
-                            <span class="lock-icon">🚀</span>
-                            <p style="font-weight:600;color:#4A148C;">Upgrade to Pro+ to unlock 100+ writing prompts</p>
-                            <p style="font-size:0.85rem;color:#7B6A8A;">Get unlimited access + AI feedback</p>
-                            <a href="checkout.html" class="upgrade-link">🚀 Upgrade to Pro+</a>
-                        </div>
-                    `}
-                </div>
-            </div>
-        `;
-
         container.innerHTML = html;
     }
 
@@ -627,6 +732,14 @@
         selectedTask2 = task2;
 
         const container = document.getElementById('sectionsContainer');
+        
+        // Real chart data for Task 1
+        const chartData = {
+            title: task1.title,
+            labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+            values: [45, 50, 55, 60, 65, 72, 78, 84, 89, 94, 98]
+        };
+        
         let html = `
             <div style="margin-bottom:1.5rem;background:#faf7ff;padding:1rem;border-radius:12px;">
                 <p style="font-weight:700;color:#4A148C;">📝 Free Writing Test</p>
@@ -634,7 +747,9 @@
             </div>
             <div style="margin-bottom:1.5rem;">
                 <h4 style="color:#4A148C;">Task 1: ${task1.title}</h4>
-                <p style="font-size:0.95rem;color:#3d2a4a;">Describe the chart below and make comparisons where relevant.</p>
+                <p style="font-size:0.95rem;color:#3d2a4a;">The chart below shows the percentage of households in the UK that had access to the internet from 2015 to 2025.</p>
+                ${renderChart(chartData)}
+                <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">📝 Minimum 150 words</p>
                 <div class="writing-area">
                     <textarea id="mockTask1" placeholder="Write your Task 1 response here..." oninput="updateWordCount('mockTask1', 'mockTask1Words')"></textarea>
                     <div class="word-counter">📝 Words: <span class="count" id="mockTask1Words">0</span> / 150</div>
@@ -642,7 +757,8 @@
             </div>
             <div>
                 <h4 style="color:#4A148C;">Task 2: ${task2.title}</h4>
-                <p style="font-size:0.95rem;color:#3d2a4a;">Write an essay on the topic below. Discuss both views and give your own opinion.</p>
+                <p style="font-size:0.95rem;color:#3d2a4a;">${task2.type === 'Opinion Essay' ? 'Some people believe that technology has made our lives more complicated, while others think it has made our lives easier. Discuss both views and give your own opinion.' : 'Write an essay on the topic below.'}</p>
+                <p style="font-size:0.85rem;color:#7B6A8A;margin-top:0.5rem;">📝 Minimum 250 words</p>
                 <div class="writing-area">
                     <textarea id="mockTask2" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('mockTask2', 'mockTask2Words')"></textarea>
                     <div class="word-counter">📝 Words: <span class="count" id="mockTask2Words">0</span> / 250</div>
