@@ -19,6 +19,53 @@
     <script src="questions.js"></script>
 
     <style>
+        /* ===== FIX: HAMBURGER MENU IN DARK MODE ===== */
+body.dark-mode .nav-links {
+    background: #1a0a2e !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+}
+body.dark-mode .nav-links a {
+    color: rgba(255,255,255,0.9) !important;
+}
+body.dark-mode .nav-links a:hover {
+    color: #FFD700 !important;
+}
+body.dark-mode .nav-links .dropdown-content {
+    background: #1a0a2e !important;
+    border-color: rgba(255,255,255,0.1) !important;
+}
+body.dark-mode .nav-links .dropdown-content a {
+    color: rgba(255,255,255,0.8) !important;
+}
+body.dark-mode .nav-links .dropdown-content a:hover {
+    background: rgba(255,255,255,0.05) !important;
+    color: #FFD700 !important;
+}
+body.dark-mode .nav-cta-outline {
+    border-color: #FFD700 !important;
+    color: #FFD700 !important;
+}
+body.dark-mode .nav-cta-outline:hover {
+    background: #FFD700 !important;
+    color: #1a0a2e !important;
+}
+body.dark-mode .nav-cta {
+    background: #FFD700 !important;
+    color: #1a0a2e !important;
+}
+body.dark-mode .nav-cta:hover {
+    background: #f5c500 !important;
+}
+body.dark-mode .user-greeting {
+    color: #FFD700 !important;
+}
+body.dark-mode .hamburger span {
+    background: #FFD700 !important;
+}
+body.dark-mode .dark-mode-toggle {
+    color: #FFD700 !important;
+}
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
