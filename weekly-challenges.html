@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>Weekly Challenges — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+        .header h1 span { color: #FFD700; }
+
+        .challenge-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+        .challenge-card:hover {
+            border-color: #7B1FA2;
+        }
+        .challenge-card .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .challenge-card .challenge-header .title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4A148C;
+        }
+        .challenge-card .challenge-header .badge {
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .challenge-card .challenge-header .badge.active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .challenge-card .challenge-header .badge.completed {
+            background: #FFD700;
+            color: #4A148C;
+        }
+        .challenge-card .challenge-header .badge.upcoming {
+            background: #f3edf7;
+            color: #7B6A8A;
+        }
+        .challenge-card .challenge-desc {
+            color: #7B6A8A;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+        .challenge-card .tasks {
+            margin-top: 0.5rem;
+        }
+        .challenge-card .tasks .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f5f0ff;
+        }
+        .challenge-card .tasks .task:last-child {
+            border-bottom: none;
+        }
+        .challenge-card .tasks .task .task-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .challenge-card .tasks .task .task-status {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .challenge-card .tasks .task .task-status.done {
+            color: #2e7d32;
+        }
+        .challenge-card .tasks .task .task-status.pending {
+            color: #f57f17;
+        }
+        .challenge-card .tasks .task .task-status.locked {
+            color: #c62828;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+        }
+        .btn-secondary:hover {
+            background: #e5d9ed;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .challenge-card .challenge-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🏆 Weekly <span>Challenges</span></h1>
+    </div>
+
+    <div id="challengesContainer">
+        <!-- Rendered by JavaScript -->
+    </div>
+
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // CHALLENGE DATA
+    // ============================================================
+    const challenges = [
+        {
+            id: 1,
+            title: "📖 Reading Marathon",
+            desc: "Complete 5 reading tests this week",
+            tasks: [
+                { name: "Reading Test 1", done: false },
+                { name: "Reading Test 2", done: false },
+                { name: "Reading Test 3", done: false },
+                { name: "Reading Test 4", done: false },
+                { name: "Reading Test 5", done: false }
+            ],
+            status: "active"
+        },
+        {
+            id: 2,
+            title: "✍️ Writing Challenge",
+            desc: "Submit 3 writing tasks this week",
+            tasks: [
+                { name: "Task 1: Chart Description", done: true },
+                { name: "Task 2: Opinion Essay", done: false },
+                { name: "Task 3: Problem-Solution Essay", done: false }
+            ],
+            status: "active"
+        },
+        {
+            id: 3,
+            title: "🎧 Listening Sprint",
+            desc: "Complete 4 listening tests",
+            tasks: [
+                { name: "Listening Test 1", done: true },
+                { name: "Listening Test 2", done: true },
+                { name: "Listening Test 3", done: false },
+                { name: "Listening Test 4", done: false }
+            ],
+            status: "active"
+        },
+        {
+            id: 4,
+            title: "🗣️ Speaking Practice",
+            desc: "Record 3 speaking answers",
+            tasks: [
+                { name: "Part 1: Introduction", done: true },
+                { name: "Part 2: Cue Card", done: true },
+                { name: "Part 3: Discussion", done: false }
+            ],
+            status: "active"
+        },
+        {
+            id: 5,
+            title: "🔥 All-Rounder",
+            desc: "Complete one test in each module",
+            tasks: [
+                { name: "Reading Test", done: false },
+                { name: "Writing Task", done: false },
+                { name: "Listening Test", done: false },
+                { name: "Speaking Practice", done: false }
+            ],
+            status: "upcoming"
+        }
+    ];
+
+    // ============================================================
+    // RENDER CHALLENGES
+    // ============================================================
+    function renderChallenges() {
+        const container = document.getElementById('challengesContainer');
+
+        container.innerHTML = challenges.map(challenge => {
+            const total = challenge.tasks.length;
+            const completed = challenge.tasks.filter(t => t.done).length;
+            const progress = Math.round((completed / total) * 100);
+
+            const statusBadge = challenge.status === 'active' ? 'active' : 'upcoming';
+            const statusLabel = challenge.status === 'active' ? '🟢 Active' : '📅 Upcoming';
+
+            return `
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <span class="title">${challenge.title}</span>
+                        <span class="badge ${statusBadge}">${statusLabel}</span>
+                    </div>
+                    <div class="challenge-desc">${challenge.desc}</div>
+                    <div style="background:#f3edf7;border-radius:50px;height:6px;overflow:hidden;margin:0.5rem 0;">
+                        <div style="height:100%;width:${progress}%;background:linear-gradient(90deg,#4A148C,#7B1FA2);border-radius:50px;"></div>
+                    </div>
+                    <div style="font-size:0.8rem;color:#7B6A8A;margin-bottom:0.5rem;">${completed} / ${total} completed</div>
+                    <div class="tasks">
+                        ${challenge.tasks.map(task => `
+                            <div class="task">
+                                <span class="task-name">${task.done ? '✅' : '⬜'} ${task.name}</span>
+                                <span class="task-status ${task.done ? 'done' : 'pending'}">
+                                    ${task.done ? '✅ Done' : '⏳ Pending'}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn btn-primary" onclick="window.location.href='reading-test.html'" style="margin-top:0.8rem;">
+                        <i class="fas fa-play"></i> Start Challenge
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+        renderChallenges();
+    });
+</script>
+
+</body>
+  </html>
