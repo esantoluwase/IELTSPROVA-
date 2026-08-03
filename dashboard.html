@@ -29,7 +29,6 @@
         }
         .container { max-width: 1100px; margin: 0 auto; }
 
-        /* ===== HEADER ===== */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -102,7 +101,7 @@
             box-shadow: 0 8px 25px rgba(74,20,140,0.3);
         }
 
-        /* ===== ONBOARDING CARD ===== */
+        /* ===== ONBOARDING ===== */
         .onboarding-card {
             background: linear-gradient(135deg, #faf7ff, #f3edf7);
             border-radius: 24px;
@@ -193,7 +192,6 @@
         }
         .streak-goal-card .goal .label { color: #7B6A8A; font-size: 0.9rem; }
 
-        /* ===== STUDY REMINDERS ===== */
         .reminder-settings {
             background: #faf7ff;
             padding: 1rem 1.5rem;
@@ -285,7 +283,7 @@
             margin-bottom: 0.3rem;
         }
 
-        /* ===== BADGES ===== */
+        /* ===== BADGES (UPDATED) ===== */
         .badges-section {
             background: white;
             border-radius: 24px;
@@ -301,19 +299,20 @@
         .badges-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.8rem;
         }
         .badge-item {
             background: #faf7ff;
-            padding: 0.8rem 1.2rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
             border: 1px solid #f0e8f5;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             transition: 0.3s;
+            cursor: default;
         }
         .badge-item.earned {
             background: #e8f5e9;
@@ -324,9 +323,18 @@
             opacity: 0.5;
             filter: grayscale(1);
         }
-        .badge-item .badge-icon { font-size: 1.5rem; }
+        .badge-item .badge-icon { font-size: 1.2rem; }
+        .badge-item .share-badge {
+            background: none;
+            border: none;
+            color: #4A148C;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 0.2rem;
+            transition: 0.3s;
+        }
+        .badge-item .share-badge:hover { color: #FFD700; }
 
-        /* ===== CHARTS ===== */
         .charts-section {
             background: white;
             border-radius: 24px;
@@ -381,7 +389,39 @@
             margin-top: 0.2rem;
         }
 
-        /* ===== CERTIFICATE ===== */
+        /* ===== ANALYTICS ===== */
+        .analytics-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 2rem;
+        }
+        .analytics-section h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1rem;
+        }
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .analytics-card {
+            background: #faf7ff;
+            padding: 1.2rem;
+            border-radius: 16px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+        }
+        .analytics-card .big-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .analytics-card .big-number.gold { color: #FFD700; }
+        .analytics-card .label { color: #7B6A8A; font-size: 0.85rem; }
+
         .certificate-section {
             background: white;
             border-radius: 24px;
@@ -427,9 +467,7 @@
             cursor: not-allowed;
             transform: none;
         }
-        .cert-actions {
-            margin-top: 0.5rem;
-        }
+        .cert-actions { margin-top: 0.5rem; }
         .cert-upgrade-prompt {
             background: #f5f0ff;
             padding: 1rem;
@@ -442,7 +480,6 @@
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-
         .certificate-preview {
             display: none;
             margin-top: 1.5rem;
@@ -652,6 +689,15 @@
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(255,215,0,0.3);
         }
+        .share-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+            padding: 0.2rem;
+        }
+        .share-btn:hover { transform: scale(1.2); }
 
         @media (max-width: 600px) {
             body { padding: 1rem; }
@@ -666,6 +712,7 @@
             .chart-grid { grid-template-columns: 1fr; }
             .badges-grid { justify-content: center; }
             .reminder-settings { flex-direction: column; text-align: center; }
+            .analytics-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -777,10 +824,33 @@
             </div>
         </div>
 
-        <!-- ===== BADGES ===== -->
+        <!-- ===== BADGES (UPDATED) ===== -->
         <div class="badges-section">
             <h2>🏆 Your Badges</h2>
             <div class="badges-grid" id="badgesGrid"></div>
+        </div>
+
+        <!-- ===== ANALYTICS ===== -->
+        <div class="analytics-section">
+            <h2>📊 Study Analytics</h2>
+            <div class="analytics-grid" id="analyticsGrid">
+                <div class="analytics-card">
+                    <div class="big-number" id="analyticsTotalTests">0</div>
+                    <div class="label">Total Tests</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="big-number gold" id="analyticsAvgScore">0%</div>
+                    <div class="label">Average Score</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="big-number" id="analyticsBestScore">0</div>
+                    <div class="label">Best Score</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="big-number gold" id="analyticsStreak">0</div>
+                    <div class="label">Best Streak</div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== PROGRESS BARS ===== -->
@@ -904,13 +974,10 @@
             return;
         }
 
-        // ===== UPDATE USER INFO =====
         document.getElementById('userName').textContent = user.displayName || 'Student';
         document.getElementById('userAvatar').textContent = (user.displayName || 'S')[0].toUpperCase();
 
-        // ===== LOAD USER PLAN =====
         let userPlan = 'free';
-
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             if (userDoc.exists) {
@@ -921,10 +988,8 @@
             console.log('Error loading user plan:', e);
         }
 
-        // ===== UPDATE PLAN BADGE =====
         const planBadge = document.getElementById('userPlan');
         const upgradeBtn = document.getElementById('upgradeBtn');
-
         if (userPlan === 'pro') {
             planBadge.textContent = '⭐ Pro Plan';
             planBadge.className = 'plan-badge pro';
@@ -939,11 +1004,9 @@
             upgradeBtn.style.display = 'inline-flex';
         }
 
-        // ===== UPDATE MOCK EXAM CARD =====
         const mockBtn = document.getElementById('mockBtn');
         const mockBadge = document.getElementById('mockBadge');
         const mockStatus = document.getElementById('mockExamStatus');
-
         if (userPlan === 'free') {
             mockBtn.style.display = 'none';
             mockBadge.textContent = '🔒 Locked';
@@ -961,16 +1024,13 @@
             mockStatus.textContent = 'You have unlimited mock exams available';
         }
 
-        // ===== LOAD SCORES =====
         let allScores = [];
         let localScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
-
         let firebaseScores = [];
         try {
             const scoresSnapshot = await db.collection('scores')
                 .where('userId', '==', user.uid)
                 .get();
-            
             scoresSnapshot.forEach(doc => {
                 const data = doc.data();
                 firebaseScores.push({
@@ -984,10 +1044,8 @@
             console.error('❌ Firestore error:', error);
         }
 
-        // ===== MERGE SCORES =====
         const mergedScores = [...localScores];
         const existingModules = new Set(localScores.map(s => `${s.module}_${s.date}`));
-        
         firebaseScores.forEach(fs => {
             const key = `${fs.module}_${fs.date}`;
             if (!existingModules.has(key)) {
@@ -996,25 +1054,19 @@
             }
         });
 
-        // ===== UPDATE ONBOARDING =====
         updateOnboarding(mergedScores);
-
-        // ===== UPDATE STREAK & GOAL =====
         updateStreakAndGoal(mergedScores);
 
-        // ===== UPDATE BADGES =====
+        // ===== UPDATE BADGES (NEW) =====
         updateBadges(mergedScores);
 
-        // ===== UPDATE CHARTS =====
+        // ===== UPDATE ANALYTICS =====
+        updateAnalytics(mergedScores);
+
         updateCharts(mergedScores);
-
-        // ===== UPDATE CERTIFICATE =====
         updateCertificate(mergedScores, user.displayName || 'Student', userPlan);
-
-        // ===== UPDATE STUDY REMINDERS =====
         setupReminders(userPlan);
 
-        // ===== SHOW DASHBOARD =====
         document.getElementById('loadingMessage').style.display = 'none';
         document.getElementById('dashboardContent').style.display = 'block';
 
@@ -1107,24 +1159,43 @@
     }
 
     // ============================================================
-    // UPDATE BADGES
+    // UPDATE BADGES (18+ Badges)
     // ============================================================
     function updateBadges(scores) {
         const totalTests = scores.length;
         const bestScore = scores.length > 0 ? Math.max(...scores.map(s => s.score || 0)) : 0;
         const hasHighScore = bestScore >= 7.0;
-        const hasMediumScore = bestScore >= 5.0 && bestScore < 7.0;
+        const hasVeryHighScore = bestScore >= 8.0;
+        const hasPerfectScore = scores.some(s => s.score === s.total && s.total >= 10);
         const hasStreak = new Set(scores.map(s => s.date ? new Date(s.date).toDateString() : '')).size >= 3;
+        const hasWeekStreak = new Set(scores.map(s => s.date ? new Date(s.date).toDateString() : '')).size >= 7;
+        const hasMonthStreak = new Set(scores.map(s => s.date ? new Date(s.date).toDateString() : '')).size >= 30;
+        const hasAllModules = scores.some(s => s.module === 'reading') && scores.some(s => s.module === 'listening') && scores.some(s => s.module === 'writing') && scores.some(s => s.module === 'speaking');
+        const hasReadingMaster = scores.some(s => s.module === 'reading' && s.score >= 7.0);
+        const hasWritingMaster = scores.some(s => s.module === 'writing' && s.score >= 7.0);
+        const hasListeningMaster = scores.some(s => s.module === 'listening' && s.score >= 7.0);
+        const hasSpeakingMaster = scores.some(s => s.module === 'speaking' && s.score >= 7.0);
+        const hasQuizMaster = totalTests >= 20;
 
         const badges = [
             { id: 'first', label: 'First Test', icon: '⭐', earned: totalTests >= 1 },
             { id: 'three', label: '3 Tests', icon: '📚', earned: totalTests >= 3 },
             { id: 'five', label: '5 Tests', icon: '💪', earned: totalTests >= 5 },
             { id: 'ten', label: '10 Tests', icon: '🏆', earned: totalTests >= 10 },
+            { id: 'twentyfive', label: '25 Tests', icon: '🎖️', earned: totalTests >= 25 },
+            { id: 'fifty', label: '50 Tests', icon: '👑', earned: totalTests >= 50 },
             { id: 'high', label: '7.0+ Score', icon: '🌟', earned: hasHighScore },
-            { id: 'medium', label: '5.0+ Score', icon: '⭐', earned: hasMediumScore || hasHighScore },
-            { id: 'streak', label: '3-Day Streak', icon: '🔥', earned: hasStreak },
-            { id: 'all_modules', label: 'All Modules', icon: '📖', earned: scores.some(s => s.module === 'reading') && scores.some(s => s.module === 'listening') && scores.some(s => s.module === 'writing') && scores.some(s => s.module === 'speaking') }
+            { id: 'veryhigh', label: '8.0+ Score', icon: '💎', earned: hasVeryHighScore },
+            { id: 'perfect', label: 'Perfect Score', icon: '🎯', earned: hasPerfectScore },
+            { id: 'streak3', label: '3-Day Streak', icon: '🔥', earned: hasStreak },
+            { id: 'streak7', label: '7-Day Streak', icon: '⚡', earned: hasWeekStreak },
+            { id: 'streak30', label: '30-Day Streak', icon: '🌈', earned: hasMonthStreak },
+            { id: 'all_modules', label: 'All Modules', icon: '📖', earned: hasAllModules },
+            { id: 'reading_master', label: 'Reading Master', icon: '📖', earned: hasReadingMaster },
+            { id: 'writing_master', label: 'Writing Master', icon: '✍️', earned: hasWritingMaster },
+            { id: 'listening_master', label: 'Listening Master', icon: '🎧', earned: hasListeningMaster },
+            { id: 'speaking_master', label: 'Speaking Master', icon: '🗣️', earned: hasSpeakingMaster },
+            { id: 'quiz_master', label: 'Quiz Master', icon: '🧠', earned: hasQuizMaster }
         ];
 
         const grid = document.getElementById('badgesGrid');
@@ -1133,8 +1204,43 @@
                 <span class="badge-icon">${b.icon}</span>
                 ${b.label}
                 ${b.earned ? ' ✅' : ' 🔒'}
+                ${b.earned ? `<button class="share-badge" onclick="shareBadge('${b.icon}', '${b.label}')"><i class="fas fa-share-alt"></i></button>` : ''}
             </div>
         `).join('');
+    }
+
+    // ============================================================
+    // SHARE BADGE (SOCIAL SHARING)
+    // ============================================================
+    function shareBadge(icon, label) {
+        const text = `🎉 I just earned the "${label}" badge on IELTSProva! 💜 Try it yourself at ieltsprova.netlify.app`;
+        if (navigator.share) {
+            navigator.share({ title: 'IELTSProva Badge', text: text, url: 'https://ieltsprova.netlify.app/' });
+        } else {
+            // Fallback: Copy to clipboard
+            navigator.clipboard.writeText(text + ' https://ieltsprova.netlify.app/');
+            alert('✅ Badge text copied to clipboard! Share it with your friends.');
+        }
+    }
+
+    // ============================================================
+    // UPDATE ANALYTICS
+    // ============================================================
+    function updateAnalytics(scores) {
+        const total = scores.length;
+        document.getElementById('analyticsTotalTests').textContent = total;
+
+        if (total > 0) {
+            const avg = scores.reduce((sum, s) => sum + (s.score || 0), 0) / total;
+            const avgPercent = Math.round((avg / 10) * 100);
+            document.getElementById('analyticsAvgScore').textContent = `${avgPercent}%`;
+
+            const best = Math.max(...scores.map(s => s.score || 0));
+            document.getElementById('analyticsBestScore').textContent = best;
+
+            const days = new Set(scores.map(s => s.date ? new Date(s.date).toDateString() : ''));
+            document.getElementById('analyticsStreak').textContent = days.size || 0;
+        }
     }
 
     // ============================================================
@@ -1149,14 +1255,12 @@
             const moduleScores = scores.filter(s => s.module === module);
             const scoresList = moduleScores.map(s => Math.round((s.score / (s.total || 10)) * 10) / 10);
             const recentScores = scoresList.slice(-5);
-            const bars = recentScores.map((s, i) => {
+            const bars = recentScores.map((s) => {
                 const height = Math.max((s / 9) * 50, 4);
                 const isGold = s >= 7.0;
                 return `<div class="bar ${isGold ? 'gold' : ''}" style="height:${height}px;"></div>`;
             }).join('');
-
             const labels = recentScores.map((_, i) => `#${scoresList.length - 4 + i + 1}`).join(' ');
-
             return `
                 <div class="chart-card">
                     <h4>${moduleLabels[index]}</h4>
@@ -1183,7 +1287,6 @@
 
         if (qualifies) {
             status.innerHTML = `<span class="qualified">✅ You qualify for a certificate! (Best score: ${bestScore}/${bestTotal})</span>`;
-            
             if (userPlan === 'free') {
                 actions.innerHTML = `
                     <div class="cert-upgrade-prompt">
@@ -1222,7 +1325,6 @@
         const data = window._certData;
         if (!data) return;
 
-        // Update preview
         document.getElementById('certStudentName').textContent = data.name;
         document.getElementById('certModule').textContent = data.module;
         document.getElementById('certScore').textContent = data.score;
@@ -1234,7 +1336,6 @@
         preview.classList.add('show');
         preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        // Use html2canvas to download
         html2canvas(preview, {
             scale: 2,
             backgroundColor: '#ffffff',
@@ -1256,7 +1357,7 @@
         const remindersEnabled = localStorage.getItem('reminders_enabled') === 'true';
 
         if (userPlan === 'pro' || userPlan === 'proplus') {
-            const reminderHTML = `
+            container.innerHTML = `
                 <div class="reminder-settings">
                     <div class="reminder-info">
                         <h4>📧 Study Reminders</h4>
@@ -1272,7 +1373,6 @@
                     </div>
                 </div>
             `;
-            container.innerHTML = reminderHTML;
         } else {
             container.innerHTML = `
                 <div class="reminder-settings" style="justify-content:center;text-align:center;">
