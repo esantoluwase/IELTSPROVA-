@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>Study Planner — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+        .header h1 span { color: #FFD700; }
+        .header .plan-badge {
+            background: #fce4ec;
+            color: #c62828;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .header .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .header .plan-badge.proplus {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .planner-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 1.5rem;
+        }
+        .planner-card h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1rem;
+        }
+        .planner-card p {
+            color: #7B6A8A;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .goal-input {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .goal-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            min-width: 150px;
+        }
+        .goal-input input:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .goal-input select {
+            padding: 0.8rem 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            min-width: 150px;
+        }
+        .goal-input select:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+        .btn-secondary {
+            background: #f3edf7;
+            color: #4A148C;
+        }
+        .btn-secondary:hover {
+            background: #e5d9ed;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: scale(1.05);
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .day-card {
+            background: #faf7ff;
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid #f0e8f5;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .day-card:hover {
+            border-color: #7B1FA2;
+        }
+        .day-card .day-name {
+            font-weight: 700;
+            color: #4A148C;
+            font-size: 0.85rem;
+        }
+        .day-card .day-tasks {
+            font-size: 0.75rem;
+            color: #7B6A8A;
+            margin-top: 0.3rem;
+        }
+        .day-card .day-tasks .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.2rem 0;
+            border-bottom: 1px solid #f5f0ff;
+            font-size: 0.75rem;
+        }
+        .day-card .day-tasks .task:last-child {
+            border-bottom: none;
+        }
+        .day-card .day-tasks .task .done {
+            color: #2e7d32;
+        }
+        .day-card .day-tasks .task .pending {
+            color: #f57f17;
+        }
+        .day-card .day-tasks .task .locked {
+            color: #c62828;
+        }
+        .day-card .day-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4A148C;
+        }
+        .day-card.today {
+            border-color: #FFD700;
+            background: #fffef5;
+        }
+        .day-card.completed {
+            border-color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .locked-overlay {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #f5f0ff;
+            border-radius: 24px;
+            border: 2px dashed #7B1FA2;
+        }
+        .locked-overlay .lock-icon { font-size: 3rem; color: #7B1FA2; }
+        .locked-overlay h2 { color: #4A148C; margin: 0.5rem 0; }
+        .locked-overlay p { color: #7B6A8A; margin-bottom: 1rem; }
+        .locked-overlay .upgrade-link {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .days-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .days-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .goal-input { flex-direction: column; }
+            .header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>📅 Study <span>Planner</span></h1>
+        <span class="plan-badge" id="planBadge">🔒 Free</span>
+    </div>
+
+    <!-- ===== PLANNER CONTENT ===== -->
+    <div id="plannerContent">
+        <!-- Rendered by JavaScript -->
+    </div>
+
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let userPlan = 'free';
+    let userId = null;
+
+    // ============================================================
+    // CHECK LOGIN + LOAD USER PLAN
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        userId = user.uid;
+
+        try {
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                userPlan = data.plan || 'free';
+            }
+        } catch (e) {
+            console.log('Error loading user plan:', e);
+        }
+
+        // Update badge
+        const badge = document.getElementById('planBadge');
+        if (userPlan === 'free') {
+            badge.textContent = '🔒 Free (Upgrade to Pro)';
+            badge.className = 'plan-badge';
+        } else if (userPlan === 'pro') {
+            badge.textContent = '⭐ Pro';
+            badge.className = 'plan-badge pro';
+        } else {
+            badge.textContent = '🚀 Pro+';
+            badge.className = 'plan-badge proplus';
+        }
+
+        renderPlanner();
+    });
+
+    // ============================================================
+    // RENDER PLANNER
+    // ============================================================
+    function renderPlanner() {
+        const container = document.getElementById('plannerContent');
+
+        if (userPlan === 'free') {
+            container.innerHTML = `
+                <div class="locked-overlay">
+                    <span class="lock-icon">🔒</span>
+                    <h2>Study Planner is a Pro Feature</h2>
+                    <p>Get a personalized weekly study plan tailored to your goals.</p>
+                    <p style="font-size:0.85rem;color:#7B6A8A;margin-bottom:1rem;">
+                        ⭐ Pro: Weekly plans · 🚀 Pro+: Advanced AI planning
+                    </p>
+                    <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+                </div>
+            `;
+            return;
+        }
+
+        // Get user's goal from localStorage or set default
+        const savedGoal = localStorage.getItem('study_goal') || '7.0';
+        const savedDays = parseInt(localStorage.getItem('study_days')) || 5;
+
+        const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const today = new Date().getDay();
+        const todayIndex = today === 0 ? 6 : today - 1;
+
+        // Generate tasks for each day
+        const modules = ['Reading', 'Writing', 'Listening', 'Speaking'];
+        const taskTypes = ['Practice Test', 'Review Notes', 'Vocabulary', 'Mock Exam'];
+
+        container.innerHTML = `
+            <div class="planner-card">
+                <h2>🎯 Your Study Goal</h2>
+                <p>Set your target band score and how many days per week you want to study.</p>
+                <div class="goal-input">
+                    <input type="number" id="targetScore" value="${savedGoal}" min="4.0" max="9.0" step="0.5" />
+                    <select id="studyDays">
+                        <option value="3" ${savedDays === 3 ? 'selected' : ''}>3 days/week</option>
+                        <option value="4" ${savedDays === 4 ? 'selected' : ''}>4 days/week</option>
+                        <option value="5" ${savedDays === 5 ? 'selected' : ''}>5 days/week</option>
+                        <option value="6" ${savedDays === 6 ? 'selected' : ''}>6 days/week</option>
+                        <option value="7" ${savedDays === 7 ? 'selected' : ''}>7 days/week</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="updateGoal()">
+                        <i class="fas fa-save"></i> Update Plan
+                    </button>
+                </div>
+            </div>
+
+            <div class="planner-card">
+                <h2>📅 Your Weekly Plan</h2>
+                <p>${dayNames[todayIndex]} — Today's focus: ${modules[todayIndex % 4]}</p>
+                <div class="days-grid">
+                    ${dayNames.map((name, index) => {
+                        const isToday = index === todayIndex;
+                        const isPast = index < todayIndex;
+                        const tasks = [
+                            `${modules[index % 4]} Practice Test`,
+                            `${modules[(index + 1) % 4]} Review`,
+                            `Vocabulary Building`
+                        ];
+                        return `
+                            <div class="day-card ${isToday ? 'today' : ''} ${isPast ? 'completed' : ''}">
+                                <div class="day-name">${name}</div>
+                                <div class="day-number">${isPast ? '✅' : isToday ? '📌' : '📅'}</div>
+                                <div class="day-tasks">
+                                    ${tasks.map(task => `
+                                        <div class="task">
+                                            <span>${task}</span>
+                                            <span class="${isPast ? 'done' : isToday ? 'pending' : 'locked'}">
+                                                ${isPast ? '✅' : isToday ? '⏳' : '🔒'}
+                                            </span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <div class="planner-card">
+                <h2>📊 Weekly Progress</h2>
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:150px;background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                        <div style="font-size:2rem;font-weight:900;color:#4A148C;">${todayIndex}</div>
+                        <div style="font-size:0.85rem;color:#7B6A8A;">Days Completed</div>
+                    </div>
+                    <div style="flex:1;min-width:150px;background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                        <div style="font-size:2rem;font-weight:900;color:#FFD700;">${Math.round((todayIndex / 7) * 100)}%</div>
+                        <div style="font-size:0.85rem;color:#7B6A8A;">Overall Progress</div>
+                    </div>
+                    <div style="flex:1;min-width:150px;background:#faf7ff;padding:1rem;border-radius:16px;text-align:center;">
+                        <div style="font-size:2rem;font-weight:900;color:#4A148C;">${savedGoal}</div>
+                        <div style="font-size:0.85rem;color:#7B6A8A;">Target Band</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center;margin-top:1rem;">
+                <button class="btn btn-success" onclick="startDailyTask()">
+                    <i class="fas fa-play"></i> Start Today's Task
+                </button>
+                <button class="btn btn-secondary" onclick="resetPlan()" style="margin-left:0.5rem;">
+                    <i class="fas fa-sync-alt"></i> Reset Plan
+                </button>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // UPDATE GOAL
+    // ============================================================
+    function updateGoal() {
+        const targetScore = document.getElementById('targetScore').value;
+        const studyDays = document.getElementById('studyDays').value;
+
+        localStorage.setItem('study_goal', targetScore);
+        localStorage.setItem('study_days', studyDays);
+
+        alert('✅ Study plan updated!');
+        renderPlanner();
+    }
+
+    // ============================================================
+    // START DAILY TASK
+    // ============================================================
+    function startDailyTask() {
+        const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const today = new Date().getDay();
+        const todayIndex = today === 0 ? 6 : today - 1;
+        const modules = ['Reading', 'Writing', 'Listening', 'Speaking'];
+
+        alert(`📖 Today's task: ${modules[todayIndex % 4]} Practice Test\n\nGo to the Test section to start practicing!`);
+        window.location.href = 'reading-test.html';
+    }
+
+    // ============================================================
+    // RESET PLAN
+    // ============================================================
+    function resetPlan() {
+        if (confirm('Reset your study plan?')) {
+            localStorage.removeItem('study_goal');
+            localStorage.removeItem('study_days');
+            renderPlanner();
+        }
+    }
+</script>
+
+</body>
+      </html>
