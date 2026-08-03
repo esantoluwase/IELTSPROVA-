@@ -45,6 +45,7 @@
             color: #1a0a2e;
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
         }
         a { text-decoration: none; color: inherit; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
@@ -58,6 +59,7 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255,255,255,0.3);
             padding: 1rem 0;
+            transition: background 0.3s, border-color 0.3s;
         }
         .nav-container {
             display: flex;
@@ -73,6 +75,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: color 0.3s;
         }
         .logo span { color: #FFD700; }
         .logo small {
@@ -199,6 +202,19 @@
         }
         .user-greeting { font-weight: 600; color: #4A148C; }
 
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            color: #4A148C;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            padding: 0.2rem 0.5rem;
+        }
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .hamburger { display: flex; }
             .nav-links {
@@ -231,6 +247,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            transition: background 0.3s;
         }
         .hero::before {
             content: '';
@@ -248,6 +265,7 @@
             font-weight: 900;
             color: #1a0a2e;
             margin-bottom: 0.5rem;
+            transition: color 0.3s;
         }
         .hero h1 span {
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
@@ -259,6 +277,7 @@
             color: #4A3A5A;
             max-width: 650px;
             margin: 0 auto 1.5rem;
+            transition: color 0.3s;
         }
         .hero-buttons {
             display: flex;
@@ -302,6 +321,7 @@
         .tabs-section {
             padding: 2rem 0 0;
             background: white;
+            transition: background 0.3s;
         }
         .tabs {
             display: flex;
@@ -395,6 +415,7 @@
             border: 2px solid #7B1FA2;
             max-width: 700px;
             margin: 0 auto;
+            transition: background 0.3s, border-color 0.3s;
         }
         .mock-exam-card .lock-icon {
             font-size: 3rem;
@@ -542,6 +563,7 @@
             padding: 3rem 0;
             background: linear-gradient(135deg, #1a0a2e, #4A148C);
             color: rgba(255,255,255,0.8);
+            transition: background 0.3s;
         }
         .footer-grid {
             display: grid;
@@ -626,6 +648,67 @@
             .scroll-top { bottom: 1rem; right: 1rem; width: 40px; height: 40px; font-size: 1rem; }
             .mock-exam-card { padding: 1.5rem; }
         }
+
+        /* ===== DARK MODE ===== */
+        body.dark-mode {
+            background: #1a0a2e;
+            color: #e8e0f0;
+        }
+        body.dark-mode nav {
+            background: rgba(26, 10, 46, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        body.dark-mode .nav-links a { color: rgba(255,255,255,0.7); }
+        body.dark-mode .nav-links a:hover { color: #FFD700; }
+        body.dark-mode .logo { color: #FFD700; }
+        body.dark-mode .logo small { color: rgba(255,255,255,0.5); }
+        body.dark-mode .hero {
+            background: linear-gradient(160deg, #1a0a2e 0%, #2A004F 100%);
+        }
+        body.dark-mode .hero h1 { color: #e8e0f0; }
+        body.dark-mode .hero p { color: rgba(255,255,255,0.7); }
+        body.dark-mode .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        body.dark-mode .tabs-section { background: rgba(255,255,255,0.02); }
+        body.dark-mode .tab-btn { color: rgba(255,255,255,0.5); }
+        body.dark-mode .tab-btn.active {
+            color: #FFD700;
+            background: rgba(255,255,255,0.05);
+            border-bottom-color: #FFD700;
+        }
+        body.dark-mode .tab-btn:hover {
+            color: #FFD700;
+            background: rgba(255,255,255,0.05);
+        }
+        body.dark-mode .module-card {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.08);
+            color: #e8e0f0;
+        }
+        body.dark-mode .module-card h3 { color: #FFD700; }
+        body.dark-mode .module-card p { color: rgba(255,255,255,0.5); }
+        body.dark-mode .pricing-card {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.08);
+            color: #e8e0f0;
+        }
+        body.dark-mode .pricing-card .plan-name { color: #e8e0f0; }
+        body.dark-mode .pricing-card .price { color: #FFD700; }
+        body.dark-mode .pricing-card ul li { color: rgba(255,255,255,0.7); }
+        body.dark-mode .pricing-card .btn-plan { background: #FFD700; color: #4A148C; }
+        body.dark-mode .pricing-card.popular { background: rgba(255,215,0,0.1); border-color: #FFD700; }
+        body.dark-mode .mock-exam-card {
+            background: rgba(255,255,255,0.05);
+            border-color: #7B1FA2;
+        }
+        body.dark-mode .mock-exam-card h2 { color: #FFD700; }
+        body.dark-mode .mock-exam-card p { color: rgba(255,255,255,0.5); }
+        body.dark-mode footer {
+            background: linear-gradient(135deg, #0a0515, #1a0a2e);
+        }
+        body.dark-mode .scroll-top { background: #FFD700; color: #4A148C; }
     </style>
 </head>
 <body>
@@ -648,6 +731,9 @@
                 <a href="study-planner.html"><i class="fas fa-calendar-alt"></i> Planner</a>
                 <a href="mock-exam.html"><i class="fas fa-graduation-cap"></i> Mock Exam</a>
                 <a href="pitch.html"><i class="fas fa-rocket"></i> Investor Pitch</a>
+                <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <div class="dropdown">
                     <a href="#">Modules <i class="fas fa-chevron-down" style="font-size:0.6rem;"></i></a>
                     <div class="dropdown-content">
@@ -889,7 +975,9 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // ===== HAMBURGER =====
+        // ============================================================
+        // HAMBURGER
+        // ============================================================
         const hamburger = document.getElementById('hamburgerBtn');
         const navLinks = document.getElementById('navLinks');
 
@@ -905,14 +993,18 @@
             });
         });
 
-        // ===== SCROLL TO TOP =====
+        // ============================================================
+        // SCROLL TO TOP
+        // ============================================================
         window.addEventListener('scroll', function() {
             const btn = document.getElementById('scrollTopBtn');
             if (window.scrollY > 300) btn.classList.add('show');
             else btn.classList.remove('show');
         });
 
-        // ===== TABS =====
+        // ============================================================
+        // TABS
+        // ============================================================
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = {
             modules: document.getElementById('tab-modules'),
@@ -931,7 +1023,9 @@
             });
         });
 
-        // ===== AUTH STATE =====
+        // ============================================================
+        // AUTH STATE
+        // ============================================================
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('authButtons').style.display = 'none';
@@ -998,7 +1092,31 @@
             }
         }
 
-        // ===== MODAL =====
+        // ============================================================
+        // DARK MODE
+        // ============================================================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        // Load dark mode preference on page load
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (icon) icon.className = 'fas fa-sun';
+        }
+
+        // ============================================================
+        // MODAL
+        // ============================================================
         let currentMode = 'login';
 
         function openModal(mode) {
@@ -1091,4 +1209,4 @@
     </script>
 
 </body>
-        </html>
+    </html>
