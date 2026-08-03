@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>Leaderboard — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+        }
+        .header h1 span { color: #FFD700; }
+        .header .plan-badge {
+            background: #fce4ec;
+            color: #c62828;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .header .plan-badge.pro {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        .header .plan-badge.proplus {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            background: white;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #7B6A8A;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #f0e8f5;
+        }
+        .tab-btn.active {
+            background: #4A148C;
+            color: white;
+            border-color: #4A148C;
+        }
+        .tab-btn:hover { background: #f5f0ff; }
+        .tab-btn.active:hover { background: #4A148C; }
+
+        .leaderboard-table {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            overflow-x: auto;
+        }
+        .leaderboard-table .header-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-weight: 700;
+            color: #4A148C;
+            border-bottom: 2px solid #f0e8f5;
+        }
+        .leaderboard-table .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f5f0ff;
+            transition: 0.3s;
+        }
+        .leaderboard-table .row:hover { background: #faf7ff; }
+        .leaderboard-table .row .rank {
+            font-weight: 800;
+            color: #4A148C;
+            min-width: 40px;
+        }
+        .leaderboard-table .row .rank.gold { color: #FFD700; }
+        .leaderboard-table .row .rank.silver { color: #c0c0c0; }
+        .leaderboard-table .row .rank.bronze { color: #cd7f32; }
+        .leaderboard-table .row .user {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex: 1;
+        }
+        .leaderboard-table .row .user .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .leaderboard-table .row .user .name { font-weight: 600; }
+        .leaderboard-table .row .score {
+            font-weight: 700;
+            color: #4A148C;
+        }
+        .leaderboard-table .row .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.1rem 0.6rem;
+            border-radius: 50px;
+        }
+        .leaderboard-table .row .badge.pro { background: #fff8e1; color: #f57f17; }
+        .leaderboard-table .row .badge.proplus { background: #fce4ec; color: #c62828; }
+        .leaderboard-table .row .badge.free { background: #e8f5e9; color: #2e7d32; }
+
+        .your-rank {
+            background: linear-gradient(135deg, #faf7ff, #f3edf7);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            text-align: center;
+            border: 2px solid #7B1FA2;
+        }
+        .your-rank .rank-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .your-rank .rank-label { color: #7B6A8A; }
+
+        .locked-overlay {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #f5f0ff;
+            border-radius: 24px;
+            border: 2px dashed #7B1FA2;
+        }
+        .locked-overlay .lock-icon { font-size: 3rem; color: #7B1FA2; }
+        .locked-overlay h2 { color: #4A148C; margin: 0.5rem 0; }
+        .locked-overlay p { color: #7B6A8A; margin-bottom: 1rem; }
+        .locked-overlay .upgrade-link {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .leaderboard-table .row { flex-wrap: wrap; gap: 0.3rem; }
+            .leaderboard-table .row .user { flex: 1; min-width: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>🏆 <span>Leaderboard</span></h1>
+        <span class="plan-badge" id="planBadge">🔒 Free</span>
+    </div>
+
+    <!-- ===== TABS ===== -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="loadLeaderboard('weekly')">Weekly</button>
+        <button class="tab-btn" onclick="loadLeaderboard('monthly')">Monthly</button>
+        <button class="tab-btn" onclick="loadLeaderboard('alltime')">All Time</button>
+    </div>
+
+    <!-- ===== LEADERBOARD ===== -->
+    <div id="leaderboardContent">
+        <div class="leaderboard-table">
+            <div class="header-row">
+                <span>Rank</span>
+                <span style="flex:1;">User</span>
+                <span>Score</span>
+            </div>
+            <div id="leaderboardRows">
+                <!-- Rows will be rendered by JavaScript -->
+            </div>
+        </div>
+
+        <!-- ===== YOUR RANK ===== -->
+        <div class="your-rank">
+            <div class="rank-label">Your Rank</div>
+            <div class="rank-number" id="yourRank">—</div>
+        </div>
+    </div>
+
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUserPlan = 'free';
+    let currentUserId = null;
+
+    // ============================================================
+    // LOAD USER PLAN
+    // ============================================================
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        currentUserId = user.uid;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists) {
+                currentUserPlan = userDoc.data().plan || 'free';
+            }
+        } catch (e) {
+            console.log('Error loading user plan:', e);
+        }
+
+        // Update badge
+        const badge = document.getElementById('planBadge');
+        if (currentUserPlan === 'free') {
+            badge.textContent = '🔒 Free (View Only)';
+            badge.className = 'plan-badge';
+        } else if (currentUserPlan === 'pro') {
+            badge.textContent = '⭐ Pro';
+            badge.className = 'plan-badge pro';
+        } else {
+            badge.textContent = '🚀 Pro+';
+            badge.className = 'plan-badge proplus';
+        }
+
+        // Load leaderboard
+        loadLeaderboard('weekly');
+    });
+
+    // ============================================================
+    // LOAD LEADERBOARD
+    // ============================================================
+    async function loadLeaderboard(period) {
+        const container = document.getElementById('leaderboardRows');
+        const yourRank = document.getElementById('yourRank');
+
+        // Update tab styles
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.textContent.toLowerCase().includes(period)) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Show loading
+        container.innerHTML = '<div style="text-align:center;padding:2rem;color:#7B6A8A;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+
+        try {
+            // Get all users
+            const usersSnapshot = await db.collection('users').get();
+            const users = {};
+            usersSnapshot.forEach(doc => {
+                users[doc.id] = doc.data();
+            });
+
+            // Get all scores
+            const scoresSnapshot = await db.collection('scores').get();
+            const scores = [];
+            scoresSnapshot.forEach(doc => {
+                const data = doc.data();
+                scores.push(data);
+            });
+
+            // Calculate total scores per user
+            const userScores = {};
+            scores.forEach(s => {
+                if (!userScores[s.userId]) {
+                    userScores[s.userId] = 0;
+                }
+                userScores[s.userId] += s.score || 0;
+            });
+
+            // Build leaderboard
+            const leaderboard = Object.keys(userScores).map(userId => ({
+                userId: userId,
+                name: users[userId]?.name || 'Unknown Student',
+                plan: users[userId]?.plan || 'free',
+                totalScore: userScores[userId],
+                testCount: scores.filter(s => s.userId === userId).length
+            }));
+
+            // Sort by total score (descending)
+            leaderboard.sort((a, b) => b.totalScore - a.totalScore);
+
+            // Find user's rank
+            const userRank = leaderboard.findIndex(u => u.userId === currentUserId) + 1;
+
+            if (userRank > 0) {
+                yourRank.textContent = `#${userRank}`;
+            } else {
+                yourRank.textContent = '—';
+            }
+
+            // Render leaderboard
+            if (leaderboard.length === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:2rem;color:#7B6A8A;">No data yet. Be the first!</div>';
+                return;
+            }
+
+            container.innerHTML = leaderboard.slice(0, 20).map((item, index) => {
+                const rank = index + 1;
+                let rankClass = '';
+                if (rank === 1) rankClass = 'gold';
+                else if (rank === 2) rankClass = 'silver';
+                else if (rank === 3) rankClass = 'bronze';
+
+                const planBadge = item.plan === 'pro' ? '⭐' : item.plan === 'proplus' ? '🚀' : '🟢';
+
+                return `
+                    <div class="row">
+                        <span class="rank ${rankClass}">#${rank}</span>
+                        <div class="user">
+                            <div class="avatar">${item.name.charAt(0).toUpperCase()}</div>
+                            <span class="name">${item.name}</span>
+                            <span class="badge ${item.plan}">${planBadge}</span>
+                        </div>
+                        <span class="score">${item.totalScore} pts</span>
+                    </div>
+                `;
+            }).join('');
+
+        } catch (error) {
+            console.error('Error loading leaderboard:', error);
+            container.innerHTML = '<div style="text-align:center;padding:2rem;color:#c62828;">Error loading leaderboard</div>';
+        }
+    }
+</script>
+
+</body>
+  </html>
