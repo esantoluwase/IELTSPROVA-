@@ -15,6 +15,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
+    <!-- ===== HTML2CANVAS FOR CERTIFICATE GENERATION ===== -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -25,6 +28,8 @@
             line-height: 1.6;
         }
         .container { max-width: 1100px; margin: 0 auto; }
+
+        /* ===== HEADER ===== */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -116,9 +121,7 @@
             gap: 1rem;
             flex-wrap: wrap;
         }
-        .onboarding-card .onboarding-content .icon {
-            font-size: 2.5rem;
-        }
+        .onboarding-card .onboarding-content .icon { font-size: 2.5rem; }
         .onboarding-card .onboarding-content h3 {
             color: #4A148C;
             font-size: 1.2rem;
@@ -150,6 +153,54 @@
             border-radius: 50px;
             width: 0%;
             transition: width 0.5s ease;
+        }
+
+        /* ===== STREAK + GOAL CARD ===== */
+        .streak-goal-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .streak-goal-card .streak {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .streak-goal-card .streak .icon {
+            font-size: 2rem;
+        }
+        .streak-goal-card .streak .number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .streak-goal-card .streak .label {
+            color: #7B6A8A;
+            font-size: 0.9rem;
+        }
+        .streak-goal-card .goal {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .streak-goal-card .goal .icon {
+            font-size: 2rem;
+        }
+        .streak-goal-card .goal .number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #FFD700;
+        }
+        .streak-goal-card .goal .label {
+            color: #7B6A8A;
+            font-size: 0.9rem;
         }
 
         .loading-spinner {
@@ -234,6 +285,204 @@
         }
         .progress-bar .fill.gold {
             background: linear-gradient(90deg, #FFD700, #f5c500);
+        }
+
+        /* ===== BADGES ===== */
+        .badges-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 2rem;
+        }
+        .badges-section h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1rem;
+        }
+        .badges-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .badge-item {
+            background: #faf7ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            border: 1px solid #f0e8f5;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .badge-item.earned {
+            background: #e8f5e9;
+            border-color: #2e7d32;
+            color: #2e7d32;
+        }
+        .badge-item.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+        .badge-item .badge-icon {
+            font-size: 1.5rem;
+        }
+
+        /* ===== PROGRESS CHARTS ===== */
+        .charts-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 2rem;
+        }
+        .charts-section h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 1rem;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .chart-card {
+            background: #faf7ff;
+            padding: 1.2rem;
+            border-radius: 16px;
+            border: 1px solid #f0e8f5;
+        }
+        .chart-card h4 {
+            color: #4A148C;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .mini-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 60px;
+            gap: 4px;
+        }
+        .mini-chart .bar {
+            flex: 1;
+            border-radius: 4px 4px 0 0;
+            min-height: 4px;
+            transition: height 0.8s ease;
+            background: linear-gradient(180deg, #7B1FA2, #4A148C);
+        }
+        .mini-chart .bar.gold {
+            background: linear-gradient(180deg, #FFD700, #f5c500);
+        }
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            color: #7B6A8A;
+            margin-top: 0.2rem;
+        }
+
+        /* ===== CERTIFICATE SECTION ===== */
+        .certificate-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f0e8f5;
+            margin-bottom: 2rem;
+        }
+        .certificate-section h2 {
+            font-size: 1.4rem;
+            color: #4A148C;
+            margin-bottom: 0.5rem;
+        }
+        .certificate-section .cert-status {
+            color: #7B6A8A;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .certificate-section .cert-status .qualified {
+            color: #2e7d32;
+            font-weight: 700;
+        }
+        .certificate-section .cert-status .not-qualified {
+            color: #c62828;
+            font-weight: 700;
+        }
+        .btn-cert {
+            background: linear-gradient(135deg, #FFD700, #f5c500);
+            color: #4A148C;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-cert:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.3);
+        }
+        .btn-cert:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== CERTIFICATE PREVIEW ===== */
+        .certificate-preview {
+            display: none;
+            margin-top: 1.5rem;
+            background: #faf7ff;
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid #FFD700;
+            text-align: center;
+            position: relative;
+        }
+        .certificate-preview.show {
+            display: block;
+        }
+        .certificate-preview .cert-border {
+            border: 3px double #FFD700;
+            padding: 2rem;
+            border-radius: 16px;
+            background: white;
+        }
+        .certificate-preview .cert-logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #4A148C;
+        }
+        .certificate-preview .cert-logo span {
+            color: #FFD700;
+        }
+        .certificate-preview .cert-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4A148C;
+            margin: 0.5rem 0;
+        }
+        .certificate-preview .cert-name {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #1a0a2e;
+            margin: 0.5rem 0;
+        }
+        .certificate-preview .cert-details {
+            color: #3d2a4a;
+            font-size: 1.1rem;
+        }
+        .certificate-preview .cert-details strong {
+            color: #4A148C;
+        }
+        .certificate-preview .cert-footer {
+            margin-top: 1rem;
+            color: #7B6A8A;
+            font-size: 0.85rem;
         }
 
         .history-section {
@@ -346,6 +595,11 @@
             color: #2e7d32;
         }
 
+        /* ===== CERTIFICATE DESIGN ===== */
+        .cert-design {
+            display: none;
+        }
+
         @media (max-width: 600px) {
             body { padding: 1rem; }
             .dashboard-header { flex-direction: column; align-items: flex-start; }
@@ -355,6 +609,9 @@
             .mock-exam-card { flex-direction: column; text-align: center; }
             .onboarding-card { flex-direction: column; text-align: center; }
             .onboarding-card .onboarding-progress { width: 100%; justify-content: center; }
+            .streak-goal-card { flex-direction: column; text-align: center; }
+            .chart-grid { grid-template-columns: 1fr; }
+            .badges-grid { justify-content: center; }
         }
     </style>
 </head>
@@ -377,7 +634,7 @@
         </div>
     </div>
 
-    <!-- ===== ONBOARDING CARD ===== -->
+    <!-- ===== ONBOARDING ===== -->
     <div class="onboarding-card" id="onboardingCard">
         <div class="onboarding-content">
             <span class="icon">🎯</span>
@@ -392,6 +649,24 @@
             <a href="reading-test.html" class="btn-upgrade" id="onboardingActionBtn" style="font-size:0.8rem;">
                 <i class="fas fa-play"></i> Start Test
             </a>
+        </div>
+    </div>
+
+    <!-- ===== STREAK + GOAL ===== -->
+    <div class="streak-goal-card">
+        <div class="streak">
+            <span class="icon">🔥</span>
+            <div>
+                <div class="number" id="streakCount">0</div>
+                <div class="label">Day Streak</div>
+            </div>
+        </div>
+        <div class="goal">
+            <span class="icon">🎯</span>
+            <div>
+                <div class="number" id="goalProgress">0 / 10</div>
+                <div class="label">Daily Goal (questions)</div>
+            </div>
         </div>
     </div>
 
@@ -431,14 +706,22 @@
                 <div class="stat-label">Average Score</div>
             </div>
             <div class="stat-card">
-                <span class="stat-icon">🔥</span>
-                <div class="stat-number" id="streak">0</div>
-                <div class="stat-label">Day Streak</div>
+                <span class="stat-icon">🏆</span>
+                <div class="stat-number" id="bestScore">0</div>
+                <div class="stat-label">Best Score</div>
             </div>
             <div class="stat-card">
                 <span class="stat-icon">⏱️</span>
                 <div class="stat-number" id="totalTime">0m</div>
                 <div class="stat-label">Total Practice</div>
+            </div>
+        </div>
+
+        <!-- ===== BADGES ===== -->
+        <div class="badges-section">
+            <h2>🏆 Your Badges</h2>
+            <div class="badges-grid" id="badgesGrid">
+                <!-- Badges will be rendered by JavaScript -->
             </div>
         </div>
 
@@ -480,6 +763,51 @@
                     </div>
                     <div class="progress-bar">
                         <div class="fill gold" id="speakingFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PROGRESS CHARTS ===== -->
+        <div class="charts-section">
+            <h2>📈 Progress Charts</h2>
+            <div class="chart-grid" id="chartGrid">
+                <!-- Charts will be rendered by JavaScript -->
+            </div>
+        </div>
+
+        <!-- ===== CERTIFICATE GENERATOR ===== -->
+        <div class="certificate-section">
+            <h2>🎓 Certificate Generator</h2>
+            <div class="cert-status" id="certStatus">
+                <span class="not-qualified">🔒 Complete 3 tests with a score of 7.0+ to unlock your certificate.</span>
+            </div>
+            <button class="btn-cert" id="generateCertBtn" onclick="generateCertificate()">
+                <i class="fas fa-certificate"></i> Generate Certificate
+            </button>
+
+            <!-- ===== CERTIFICATE PREVIEW ===== -->
+            <div class="certificate-preview" id="certificatePreview">
+                <div class="cert-border">
+                    <div class="cert-logo">💜 IELTS<span>Prova</span></div>
+                    <div class="cert-title">🎓 Certificate of Achievement</div>
+                    <p style="color:#7B6A8A; font-size:0.9rem;">This certifies that</p>
+                    <div class="cert-name" id="certStudentName">Student Name</div>
+                    <div class="cert-details">
+                        has successfully completed the <strong id="certModule">IELTS Reading</strong> test
+                        with a score of <strong id="certScore">7.5</strong> out of <strong id="certTotal">9.0</strong>
+                    </div>
+                    <div style="margin-top:0.5rem; color:#4A148C; font-weight:600; font-size:0.9rem;">
+                        ⭐ "Excellence is not a skill. It's an attitude."
+                    </div>
+                    <div class="cert-footer">
+                        <p>Date: <span id="certDate">August 3, 2026</span></p>
+                        <p style="margin-top:0.2rem; font-size:0.7rem; opacity:0.6;">
+                            Certificate ID: <span id="certId">PRV-2026-0000</span>
+                        </p>
+                        <p style="margin-top:0.2rem; font-size:0.7rem; opacity:0.6;">
+                            📧 provatech9@gmail.com
+                        </p>
                     </div>
                 </div>
             </div>
@@ -536,7 +864,6 @@
             if (userDoc.exists) {
                 const data = userDoc.data();
                 userPlan = data.plan || 'free';
-                console.log('📊 User plan loaded:', userPlan);
             }
         } catch (e) {
             console.log('Error loading user plan:', e);
@@ -585,7 +912,6 @@
         // ===== LOAD SCORES =====
         let allScores = [];
         let localScores = JSON.parse(localStorage.getItem('ieltsprova_scores')) || [];
-        console.log('📊 LocalStorage scores:', localScores);
 
         let firebaseScores = [];
         try {
@@ -595,7 +921,6 @@
             
             scoresSnapshot.forEach(doc => {
                 const data = doc.data();
-                console.log('📊 Firebase score:', data);
                 firebaseScores.push({
                     module: data.module || 'reading',
                     score: data.score || 0,
@@ -603,7 +928,6 @@
                     date: data.date ? new Date(data.date.seconds * 1000).toISOString() : new Date().toISOString()
                 });
             });
-            console.log('✅ Firebase scores:', firebaseScores.length);
         } catch (error) {
             console.error('❌ Firestore error:', error);
         }
@@ -620,10 +944,20 @@
             }
         });
 
-        console.log('📊 Total merged scores:', mergedScores.length);
-
         // ===== UPDATE ONBOARDING =====
         updateOnboarding(mergedScores);
+
+        // ===== UPDATE STREAK & GOAL =====
+        updateStreakAndGoal(mergedScores);
+
+        // ===== UPDATE BADGES =====
+        updateBadges(mergedScores);
+
+        // ===== UPDATE CHARTS =====
+        updateCharts(mergedScores);
+
+        // ===== UPDATE CERTIFICATE =====
+        updateCertificate(mergedScores, user.displayName || 'Student');
 
         // ===== SHOW DASHBOARD =====
         document.getElementById('loadingMessage').style.display = 'none';
@@ -632,7 +966,7 @@
         if (mergedScores.length === 0) {
             document.getElementById('totalTests').textContent = '0';
             document.getElementById('avgScore').textContent = '—';
-            document.getElementById('streak').textContent = '0';
+            document.getElementById('bestScore').textContent = '—';
             document.getElementById('totalTime').textContent = '0m';
             return;
         }
@@ -685,7 +1019,6 @@
             actionBtn.href = 'reading-test.html';
         }
 
-        // Show/hide onboarding card
         const card = document.getElementById('onboardingCard');
         if (completed === total) {
             card.style.borderColor = '#FFD700';
@@ -694,6 +1027,147 @@
             card.style.borderColor = '#7B1FA2';
             card.style.background = 'linear-gradient(135deg, #faf7ff, #f3edf7)';
         }
+    }
+
+    // ============================================================
+    // UPDATE STREAK & GOAL
+    // ============================================================
+    function updateStreakAndGoal(scores) {
+        // Streak: Count days with at least one test
+        const days = new Set();
+        scores.forEach(s => {
+            if (s.date) {
+                const d = new Date(s.date).toDateString();
+                days.add(d);
+            }
+        });
+        document.getElementById('streakCount').textContent = days.size || 0;
+
+        // Daily Goal: Today's questions answered
+        const today = new Date().toDateString();
+        const todayScores = scores.filter(s => {
+            if (!s.date) return false;
+            return new Date(s.date).toDateString() === today;
+        });
+        const todayQuestions = todayScores.reduce((sum, s) => sum + (s.total || 0), 0);
+        document.getElementById('goalProgress').textContent = `${Math.min(todayQuestions, 20)} / 20`;
+    }
+
+    // ============================================================
+    // UPDATE BADGES
+    // ============================================================
+    function updateBadges(scores) {
+        const totalTests = scores.length;
+        const bestScore = scores.length > 0 ? Math.max(...scores.map(s => s.score || 0)) : 0;
+        const hasHighScore = bestScore >= 7.0;
+        const hasMediumScore = bestScore >= 5.0 && bestScore < 7.0;
+        const hasStreak = new Set(scores.map(s => s.date ? new Date(s.date).toDateString() : '')).size >= 3;
+
+        const badges = [
+            { id: 'first', label: 'First Test', icon: '⭐', earned: totalTests >= 1 },
+            { id: 'three', label: '3 Tests', icon: '📚', earned: totalTests >= 3 },
+            { id: 'five', label: '5 Tests', icon: '💪', earned: totalTests >= 5 },
+            { id: 'ten', label: '10 Tests', icon: '🏆', earned: totalTests >= 10 },
+            { id: 'high', label: '7.0+ Score', icon: '🌟', earned: hasHighScore },
+            { id: 'medium', label: '5.0+ Score', icon: '⭐', earned: hasMediumScore || hasHighScore },
+            { id: 'streak', label: '3-Day Streak', icon: '🔥', earned: hasStreak },
+            { id: 'all_modules', label: 'All Modules', icon: '📖', earned: scores.some(s => s.module === 'reading') && scores.some(s => s.module === 'listening') && scores.some(s => s.module === 'writing') && scores.some(s => s.module === 'speaking') }
+        ];
+
+        const grid = document.getElementById('badgesGrid');
+        grid.innerHTML = badges.map(b => `
+            <div class="badge-item ${b.earned ? 'earned' : 'locked'}">
+                <span class="badge-icon">${b.icon}</span>
+                ${b.label}
+                ${b.earned ? ' ✅' : ' 🔒'}
+            </div>
+        `).join('');
+    }
+
+    // ============================================================
+    // UPDATE CHARTS
+    // ============================================================
+    function updateCharts(scores) {
+        const modules = ['reading', 'listening', 'writing', 'speaking'];
+        const moduleLabels = ['Reading', 'Listening', 'Writing', 'Speaking'];
+        const chartGrid = document.getElementById('chartGrid');
+
+        chartGrid.innerHTML = modules.map((module, index) => {
+            const moduleScores = scores.filter(s => s.module === module);
+            const scoresList = moduleScores.map(s => Math.round((s.score / (s.total || 10)) * 10) / 10);
+            const maxScore = Math.max(...scoresList, 0.5);
+            
+            // Generate mini chart bars (show last 5 scores)
+            const recentScores = scoresList.slice(-5);
+            const bars = recentScores.map((s, i) => {
+                const height = Math.max((s / 9) * 50, 4);
+                const isGold = s >= 7.0;
+                return `<div class="bar ${isGold ? 'gold' : ''}" style="height:${height}px;"></div>`;
+            }).join('');
+
+            const labels = recentScores.map((_, i) => `#${scoresList.length - 4 + i + 1}`).join(' ');
+
+            return `
+                <div class="chart-card">
+                    <h4>${moduleLabels[index]}</h4>
+                    <div class="mini-chart">${bars}</div>
+                    <div class="chart-labels">${labels}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ============================================================
+    // UPDATE CERTIFICATE
+    // ============================================================
+    function updateCertificate(scores, studentName) {
+        const totalTests = scores.length;
+        const bestScore = scores.length > 0 ? Math.max(...scores.map(s => s.score || 0)) : 0;
+        const bestModule = scores.length > 0 ? scores.find(s => s.score === bestScore)?.module || 'IELTS' : 'IELTS';
+        const bestTotal = scores.length > 0 ? scores.find(s => s.score === bestScore)?.total || 9 : 9;
+
+        const status = document.getElementById('certStatus');
+        const btn = document.getElementById('generateCertBtn');
+
+        if (totalTests >= 3 && bestScore >= 7.0) {
+            status.innerHTML = `<span class="qualified">✅ You qualify for a certificate! (Best score: ${bestScore}/${bestTotal})</span>`;
+            btn.disabled = false;
+        } else {
+            status.innerHTML = `<span class="not-qualified">🔒 Complete 3 tests with a score of 7.0+ to unlock your certificate. (Current: ${totalTests} tests, best score: ${bestScore}/10)</span>`;
+            btn.disabled = true;
+        }
+
+        // Store certificate data
+        window._certData = {
+            name: studentName,
+            module: bestModule.charAt(0).toUpperCase() + bestModule.slice(1),
+            score: bestScore,
+            total: bestTotal,
+            date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            id: `PRV-${Date.now().toString().slice(-8)}`
+        };
+    }
+
+    // ============================================================
+    // GENERATE CERTIFICATE
+    // ============================================================
+    function generateCertificate() {
+        const data = window._certData;
+        if (!data) return;
+
+        // Update preview
+        document.getElementById('certStudentName').textContent = data.name;
+        document.getElementById('certModule').textContent = data.module;
+        document.getElementById('certScore').textContent = data.score;
+        document.getElementById('certTotal').textContent = data.total;
+        document.getElementById('certDate').textContent = data.date;
+        document.getElementById('certId').textContent = data.id;
+
+        const preview = document.getElementById('certificatePreview');
+        preview.classList.add('show');
+
+        // Scroll to preview
+        preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // ============================================================
@@ -707,9 +1181,11 @@
             const avg = scores.reduce((sum, s) => sum + (s.score || 0), 0) / total;
             const avgPercent = Math.round((avg / 10) * 100);
             document.getElementById('avgScore').textContent = `${avgPercent}%`;
+
+            const best = Math.max(...scores.map(s => s.score || 0));
+            document.getElementById('bestScore').textContent = best;
         }
 
-        document.getElementById('streak').textContent = total > 0 ? '1' : '0';
         const totalMins = total * 15;
         document.getElementById('totalTime').textContent = totalMins >= 60 ? `${Math.round(totalMins / 60)}h` : `${totalMins}m`;
     }
