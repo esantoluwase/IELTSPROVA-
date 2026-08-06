@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ===== GOOGLE VERIFICATION ===== -->
+    <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw" />
+    
+    <title>AI Tutor — IELTSProva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0ff;
+            color: #1a0a2e;
+            padding: 2rem;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 40px rgba(74, 20, 140, 0.06);
+            border: 1px solid #f0e8f5;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            min-height: 500px;
+        }
+
+        /* ===== HEADER ===== */
+        .chat-header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .chat-header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .chat-header h1 i { margin-right: 0.5rem; }
+        .chat-header .plan-badge {
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .chat-header .plan-badge.pro {
+            background: #FFD700;
+            color: #4A148C;
+        }
+        .chat-header .plan-badge.proplus {
+            background: #fff;
+            color: #4A148C;
+        }
+
+        /* ===== MESSAGES ===== */
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            background: #faf7ff;
+        }
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        .message.bot {
+            background: white;
+            border: 1px solid #f0e8f5;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .message.user {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .message .time {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-top: 0.2rem;
+            display: block;
+        }
+        .message.user .time { color: rgba(255,255,255,0.6); }
+        .message .typing {
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== INPUT ===== */
+        .chat-input {
+            padding: 1rem 2rem;
+            border-top: 1px solid #f0e8f5;
+            display: flex;
+            gap: 0.8rem;
+            background: white;
+        }
+        .chat-input textarea {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #f0e8f5;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 120px;
+            transition: 0.3s;
+        }
+        .chat-input textarea:focus {
+            outline: none;
+            border-color: #7B1FA2;
+        }
+        .chat-input .send-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .chat-input .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+        .chat-input .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== SUGGESTIONS ===== */
+        .suggestions {
+            padding: 0.5rem 2rem 1rem;
+            background: white;
+            border-top: 1px solid #f0e8f5;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .suggestions .suggestion-btn {
+            padding: 0.3rem 1rem;
+            border: 1px solid #f0e8f5;
+            border-radius: 50px;
+            background: #faf7ff;
+            font-size: 0.8rem;
+            color: #4A148C;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .suggestions .suggestion-btn:hover {
+            background: #4A148C;
+            color: white;
+            border-color: #4A148C;
+        }
+
+        /* ===== LOCKED OVERLAY ===== */
+        .locked-overlay {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 2rem;
+            text-align: center;
+            background: #faf7ff;
+        }
+        .locked-overlay .lock-icon { font-size: 3rem; color: #7B1FA2; margin-bottom: 0.5rem; }
+        .locked-overlay h2 { color: #4A148C; margin-bottom: 0.5rem; }
+        .locked-overlay p { color: #7B6A8A; margin-bottom: 1rem; max-width: 400px; }
+        .locked-overlay .upgrade-link {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .locked-overlay .upgrade-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(74,20,140,0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #4A148C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* ===== DARK MODE ===== */
+        body.dark-mode .container {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.08);
+        }
+        body.dark-mode .chat-header {
+            background: linear-gradient(135deg, #1a0a2e, #2A004F);
+        }
+        body.dark-mode .chat-messages { background: rgba(255,255,255,0.02); }
+        body.dark-mode .message.bot {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.08);
+            color: #e8e0f0;
+        }
+        body.dark-mode .chat-input { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); }
+        body.dark-mode .chat-input textarea {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.08);
+            color: #e8e0f0;
+        }
+        body.dark-mode .chat-input textarea::placeholder { color: rgba(255,255,255,0.3); }
+        body.dark-mode .suggestions { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); }
+        body.dark-mode .suggestions .suggestion-btn {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.08);
+            color: #e8e0f0;
+        }
+        body.dark-mode .suggestions .suggestion-btn:hover {
+            background: #FFD700;
+            color: #1a0a2e;
+        }
+        body.dark-mode .locked-overlay { background: rgba(255,255,255,0.02); }
+        body.dark-mode .locked-overlay h2 { color: #FFD700; }
+        body.dark-mode .locked-overlay p { color: rgba(255,255,255,0.5); }
+        body.dark-mode .back-link { color: #FFD700; }
+        body.dark-mode .chat-header .plan-badge { background: rgba(255,255,255,0.2); }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .container { height: 90vh; }
+            .chat-header { padding: 1rem; }
+            .chat-header h1 { font-size: 1.1rem; }
+            .chat-messages { padding: 1rem; }
+            .chat-input { padding: 0.8rem 1rem; flex-direction: column; }
+            .chat-input .send-btn { justify-content: center; }
+            .message { max-width: 90%; }
+            .suggestions { padding: 0.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+
+    <!-- ===== HEADER ===== -->
+    <div class="chat-header">
+        <h1><i class="fas fa-robot"></i> AI Tutor</h1>
+        <span class="plan-badge" id="planBadge">🔒 Free</span>
+    </div>
+
+    <!-- ===== CHAT AREA ===== -->
+    <div id="chatArea">
+        <!-- Locked overlay (shown for Free users) -->
+        <div class="locked-overlay" id="lockedOverlay">
+            <span class="lock-icon">🔒</span>
+            <h2>AI Tutor is a Pro Feature</h2>
+            <p>Get personalized help from our AI tutor — ask any IELTS question and get instant answers.</p>
+            <p style="font-size:0.85rem;color:#7B6A8A;margin-bottom:1rem;">
+                ⭐ Pro: AI Tutor · 🚀 Pro+: Advanced AI + Voice
+            </p>
+            <a href="checkout.html" class="upgrade-link">⭐ Upgrade to Pro</a>
+        </div>
+
+        <!-- Chat messages (shown for Pro/Pro+) -->
+        <div id="chatContent" style="display:none;flex-direction:column;height:100%;">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    👋 Hello! I'm your AI IELTS tutor. Ask me anything about IELTS — tips, strategies, or help with specific questions.
+                    <span class="time">Just now</span>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <textarea id="userInput" placeholder="Ask your IELTS question..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+                <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+
+            <div class="suggestions">
+                <button class="suggestion-btn" onclick="askQuestion('How do I improve my reading score?')">📖 Reading Tips</button>
+                <button class="suggestion-btn" onclick="askQuestion('What\'s the best way to prepare for writing Task 2?')">✍️ Writing Task 2</button>
+                <button class="suggestion-btn" onclick="askQuestion('How can I improve my speaking fluency?')">🗣️ Speaking Tips</button>
+                <button class="suggestion-btn" onclick="askQuestion('How is IELTS band score calculated?')">📊 Band Score</button>
+            </div>
+        </div>
+    </div>
+
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+</div>
+
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
+        authDomain: "ieltsprova.firebaseapp.com",
+        projectId: "ieltsprova",
+        storageBucket: "ieltsprova.firebasestorage.app",
+        messagingSenderId: "812300970124",
+        appId: "1:812300970124:web:992398c08c151ae97df3a9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ============================================================
+    // CHECK USER PLAN
+    // ============================================================
+    let userPlan = 'free';
+    let userId = null;
+
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        userId = user.uid;
+
+        try {
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                userPlan = data.plan || 'free';
+            }
+        } catch (e) {
+            console.log('Error loading user plan:', e);
+        }
+
+        // Update badge
+        const badge = document.getElementById('planBadge');
+        if (userPlan === 'free') {
+            badge.textContent = '🔒 Free';
+            badge.className = 'plan-badge';
+            document.getElementById('lockedOverlay').style.display = 'flex';
+            document.getElementById('chatContent').style.display = 'none';
+        } else {
+            badge.textContent = userPlan === 'pro' ? '⭐ Pro' : '🚀 Pro+';
+            badge.className = 'plan-badge pro';
+            document.getElementById('lockedOverlay').style.display = 'none';
+            document.getElementById('chatContent').style.display = 'flex';
+        }
+    });
+
+    // ============================================================
+    // AI RESPONSES
+    // ============================================================
+    const responses = {
+        'reading': [
+            "📖 For Reading, focus on skimming and scanning. Read the questions first, then skim the passage for main ideas. Practice with our timed Reading Tests!",
+            "To improve your Reading score, practice identifying keywords in questions and matching them to the passage. Try to complete each passage in under 20 minutes."
+        ],
+        'writing': [
+            "✍️ For Writing Task 2, always plan your essay first. Structure: Introduction → Body 1 → Body 2 → Conclusion. Use linking words like 'Moreover,' 'Furthermore,' and 'In conclusion.'",
+            "In Writing Task 1, focus on describing the main trends, making comparisons, and using accurate data. Aim for 150 words minimum."
+        ],
+        'speaking': [
+            "🗣️ For Speaking, practice speaking for 2 minutes without stopping. Use the P.E.E. method: Point, Explain, Example. Record yourself and listen back.",
+            "In Part 2, use the 1-minute preparation to jot down keywords. Then speak naturally — don't memorize a script."
+        ],
+        'listening': [
+            "🎧 For Listening, read the questions before the audio starts. Listen for signpost words like 'first,' 'next,' 'finally,' and 'however.' Practice with our Listening Tests!",
+            "Spelling counts in Listening. Make sure you spell words correctly on the answer sheet."
+        ],
+        'band': [
+            "📊 The IELTS band score is calculated from 0 to 9. Each module (Reading, Writing, Listening, Speaking) is scored individually, and the overall band is the average of the four. 6.5 is a good score for most universities.",
+            "Your overall band score is the average of the four modules, rounded to the nearest 0.5. For example, 6.5 + 7.0 + 6.5 + 7.0 = 27 / 4 = 6.75 → 7.0 overall."
+        ],
+        'default': [
+            "That's a great question! Let me give you some advice. For IELTS, consistent practice is key. Try to study for at least 30 minutes every day.",
+            "Good question! The best way to improve is to identify your weak areas and focus on them. Our practice tests can help you find those areas.",
+            "I'd recommend taking a practice test first to see your current level. Then you can focus on the areas that need the most improvement."
+        ]
+    };
+
+    function getResponse(text) {
+        const lower = text.toLowerCase();
+        
+        if (lower.includes('reading') || lower.includes('passage')) {
+            return responses.reading[Math.floor(Math.random() * responses.reading.length)];
+        }
+        if (lower.includes('writing') || lower.includes('essay') || lower.includes('task')) {
+            return responses.writing[Math.floor(Math.random() * responses.writing.length)];
+        }
+        if (lower.includes('speak') || lower.includes('fluency') || lower.includes('pronunciation')) {
+            return responses.speaking[Math.floor(Math.random() * responses.speaking.length)];
+        }
+        if (lower.includes('listen') || lower.includes('audio')) {
+            return responses.listening[Math.floor(Math.random() * responses.listening.length)];
+        }
+        if (lower.includes('band') || lower.includes('score') || lower.includes('calculate')) {
+            return responses.band[Math.floor(Math.random() * responses.band.length)];
+        }
+        
+        return responses.default[Math.floor(Math.random() * responses.default.length)];
+    }
+
+    // ============================================================
+    // SEND MESSAGE
+    // ============================================================
+    function sendMessage() {
+        const input = document.getElementById('userInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Add user message
+        addMessage(text, 'user');
+
+        // Clear input
+        input.value = '';
+        input.style.height = 'auto';
+        const btn = document.getElementById('sendBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        // Simulate AI thinking
+        setTimeout(() => {
+            const response = getResponse(text);
+            addMessage(response, 'bot');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
+        }, 1000 + Math.random() * 1000);
+    }
+
+    function addMessage(text, sender) {
+        const container = document.getElementById('chatMessages');
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const div = document.createElement('div');
+        div.className = `message ${sender}`;
+        div.innerHTML = `${text} <span class="time">${time}</span>`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function askQuestion(text) {
+        document.getElementById('userInput').value = text;
+        sendMessage();
+    }
+
+    // Auto-resize textarea
+    document.getElementById('userInput').addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    // ============================================================
+    // DARK MODE
+    // ============================================================
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const icon = document.querySelector('.dark-mode-toggle i');
+        if (document.body.classList.contains('dark-mode')) {
+            if (icon) icon.className = 'fas fa-sun';
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            if (icon) icon.className = 'fas fa-moon';
+            localStorage.setItem('darkMode', 'disabled');
+        }
+    }
+
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        const icon = document.querySelector('.dark-mode-toggle i');
+        if (icon) icon.className = 'fas fa-sun';
+    }
+</script>
+
+</body>
+      </html>
