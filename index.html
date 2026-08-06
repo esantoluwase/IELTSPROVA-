@@ -709,6 +709,42 @@
             background: linear-gradient(135deg, #0a0515, #1a0a2e);
         }
         body.dark-mode .scroll-top { background: #FFD700; color: #4A148C; }
+        body.dark-mode .dark-mode-toggle { color: #FFD700; }
+
+        /* ===== FIX: HAMBURGER MENU IN DARK MODE ===== */
+        body.dark-mode .nav-links {
+            background: #1a0a2e !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+        }
+        body.dark-mode .nav-links a { color: rgba(255,255,255,0.9) !important; }
+        body.dark-mode .nav-links a:hover { color: #FFD700 !important; }
+        body.dark-mode .nav-links .dropdown-content {
+            background: #1a0a2e !important;
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+        body.dark-mode .nav-links .dropdown-content a { color: rgba(255,255,255,0.8) !important; }
+        body.dark-mode .nav-links .dropdown-content a:hover {
+            background: rgba(255,255,255,0.05) !important;
+            color: #FFD700 !important;
+        }
+        body.dark-mode .nav-cta-outline {
+            border-color: #FFD700 !important;
+            color: #FFD700 !important;
+        }
+        body.dark-mode .nav-cta-outline:hover {
+            background: #FFD700 !important;
+            color: #1a0a2e !important;
+        }
+        body.dark-mode .nav-cta {
+            background: #FFD700 !important;
+            color: #1a0a2e !important;
+        }
+        body.dark-mode .nav-cta:hover {
+            background: #f5c500 !important;
+        }
+        body.dark-mode .user-greeting { color: #FFD700 !important; }
+        body.dark-mode .hamburger span { background: #FFD700 !important; }
     </style>
 </head>
 <body>
@@ -729,6 +765,7 @@
                 <a href="#home" class="active">Home</a>
                 <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
                 <a href="study-planner.html"><i class="fas fa-calendar-alt"></i> Planner</a>
+                <a href="ai-tutor.html"><i class="fas fa-robot"></i> AI Tutor</a>
                 <a href="mock-exam.html"><i class="fas fa-graduation-cap"></i> Mock Exam</a>
                 <a href="pitch.html"><i class="fas fa-rocket"></i> Investor Pitch</a>
                 <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
@@ -909,6 +946,7 @@
                     <h4>Resources</h4>
                     <a href="study-tips.html">💡 Study Tips</a>
                     <a href="study-planner.html">📅 Study Planner</a>
+                    <a href="ai-tutor.html">🤖 AI Tutor</a>
                     <a href="dashboard.html">Dashboard</a>
                     <a href="mock-exam.html">📝 Mock Exam</a>
                 </div>
@@ -1024,6 +1062,27 @@
         });
 
         // ============================================================
+        // DARK MODE
+        // ============================================================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (icon) icon.className = 'fas fa-sun';
+        }
+
+        // ============================================================
         // AUTH STATE
         // ============================================================
         auth.onAuthStateChanged(user => {
@@ -1090,28 +1149,6 @@
                 btn.href = 'mock-exam.html';
                 extra.textContent = 'You have unlimited mock exams available.';
             }
-        }
-
-        // ============================================================
-        // DARK MODE
-        // ============================================================
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const icon = document.querySelector('.dark-mode-toggle i');
-            if (document.body.classList.contains('dark-mode')) {
-                icon.className = 'fas fa-sun';
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                icon.className = 'fas fa-moon';
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        }
-
-        // Load dark mode preference on page load
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            const icon = document.querySelector('.dark-mode-toggle i');
-            if (icon) icon.className = 'fas fa-sun';
         }
 
         // ============================================================
@@ -1209,4 +1246,4 @@
     </script>
 
 </body>
-    </html>
+        </html>
