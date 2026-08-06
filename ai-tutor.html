@@ -37,11 +37,12 @@
             flex-direction: column;
             height: 80vh;
             min-height: 500px;
+            transition: background 0.3s, border-color 0.3s;
         }
 
         /* ===== HEADER ===== */
         .chat-header {
-            padding: 1.5rem 2rem;
+            padding: 1.2rem 2rem;
             background: linear-gradient(135deg, #4A148C, #7B1FA2);
             color: white;
             display: flex;
@@ -67,10 +68,6 @@
             background: #FFD700;
             color: #4A148C;
         }
-        .chat-header .plan-badge.proplus {
-            background: #fff;
-            color: #4A148C;
-        }
 
         /* ===== MESSAGES ===== */
         .chat-messages {
@@ -81,6 +78,7 @@
             flex-direction: column;
             gap: 0.8rem;
             background: #faf7ff;
+            transition: background 0.3s;
         }
         .message {
             max-width: 80%;
@@ -107,14 +105,6 @@
             display: block;
         }
         .message.user .time { color: rgba(255,255,255,0.6); }
-        .message .typing {
-            display: inline-block;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -127,6 +117,7 @@
             display: flex;
             gap: 0.8rem;
             background: white;
+            transition: background 0.3s, border-color 0.3s;
         }
         .chat-input textarea {
             flex: 1;
@@ -139,6 +130,8 @@
             min-height: 50px;
             max-height: 120px;
             transition: 0.3s;
+            background: white;
+            color: #1a0a2e;
         }
         .chat-input textarea:focus {
             outline: none;
@@ -177,6 +170,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
+            transition: background 0.3s, border-color 0.3s;
         }
         .suggestions .suggestion-btn {
             padding: 0.3rem 1rem;
@@ -205,6 +199,7 @@
             padding: 2rem;
             text-align: center;
             background: #faf7ff;
+            transition: background 0.3s;
         }
         .locked-overlay .lock-icon { font-size: 3rem; color: #7B1FA2; margin-bottom: 0.5rem; }
         .locked-overlay h2 { color: #4A148C; margin-bottom: 0.5rem; }
@@ -226,7 +221,7 @@
 
         .back-link {
             display: inline-block;
-            margin-top: 1.5rem;
+            margin: 1.5rem 0;
             color: #4A148C;
             font-weight: 600;
             text-decoration: none;
@@ -331,7 +326,9 @@
         </div>
     </div>
 
-    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+    <div style="text-align:center;">
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+    </div>
 </div>
 
 <script>
@@ -514,4 +511,4 @@
 </script>
 
 </body>
-      </html>
+    </html>
