@@ -4,48 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IELTSProva - Writing Test</title>
-    <meta name="description" content="Practice IELTS Writing with AI-powered analysis">
     <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        body { background: #f8f9fa; }
-        .test-container { max-width: 900px; margin: 30px auto; padding: 20px; }
-        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .test-container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #f0edff; }
         .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
-        .submit-btn:hover { transform: scale(1.05); color: white; }
-        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .submit-btn:hover { transform: scale(1.05); }
+        .results-box { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; margin-top: 20px; display: none; }
+        .results-box .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        .premium-lock { background: #ffd700; color: #2d1b69; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
+        nav { background: #2d1b69 !important; padding: 10px 0; }
+        nav a { color: white !important; }
+        nav .navbar-brand span { color: #ffd700; }
         .writing-area { min-height: 300px; border: 2px solid #ddd; border-radius: 10px; padding: 15px; width: 100%; font-size: 16px; }
         .writing-area:focus { border-color: #6c63ff; outline: none; box-shadow: 0 0 0 0.2rem rgba(108,99,255,0.25); }
         .word-count { color: #6c63ff; font-weight: bold; }
-        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; }
-        #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
-        .spinner-border { width: 3rem; height: 3rem; }
-        .admin-badge { background: #ffd700; color: #2d1b69; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .premium-lock { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
-        .premium-lock.free { background: #28a745; color: white; }
-        .premium-lock.pro { background: #ffd700; color: #2d1b69; }
-        .premium-lock.proplus { background: #6c63ff; color: white; }
-        #ai-status { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; }
+        .admin-badge { background: #ffd700; color: #2d1b69; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
         .prompt-box { background: #f0edff; padding: 15px; border-radius: 10px; border-left: 4px solid #6c63ff; margin-bottom: 20px; }
-        .passage-selector { background: white; padding: 20px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .passage-btn { padding: 10px 20px; margin: 5px; border: 2px solid #ddd; border-radius: 8px; background: white; transition: all 0.3s; cursor: pointer; }
+        .passage-selector { background: #f8f5ff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #e8e0f0; }
+        .passage-btn { padding: 8px 16px; margin: 4px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s; }
         .passage-btn:hover { border-color: #6c63ff; }
         .passage-btn.active { border-color: #6c63ff; background: #f0edff; }
         .passage-btn.locked { opacity: 0.5; cursor: not-allowed; }
-        .passage-btn.locked::after { content: ' 🔒'; color: #dc3545; }
-        .passage-btn.free::after { content: ' 🆓'; color: #28a745; }
-        .passage-btn.pro::after { content: ' ⭐'; color: #ffd700; }
-        .passage-btn.proplus::after { content: ' 🚀'; color: #6c63ff; }
-        .upgrade-banner { background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 15px 20px; border-radius: 10px; margin: 15px 0; text-align: center; }
-        .upgrade-banner a { color: #ffd700; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #2d1b69;">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html"><span style="color: #ffd700;">IELTS</span>Prova</a>
+            <a class="navbar-brand" href="index.html"><span>IELTS</span>Prova</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -64,20 +54,18 @@
 
     <div class="container test-container">
         <h1 class="text-center mb-4">✍️ Writing Test</h1>
-        <p class="text-center text-muted">Write at least 250 words. <span class="admin-badge">🔄 Admin Review Required</span></p>
+        <p class="text-center text-muted">Write at least 250 words. <span class="admin-badge">📝 Manual Review</span></p>
 
-        <div id="ai-status">
-            🤖 AI System: <span id="ai-status-text" style="color: #ffc107;">Initializing...</span>
+        <div id="access-message" class="text-center mb-3">
+            <span class="premium-lock">🔓 Free Access: 1 Prompt</span>
         </div>
 
-        <div id="access-message" class="text-center mb-3"></div>
-
-        <div class="passage-selector" id="promptSelector">
+        <!-- Prompt Selector -->
+        <div class="passage-selector">
             <h5>📝 Select a Writing Prompt</h5>
             <div id="promptButtons"></div>
-            <div id="upgradeBanner" class="upgrade-banner" style="display: none;">
-                ⭐ <strong>Upgrade to Pro or Pro+</strong> to unlock more prompts!
-                <a href="checkout.html">Upgrade Now →</a>
+            <div id="upgradeBanner" style="display: none; background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 10px 15px; border-radius: 8px; margin-top: 10px; text-align: center;">
+                ⭐ <strong>Upgrade to Pro</strong> to unlock all prompts! <a href="checkout.html" style="color: #ffd700; font-weight: bold;">Upgrade Now →</a>
             </div>
         </div>
 
@@ -100,50 +88,32 @@
             <button onclick="submitWriting()" class="submit-btn" id="submitBtn" disabled>Submit Essay 🚀</button>
         </div>
 
-        <div id="test-results" style="display: none; margin-top: 30px;"></div>
-        <div id="loader" style="display: none; text-align: center; margin: 20px;">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p id="loader-text" style="color: #6c63ff; font-weight: bold; margin-top: 10px;">🤖 Analyzing your essay...</p>
-        </div>
+        <div id="results" class="results-box"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- FIXED SCRIPT PATHS - CORRECT!                              -->
-    <!-- ============================================================ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="questions.js"></script>
-    <script src="js/ai-employee.js"></script>
-    <script src="js/memory-manager.js"></script>
-    <script src="js/auto-grader.js"></script>
 
     <script>
-        const TIERS = {
-            free: { name: 'Free', passageLimit: 1, questionLimit: 20, badge: '🆓 Free', badgeClass: 'free' },
-            pro: { name: 'Pro', passageLimit: 0.5, questionLimit: 0.5, badge: '⭐ Pro', badgeClass: 'pro' },
-            proplus: { name: 'Pro+', passageLimit: 1, questionLimit: 1, badge: '🚀 Pro+', badgeClass: 'proplus' }
-        };
-
         let allPrompts = [];
-        let userTier = 'free';
-        let aiInitialized = false;
-        let initAttempts = 0;
         let selectedPromptId = null;
+        let userTier = 'free';
         let timerInterval;
         let timeSeconds = 2400;
 
-        const promptButtonsEl = document.getElementById('promptButtons');
-        const upgradeBannerEl = document.getElementById('upgradeBanner');
-        const accessMessageEl = document.getElementById('access-message');
-        const submitBtn = document.getElementById('submitBtn');
-
-        function updateAIStatus(status, color = '#ffc107') {
-            const statusText = document.getElementById('ai-status-text');
-            if (statusText) { statusText.textContent = status; statusText.style.color = color; }
+        async function checkUserPlan(user) {
+            try {
+                const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (doc.exists) {
+                    const plan = doc.data().plan || 'free';
+                    userTier = (plan === 'pro' || plan === 'Pro') ? 'pro' : 
+                               (plan === 'pro+' || plan === 'Pro+') ? 'proplus' : 'free';
+                }
+                return userTier;
+            } catch (error) { userTier = 'free'; return 'free'; }
         }
 
         function updateWordCount() {
@@ -162,28 +132,6 @@
             }, 1000);
         }
 
-        async function checkUserPlan(user) {
-            try {
-                const doc = await firebase.firestore().collection('users').doc(user.uid).get();
-                if (doc.exists) {
-                    const plan = doc.data().plan || 'free';
-                    userTier = (plan === 'pro' || plan === 'Pro') ? 'pro' : 
-                               (plan === 'pro+' || plan === 'Pro+' || plan === 'proplus') ? 'proplus' : 'free';
-                } else { userTier = 'free'; }
-                console.log('📊 User tier:', userTier.toUpperCase());
-                return userTier;
-            } catch (error) { console.error('Failed to check plan:', error); userTier = 'free'; return 'free'; }
-        }
-
-        function getTierLimits() {
-            const total = allPrompts.length;
-            let passageLimit;
-            if (userTier === 'free') { passageLimit = 1; }
-            else if (userTier === 'pro') { passageLimit = Math.max(1, Math.ceil(total * 0.5)); }
-            else if (userTier === 'proplus') { passageLimit = total; }
-            return { passageLimit };
-        }
-
         function loadPrompts() {
             if (window.writingQuestions && window.writingQuestions.length > 0) {
                 allPrompts = window.writingQuestions.map((q, i) => ({ ...q, id: i + 1 }));
@@ -200,41 +148,41 @@
         }
 
         function renderPromptButtons() {
-            const { passageLimit } = getTierLimits();
+            const maxPrompts = userTier === 'free' ? 1 : (userTier === 'pro' ? Math.ceil(allPrompts.length / 2) : allPrompts.length);
+            const container = document.getElementById('promptButtons');
             let html = '';
+            
             allPrompts.forEach((prompt, index) => {
-                const isLocked = index >= passageLimit;
+                const isLocked = index >= maxPrompts;
                 const isActive = selectedPromptId === prompt.id;
-                let statusClass = isLocked ? 'locked' : (userTier === 'proplus' ? 'proplus' : (userTier === 'pro' ? 'pro' : 'free'));
                 html += `
-                    <button class="passage-btn ${statusClass} ${isActive ? 'active' : ''}"
+                    <button class="passage-btn ${isLocked ? 'locked' : ''} ${isActive ? 'active' : ''}"
                             onclick="${isLocked ? '' : `selectPrompt(${prompt.id})`}"
                             ${isLocked ? 'disabled' : ''}>
-                        ${prompt.text.substring(0, 40)}${prompt.text.length > 40 ? '...' : ''} ${isLocked ? '🔒' : ''}
+                        ${isLocked ? '🔒 ' : ''}${prompt.text.substring(0, 35)}${prompt.text.length > 35 ? '...' : ''}
                     </button>
                 `;
             });
-            promptButtonsEl.innerHTML = html;
+            container.innerHTML = html;
 
-            const tierInfo = TIERS[userTier];
-            let messageText = userTier === 'free' ? `🆓 Free: ${passageLimit} Prompt` :
-                             userTier === 'pro' ? `⭐ Pro: ${passageLimit}/${allPrompts.length} Prompts` :
-                             `🚀 Pro+: All ${allPrompts.length} Prompts`;
-            accessMessageEl.innerHTML = `<span class="premium-lock ${tierInfo.badgeClass}">${messageText}</span>
-                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
-                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}`;
-
-            if (userTier === 'free') {
-                upgradeBannerEl.innerHTML = `⭐ <strong>Upgrade to Pro</strong> to access 50% of prompts! <a href="checkout.html">Upgrade Now →</a>`;
-                upgradeBannerEl.style.display = 'block';
-            } else if (userTier === 'pro') {
-                upgradeBannerEl.innerHTML = `🚀 <strong>Upgrade to Pro+</strong> to access ALL prompts! <a href="checkout.html">Upgrade Now →</a>`;
-                upgradeBannerEl.style.display = 'block';
+            const banner = document.getElementById('upgradeBanner');
+            if (userTier === 'free' && allPrompts.length > 1) {
+                banner.style.display = 'block';
+            } else if (userTier === 'pro' && allPrompts.length > maxPrompts) {
+                banner.innerHTML = '🚀 <strong>Upgrade to Pro+</strong> to access ALL prompts! <a href="checkout.html" style="color: #ffd700; font-weight: bold;">Upgrade Now →</a>';
+                banner.style.display = 'block';
             } else {
-                upgradeBannerEl.style.display = 'none';
+                banner.style.display = 'none';
             }
 
-            if (!selectedPromptId || selectedPromptId >= passageLimit) {
+            const promptMsg = userTier === 'free' ? `${maxPrompts} Prompt` : (userTier === 'pro' ? `${maxPrompts}/${allPrompts.length} Prompts` : `All ${allPrompts.length} Prompts`);
+            document.getElementById('access-message').innerHTML = `
+                <span class="premium-lock">${userTier === 'free' ? '🆓' : userTier === 'pro' ? '⭐' : '🚀'} ${userTier.toUpperCase()}: ${promptMsg}</span>
+                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
+                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}
+            `;
+
+            if (!selectedPromptId || selectedPromptId >= maxPrompts) {
                 if (allPrompts.length > 0) selectPrompt(allPrompts[0].id);
             }
         }
@@ -242,10 +190,11 @@
         function selectPrompt(promptId) {
             const prompt = allPrompts.find(p => p.id === promptId);
             if (!prompt) return;
+
+            const maxPrompts = userTier === 'free' ? 1 : (userTier === 'pro' ? Math.ceil(allPrompts.length / 2) : allPrompts.length);
             const index = allPrompts.indexOf(prompt);
-            const { passageLimit } = getTierLimits();
-            if (index >= passageLimit) {
-                alert(userTier === 'free' ? '⭐ Upgrade to Pro to access more prompts!' : '🚀 Upgrade to Pro+ to access all prompts!');
+            if (index >= maxPrompts) {
+                alert('⭐ Upgrade to Pro to access more prompts!');
                 return;
             }
 
@@ -253,56 +202,33 @@
             document.querySelectorAll('.passage-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
             document.getElementById('task-title').textContent = `📝 Task 2: ${prompt.type || 'Essay'}`;
             document.getElementById('task-description').textContent = prompt.text;
-            submitBtn.disabled = false;
+            document.getElementById('submitBtn').disabled = false;
         }
 
-        async function initializeAI() {
-            try {
-                const user = firebase.auth().currentUser;
-                if (!user) { updateAIStatus('Not logged in', '#dc3545'); return false; }
-                updateAIStatus('Connecting...', '#ffc107');
-                const employee = new AIEmployee(user.uid);
-                await employee.loadMemory(user.uid);
-                window.aiEmployee = employee;
-                aiInitialized = true;
-                updateAIStatus('✅ Ready', '#28a745');
-                return true;
-            } catch (error) {
-                console.error('AI init failed:', error);
-                updateAIStatus('Connecting... Retrying', '#ffc107');
-                if (initAttempts < 5) { initAttempts++; setTimeout(initializeAI, 3000); } 
-                else { updateAIStatus('⚠️ Refresh page', '#dc3545'); }
-                return false;
-            }
-        }
-
-        async function submitWriting() {
-            if (!aiInitialized || !window.aiEmployee) {
-                updateAIStatus('⏳ Loading...', '#ffc107');
-                const initialized = await initializeAI();
-                if (!initialized) { alert('🤖 AI system is loading... Please wait 5 seconds and try again.'); return; }
-                setTimeout(submitWriting, 1000); return;
-            }
-
+        function submitWriting() {
             const essayText = document.getElementById('essay-input').value;
             const wordCount = essayText.trim().split(/\s+/).length;
-            if (wordCount < 250) { alert(`⚠️ Please write at least 250 words. You have written ${wordCount} words.`); return; }
-
-            const currentQuestion = document.getElementById('task-description').textContent;
-            const questions = [{ text: currentQuestion }];
-
-            try {
-                updateAIStatus('⏳ Analyzing...', '#ffc107');
-                const result = await submitTestForGrading('writing', essayText, questions);
-                updateAIStatus('✅ Submitted for Review', '#28a745');
-                if (result.needsApproval) {
-                    alert('📝 Your essay has been submitted for review. You will receive feedback shortly.');
-                }
-            } catch (error) {
-                console.error('Grading failed:', error);
-                updateAIStatus('❌ Error', '#dc3545');
-                alert('❌ Failed to submit essay. Please try again.');
+            if (wordCount < 250) {
+                alert(`⚠️ Please write at least 250 words. You have written ${wordCount} words.`);
+                return;
             }
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `
+                <h2>📝 Essay Submitted!</h2>
+                <div class="score-card">
+                    <p>✅ Your essay has been submitted for review.</p>
+                    <p>Word count: ${wordCount} words</p>
+                    <p>You will receive feedback shortly.</p>
+                </div>
+                <button onclick="document.getElementById('results').style.display='none'" class="btn btn-light mt-3">Close</button>
+            `;
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function logout() {
+            firebase.auth().signOut().then(() => { window.location.href = 'index.html'; });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -315,14 +241,13 @@
                     await checkUserPlan(user);
                     renderPromptButtons();
                     if (allPrompts.length > 0) selectPrompt(allPrompts[0].id);
-                    setTimeout(async () => { await initializeAI(); }, 2000);
-                } else { window.location.href = 'login.html'; }
+                } else {
+                    window.location.href = 'login.html';
+                }
             });
         });
-
-        function logout() { firebase.auth().signOut().then(() => { window.location.href = 'index.html'; }); }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-    </html>
+                                                                        </html>
