@@ -13,11 +13,16 @@
         .test-container { max-width: 900px; margin: 30px auto; padding: 20px; }
         .audio-player { background: #2d1b69; padding: 20px; border-radius: 10px; color: white; margin-bottom: 30px; }
         .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .question-card:hover { box-shadow: 0 4px 20px rgba(108,99,255,0.15); }
         .question-number { color: #6c63ff; font-weight: bold; }
         .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
         .submit-btn:hover { transform: scale(1.05); color: white; }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; }
+        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
+        #test-results .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        #test-results .feedback-section { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; }
+        #test-results ul { list-style: none; padding: 0; }
+        #test-results ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
         #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
         .spinner-border { width: 3rem; height: 3rem; }
         .premium-lock { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
@@ -64,14 +69,12 @@
     <div class="container test-container">
         <h1 class="text-center mb-4">🎧 Listening Test</h1>
         
-        <!-- AI Status -->
         <div id="ai-status">
             🤖 AI System: <span id="ai-status-text" style="color: #ffc107;">Initializing...</span>
         </div>
 
         <div id="access-message" class="text-center mb-3"></div>
 
-        <!-- Audio Selector (like passages for listening) -->
         <div class="passage-selector" id="audioSelector">
             <h5>🎵 Select a Listening Audio</h5>
             <div id="audioButtons"></div>
@@ -81,7 +84,6 @@
             </div>
         </div>
 
-        <!-- Audio Display -->
         <div class="audio-player text-center">
             <h5>🎵 Audio Player</h5>
             <audio controls style="width: 100%; max-width: 500px;" id="audioPlayer">
@@ -120,19 +122,19 @@
         </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- FIXED SCRIPT PATHS - CORRECT!                              -->
+    <!-- ============================================================ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
-    <script src="js/questions.js"></script>
+    <script src="questions.js"></script>
     <script src="js/ai-employee.js"></script>
     <script src="js/memory-manager.js"></script>
     <script src="js/auto-grader.js"></script>
 
     <script>
-        // ============================================================
-        // TIER CONFIGURATION (SAME AS READING)
-        // ============================================================
         const TIERS = {
             free: { name: 'Free', passageLimit: 1, questionLimit: 20, badge: '🆓 Free', badgeClass: 'free' },
             pro: { name: 'Pro', passageLimit: 0.5, questionLimit: 0.5, badge: '⭐ Pro', badgeClass: 'pro' },
@@ -174,7 +176,6 @@
         }
 
         function getTierLimits() {
-            const tier = TIERS[userTier];
             const total = allAudios.length;
             let passageLimit, questionLimit;
             if (userTier === 'free') { passageLimit = 1; questionLimit = 20; }
@@ -188,20 +189,19 @@
                 allAudios = window.listeningPassages;
             } else {
                 allAudios = [
-                    { id: 1, title: 'University Lecture', text: 'A professor discusses climate change impacts on coastal communities.', transcript: 'Welcome to today\'s lecture on climate change...', audio: 'assets/audio/lecture1.mp3' },
-                    { id: 2, title: 'Job Interview', text: 'A candidate interviews for a marketing position at a tech company.', transcript: 'Interviewer: Tell me about yourself...', audio: 'assets/audio/interview1.mp3' },
-                    { id: 3, title: 'News Report', text: 'A news anchor reports on the latest technology trends.', transcript: 'Good evening, tonight we look at the rise of AI...', audio: 'assets/audio/news1.mp3' },
-                    { id: 4, title: 'Conversation', text: 'Two friends discuss their travel experiences in Europe.', transcript: 'Person A: How was your trip to Paris?', audio: 'assets/audio/conversation1.mp3' },
-                    { id: 5, title: 'Academic Presentation', text: 'A researcher presents findings on renewable energy.', transcript: 'Good morning everyone. Today I\'ll be presenting...', audio: 'assets/audio/presentation1.mp3' }
+                    { id: 1, title: 'University Lecture', text: 'A professor discusses climate change impacts.', transcript: 'Welcome to today\'s lecture...', audio: 'assets/audio/lecture1.mp3', questions: [] },
+                    { id: 2, title: 'Job Interview', text: 'A candidate interviews for a marketing position.', transcript: 'Interviewer: Tell me about yourself...', audio: 'assets/audio/interview1.mp3', questions: [] },
+                    { id: 3, title: 'News Report', text: 'A news anchor reports on the latest technology trends.', transcript: 'Good evening, tonight we look at AI...', audio: 'assets/audio/news1.mp3', questions: [] },
+                    { id: 4, title: 'Conversation', text: 'Two friends discuss their travel experiences.', transcript: 'Person A: How was your trip?', audio: 'assets/audio/conversation1.mp3', questions: [] },
+                    { id: 5, title: 'Academic Presentation', text: 'A researcher presents findings on renewable energy.', transcript: 'Good morning everyone...', audio: 'assets/audio/presentation1.mp3', questions: [] }
                 ];
-                // Generate questions for each
-                allAudios.forEach((audio) => {
-                    audio.questions = [];
+                allAudios.forEach((a) => {
+                    a.questions = [];
                     for (let i = 0; i < 40; i++) {
-                        audio.questions.push({
+                        a.questions.push({
                             id: i + 1,
-                            text: `Listening question ${i + 1}: What is the main topic of this audio?`,
-                            options: [`Option A`, `Option B`, `Option C`, `Option D`],
+                            text: `Listening question ${i + 1}: What is the main topic?`,
+                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
                             correct: 'A',
                             type: 'multiple-choice'
                         });
@@ -213,9 +213,7 @@
 
         function renderAudioButtons() {
             const { passageLimit, questionLimit } = getTierLimits();
-            const tierInfo = TIERS[userTier];
             let html = '';
-            
             allAudios.forEach((audio, index) => {
                 const isLocked = index >= passageLimit;
                 const isActive = selectedAudioId === audio.id;
@@ -228,17 +226,13 @@
                     </button>
                 `;
             });
-
             audioButtonsEl.innerHTML = html;
 
-            // Update access message
-            const tierBadge = tierInfo.badge;
-            const tierClass = tierInfo.badgeClass;
+            const tierInfo = TIERS[userTier];
             let messageText = userTier === 'free' ? `🆓 Free: ${passageLimit} Audio (${questionLimit} questions)` :
                              userTier === 'pro' ? `⭐ Pro: ${passageLimit}/${allAudios.length} Audios (${questionLimit} questions)` :
                              `🚀 Pro+: All ${allAudios.length} Audios (${questionLimit} questions)`;
-            
-            accessMessageEl.innerHTML = `<span class="premium-lock ${tierClass}">${messageText}</span>
+            accessMessageEl.innerHTML = `<span class="premium-lock ${tierInfo.badgeClass}">${messageText}</span>
                 ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
                 ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}`;
 
@@ -253,8 +247,7 @@
             }
 
             if (!selectedAudioId || selectedAudioId >= passageLimit) {
-                const firstAvailable = allAudios[0];
-                if (firstAvailable) selectAudio(firstAvailable.id);
+                if (allAudios.length > 0) selectAudio(allAudios[0].id);
             }
         }
 
@@ -270,15 +263,10 @@
 
             selectedAudioId = audioId;
             document.querySelectorAll('.passage-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
-
             passageContentEl.innerHTML = `<h6>${audio.title}</h6><p>${audio.text}</p>`;
             transcriptTextEl.textContent = audio.transcript || 'Transcript not available.';
             if (audio.audio) audioPlayerEl.src = audio.audio;
 
-            loadQuestionsForAudio(audio);
-        }
-
-        function loadQuestionsForAudio(audio) {
             const { questionLimit } = getTierLimits();
             const allQ = audio.questions || [];
             let shuffled = allQ.sort(() => Math.random() - 0.5);
@@ -386,4 +374,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+    </html>
