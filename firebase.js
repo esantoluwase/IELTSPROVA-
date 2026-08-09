@@ -1,7 +1,6 @@
-// firebase.js
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+// ============================================================
+// FIREBASE CONFIGURATION - DO NOT REMOVE
+// ============================================================
 
 const firebaseConfig = {
     apiKey: "AIzaSyCV8z2TqjtwR5LpSMlGn5jCsvw1IM5vMFQ",
@@ -12,6 +11,10 @@ const firebaseConfig = {
     appId: "1:812300970124:web:992398c08c151ae97df3a9"
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const db = firebase.firestore();
+
+console.log('🔥 Firebase initialized successfully');
