@@ -11,22 +11,111 @@
     <style>
         body { background: #f8f9fa; }
         .test-container { max-width: 900px; margin: 30px auto; padding: 20px; }
-        .passage-box { background: #f0edff; padding: 20px; border-radius: 10px; border-left: 4px solid #6c63ff; margin-bottom: 30px; }
-        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .question-card:hover { box-shadow: 0 4px 20px rgba(108,99,255,0.15); }
+        
+        .passage-selector { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .passage-selector h5 { color: #2d1b69; margin-bottom: 12px; }
+        .passage-btn { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px;
+            background: white;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .passage-btn:hover { border-color: #6c63ff; }
+        .passage-btn.active { 
+            border-color: #6c63ff; 
+            background: #f0edff;
+        }
+        .passage-btn.locked { 
+            opacity: 0.5; 
+            cursor: not-allowed;
+        }
+        .passage-btn.locked::after {
+            content: ' 🔒';
+            color: #dc3545;
+        }
+        .passage-btn.free::after {
+            content: ' 🆓';
+            color: #28a745;
+        }
+        .passage-btn.pro::after {
+            content: ' ⭐';
+            color: #ffd700;
+        }
+        .passage-btn.proplus::after {
+            content: ' 🚀';
+            color: #6c63ff;
+        }
+        
+        .passage-box { 
+            background: #f0edff; 
+            padding: 20px; 
+            border-radius: 10px; 
+            border-left: 4px solid #6c63ff; 
+            margin-bottom: 30px; 
+        }
+        .question-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
         .question-number { color: #6c63ff; font-weight: bold; }
-        .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
+        .submit-btn { 
+            background: linear-gradient(135deg, #6c63ff, #ffd700); 
+            border: none; 
+            padding: 12px 40px; 
+            font-weight: bold; 
+            color: white; 
+            border-radius: 30px; 
+            transition: transform 0.3s; 
+        }
         .submit-btn:hover { transform: scale(1.05); color: white; }
-        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
-        #test-results .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
-        #test-results .feedback-section { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; }
-        #test-results ul { list-style: none; padding: 0; }
-        #test-results ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        #test-results { 
+            background: linear-gradient(135deg, #6c63ff, #ffd700); 
+            padding: 25px; 
+            border-radius: 15px; 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(108,99,255,0.3); 
+        }
         #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
         .spinner-border { width: 3rem; height: 3rem; }
-        .premium-lock { background: #ffd700; color: #2d1b69; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
+        .premium-lock { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
+        .premium-lock.free { background: #28a745; color: white; }
+        .premium-lock.pro { background: #ffd700; color: #2d1b69; }
+        .premium-lock.proplus { background: #6c63ff; color: white; }
         #ai-status { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; }
         #ai-status-text { font-weight: bold; }
+        .upgrade-banner { 
+            background: linear-gradient(135deg, #2d1b69, #6c63ff); 
+            color: white; 
+            padding: 15px 20px; 
+            border-radius: 10px; 
+            margin: 15px 0;
+            text-align: center;
+        }
+        .upgrade-banner a { color: #ffd700; font-weight: bold; }
+        .tier-badge { 
+            display: inline-block; 
+            padding: 2px 12px; 
+            border-radius: 20px; 
+            font-size: 11px; 
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        .tier-badge.free { background: #28a745; color: white; }
+        .tier-badge.pro { background: #ffd700; color: #2d1b69; }
+        .tier-badge.proplus { background: #6c63ff; color: white; }
     </style>
 </head>
 <body>
@@ -53,28 +142,39 @@
     <div class="container test-container">
         <h1 class="text-center mb-4">📖 Reading Test</h1>
         
-        <!-- AI Status Indicator -->
+        <!-- AI Status -->
         <div id="ai-status">
             🤖 AI System: <span id="ai-status-text" style="color: #ffc107;">Initializing...</span>
         </div>
 
-        <div id="access-message" class="text-center mb-3">
-            <span class="premium-lock">🔓 Free Access: 20 questions</span>
+        <div id="access-message" class="text-center mb-3"></div>
+
+        <!-- Passage Selector -->
+        <div class="passage-selector" id="passageSelector">
+            <h5>📚 Select a Reading Passage</h5>
+            <div id="passageButtons"></div>
+            <div id="upgradeBanner" class="upgrade-banner" style="display: none;">
+                ⭐ <strong>Upgrade to Pro or Pro+</strong> to unlock more passages and questions!
+                <a href="checkout.html">Upgrade Now →</a>
+            </div>
         </div>
 
+        <!-- Passage Display -->
         <div id="passage-container" class="passage-box">
             <h5>📄 Reading Passage</h5>
             <div id="passage-content">
-                <p>Loading passage...</p>
+                <p>Select a passage above to begin.</p>
             </div>
         </div>
 
         <p class="text-center text-muted">Answer all questions. You have 60 minutes.</p>
         
-        <div id="test-questions"></div>
+        <div id="test-questions">
+            <p class="text-muted text-center">Select a passage to load questions.</p>
+        </div>
 
         <div class="text-center mt-4">
-            <button onclick="submitTest()" class="submit-btn">Submit Test 🚀</button>
+            <button onclick="submitTest()" class="submit-btn" id="submitBtn" disabled>Submit Test 🚀</button>
         </div>
 
         <div id="test-results" style="display: none; margin-top: 30px;"></div>
@@ -96,11 +196,57 @@
     <script src="js/auto-grader.js"></script>
 
     <script>
+        // ============================================================
+        // CORRECT TIER CONFIGURATION
+        // ============================================================
+        const TIERS = {
+            free: {
+                name: 'Free',
+                passageLimit: 1,      // 1 passage
+                questionLimit: 20,     // 20 questions
+                badge: '🆓 Free',
+                badgeClass: 'free'
+            },
+            pro: {
+                name: 'Pro',
+                passageLimit: 0.5,     // 50% of passages
+                questionLimit: 0.5,    // 50% of questions
+                badge: '⭐ Pro',
+                badgeClass: 'pro'
+            },
+            proplus: {
+                name: 'Pro+',
+                passageLimit: 1,       // 100% of passages
+                questionLimit: 1,      // 100% of questions
+                badge: '🚀 Pro+',
+                badgeClass: 'proplus'
+            }
+        };
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let allPassages = [];
         let questions = [];
-        let isPremium = false;
+        let currentPassageIndex = 0;
+        let userTier = 'free'; // 'free', 'pro', 'proplus'
         let aiInitialized = false;
         let initAttempts = 0;
+        let selectedPassageId = null;
 
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const passageButtonsEl = document.getElementById('passageButtons');
+        const passageContentEl = document.getElementById('passage-content');
+        const testQuestionsEl = document.getElementById('test-questions');
+        const submitBtn = document.getElementById('submitBtn');
+        const upgradeBannerEl = document.getElementById('upgradeBanner');
+        const accessMessageEl = document.getElementById('access-message');
+
+        // ============================================================
+        // UPDATE AI STATUS
+        // ============================================================
         function updateAIStatus(status, color = '#ffc107') {
             const statusText = document.getElementById('ai-status-text');
             if (statusText) {
@@ -109,6 +255,9 @@
             }
         }
 
+        // ============================================================
+        // CHECK USER PLAN FROM FIREBASE
+        // ============================================================
         async function checkUserPlan(user) {
             try {
                 const doc = await firebase.firestore()
@@ -118,18 +267,66 @@
                 
                 if (doc.exists) {
                     const data = doc.data();
-                    isPremium = data.plan === 'pro' || data.plan === 'pro+';
+                    const plan = data.plan || 'free';
+                    
+                    // Normalize plan name
+                    if (plan === 'pro' || plan === 'Pro') {
+                        userTier = 'pro';
+                    } else if (plan === 'pro+' || plan === 'Pro+' || plan === 'proplus') {
+                        userTier = 'proplus';
+                    } else {
+                        userTier = 'free';
+                    }
+                } else {
+                    userTier = 'free';
                 }
-                return isPremium;
+                
+                console.log('📊 User tier:', userTier.toUpperCase());
+                return userTier;
             } catch (error) {
                 console.error('Failed to check plan:', error);
-                return false;
+                userTier = 'free';
+                return 'free';
             }
         }
 
-        async function loadQuestions() {
-            try {
-                const allPassages = window.readingPassages || [
+        // ============================================================
+        // GET TIER LIMITS
+        // ============================================================
+        function getTierLimits() {
+            const tier = TIERS[userTier];
+            const totalPassages = allPassages.length;
+            
+            let passageLimit;
+            let questionLimit;
+            
+            if (userTier === 'free') {
+                passageLimit = tier.passageLimit; // 1
+                questionLimit = tier.questionLimit; // 20
+            } else if (userTier === 'pro') {
+                // Pro: 50% of passages and questions
+                passageLimit = Math.max(1, Math.ceil(totalPassages * tier.passageLimit));
+                questionLimit = Math.ceil(40 * tier.questionLimit); // 20 questions
+            } else if (userTier === 'proplus') {
+                // Pro+: 100% of passages and questions
+                passageLimit = totalPassages;
+                questionLimit = 40;
+            }
+            
+            return { passageLimit, questionLimit };
+        }
+
+        // ============================================================
+        // LOAD PASSAGES
+        // ============================================================
+        function loadPassages() {
+            // Try to get passages from window.readingPassages
+            if (window.readingPassages && window.readingPassages.length > 0) {
+                allPassages = window.readingPassages;
+                console.log('📚 Passages loaded from questions.js:', allPassages.length);
+            } else {
+                // Fallback passages
+                allPassages = [
                     { 
                         id: 1, 
                         title: 'The Future of Education', 
@@ -147,63 +344,202 @@
                         title: 'The Impact of Social Media',
                         text: 'Social media has revolutionized how we communicate and share information. While it connects people across the globe, it also raises concerns about privacy, mental health, and the spread of misinformation. Finding a balance is essential.',
                         questions: []
+                    },
+                    {
+                        id: 4,
+                        title: 'Artificial Intelligence in Healthcare',
+                        text: 'Artificial intelligence is revolutionizing healthcare. From diagnostic tools to personalized treatment plans, AI is helping doctors make better decisions and improve patient outcomes.',
+                        questions: []
+                    },
+                    {
+                        id: 5,
+                        title: 'The Rise of Remote Work',
+                        text: 'The COVID-19 pandemic accelerated the shift to remote work. Companies around the world have embraced flexible work arrangements, leading to increased productivity and employee satisfaction.',
+                        questions: []
                     }
                 ];
+                console.log('📚 Using fallback passages:', allPassages.length);
+            }
 
-                const randomPassage = allPassages[Math.floor(Math.random() * allPassages.length)];
-                
-                const passageContent = document.getElementById('passage-content');
-                if (passageContent) {
-                    passageContent.innerHTML = `
-                        <h6>${randomPassage.title || 'Reading Passage'}</h6>
-                        <p>${randomPassage.text || 'Read the passage carefully before answering questions.'}</p>
-                    `;
-                }
-
-                const user = firebase.auth().currentUser;
-                if (user) {
-                    await checkUserPlan(user);
-                }
-
-                const allQuestions = window.readingQuestions || [];
-                let questionLimit = isPremium ? 40 : 20;
-                
-                if (allQuestions.length === 0) {
-                    const topics = ['Technology', 'Education', 'Environment', 'Health', 'Society'];
-                    for (let i = 0; i < questionLimit; i++) {
+            // Generate questions for each passage
+            allPassages.forEach((passage) => {
+                if (!passage.questions || passage.questions.length === 0) {
+                    passage.questions = [];
+                    const topics = ['Main Idea', 'Detail', 'Inference', 'Vocabulary', 'Purpose'];
+                    for (let i = 0; i < 40; i++) {
                         const topic = topics[i % topics.length];
-                        allQuestions.push({
+                        passage.questions.push({
                             id: i + 1,
-                            text: `${topic} reading question ${i + 1}: What is the main idea of the passage?`,
-                            options: [`Option A for ${topic}`, `Option B for ${topic}`, `Option C for ${topic}`, `Option D for ${topic}`],
+                            text: `${topic} question ${i + 1}: Based on the passage, which statement is true?`,
+                            options: [`Option A`, `Option B`, `Option C`, `Option D`],
                             correct: 'A',
                             type: 'multiple-choice'
                         });
                     }
                 }
+            });
 
-                questions = allQuestions
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, questionLimit);
+            renderPassageButtons();
+        }
 
-                const accessMsg = document.getElementById('access-message');
-                if (accessMsg) {
-                    accessMsg.innerHTML = `
-                        <span class="premium-lock">${isPremium ? '⭐ Premium: All questions unlocked' : '🔓 Free Access: 20 questions'}</span>
-                        ${!isPremium ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro for more questions →</a></small>' : ''}
-                    `;
+        // ============================================================
+        // RENDER PASSAGE BUTTONS
+        // ============================================================
+        function renderPassageButtons() {
+            const { passageLimit, questionLimit } = getTierLimits();
+            const tierInfo = TIERS[userTier];
+            
+            let html = '';
+            let availableCount = 0;
+            
+            allPassages.forEach((passage, index) => {
+                const isLocked = index >= passageLimit;
+                const isActive = selectedPassageId === passage.id;
+                
+                let statusClass = 'free';
+                let statusLabel = '🆓';
+                
+                if (isLocked) {
+                    statusClass = 'locked';
+                    statusLabel = '🔒';
+                } else if (userTier === 'proplus') {
+                    statusClass = 'proplus';
+                    statusLabel = '🚀';
+                } else if (userTier === 'pro') {
+                    statusClass = 'pro';
+                    statusLabel = '⭐';
+                } else {
+                    statusClass = 'free';
+                    statusLabel = '🆓';
                 }
+                
+                if (!isLocked) availableCount++;
+                
+                html += `
+                    <button class="passage-btn ${statusClass} ${isActive ? 'active' : ''}"
+                            onclick="${isLocked ? '' : `selectPassage(${passage.id})`}"
+                            ${isLocked ? 'disabled' : ''}>
+                        ${statusLabel} ${passage.title}
+                        ${isLocked ? '🔒' : ''}
+                    </button>
+                `;
+            });
 
-                displayQuestions();
-            } catch (error) {
-                console.error('Failed to load questions:', error);
+            passageButtonsEl.innerHTML = html;
+
+            // Update access message
+            const tierBadge = tierInfo.badge;
+            const tierClass = tierInfo.badgeClass;
+            
+            let messageText = '';
+            if (userTier === 'free') {
+                messageText = `🆓 Free: ${passageLimit} Passage (${questionLimit} questions)`;
+            } else if (userTier === 'pro') {
+                messageText = `⭐ Pro: ${passageLimit}/${allPassages.length} Passages (${questionLimit} questions)`;
+            } else if (userTier === 'proplus') {
+                messageText = `🚀 Pro+: All ${allPassages.length} Passages (${questionLimit} questions)`;
+            }
+            
+            accessMessageEl.innerHTML = `
+                <span class="premium-lock ${tierClass}">${messageText}</span>
+                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
+                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}
+            `;
+
+            // Show/hide upgrade banner
+            if (userTier === 'free') {
+                upgradeBannerEl.innerHTML = `
+                    ⭐ <strong>Upgrade to Pro</strong> to access 50% of passages and questions!
+                    <a href="checkout.html">Upgrade Now →</a>
+                `;
+                upgradeBannerEl.style.display = 'block';
+            } else if (userTier === 'pro') {
+                upgradeBannerEl.innerHTML = `
+                    🚀 <strong>Upgrade to Pro+</strong> to access ALL passages and questions!
+                    <a href="checkout.html">Upgrade Now →</a>
+                `;
+                upgradeBannerEl.style.display = 'block';
+            } else {
+                upgradeBannerEl.style.display = 'none';
+            }
+
+            // Auto-select first available passage
+            if (!selectedPassageId || selectedPassageId >= passageLimit) {
+                const firstAvailable = allPassages[0];
+                if (firstAvailable) {
+                    selectPassage(firstAvailable.id);
+                }
             }
         }
 
-        function displayQuestions() {
-            const container = document.getElementById('test-questions');
-            if (!container) return;
+        // ============================================================
+        // SELECT A PASSAGE
+        // ============================================================
+        function selectPassage(passageId) {
+            const passage = allPassages.find(p => p.id === passageId);
+            if (!passage) return;
+
+            const index = allPassages.indexOf(passage);
+            const { passageLimit } = getTierLimits();
             
+            if (index >= passageLimit) {
+                if (userTier === 'free') {
+                    alert('⭐ Upgrade to Pro to access more passages!');
+                } else if (userTier === 'pro') {
+                    alert('🚀 Upgrade to Pro+ to access all passages!');
+                }
+                return;
+            }
+
+            selectedPassageId = passageId;
+            currentPassageIndex = index;
+
+            // Update button states
+            document.querySelectorAll('.passage-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+
+            // Display passage
+            passageContentEl.innerHTML = `
+                <h6>${passage.title}</h6>
+                <p>${passage.text}</p>
+            `;
+
+            // Load questions for this passage
+            loadQuestionsForPassage(passage);
+        }
+
+        // ============================================================
+        // LOAD QUESTIONS FOR A PASSAGE
+        // ============================================================
+        function loadQuestionsForPassage(passage) {
+            const { questionLimit } = getTierLimits();
+            const allQ = passage.questions || [];
+            
+            // Shuffle and limit based on tier
+            let shuffled = allQ.sort(() => Math.random() - 0.5);
+            
+            if (userTier === 'free') {
+                questions = shuffled.slice(0, 20); // 20 questions
+            } else if (userTier === 'pro') {
+                questions = shuffled.slice(0, 30); // 30 questions (50% of 40)
+            } else if (userTier === 'proplus') {
+                questions = shuffled.slice(0, 40); // 40 questions (100%)
+            }
+
+            displayQuestions();
+            submitBtn.disabled = false;
+        }
+
+        // ============================================================
+        // DISPLAY QUESTIONS
+        // ============================================================
+        function displayQuestions() {
+            if (!questions || questions.length === 0) {
+                testQuestionsEl.innerHTML = '<p class="text-muted text-center">No questions available.</p>';
+                return;
+            }
+
             let html = `<p class="text-muted">Showing ${questions.length} questions</p>`;
             
             questions.forEach((q, index) => {
@@ -227,9 +563,13 @@
                     </div>
                 `;
             });
-            container.innerHTML = html;
+            
+            testQuestionsEl.innerHTML = html;
         }
 
+        // ============================================================
+        // COLLECT ANSWERS
+        // ============================================================
         function collectAnswers() {
             const answers = [];
             questions.forEach((q, index) => {
@@ -239,6 +579,9 @@
             return answers;
         }
 
+        // ============================================================
+        // INITIALIZE AI
+        // ============================================================
         async function initializeAI() {
             try {
                 const user = firebase.auth().currentUser;
@@ -259,20 +602,23 @@
                 return true;
             } catch (error) {
                 console.error('AI Employee init failed:', error);
-                updateAIStatus('❌ Error - Retrying...', '#dc3545');
+                updateAIStatus('Connecting... Retrying', '#ffc107');
                 
-                if (initAttempts < 3) {
+                if (initAttempts < 5) {
                     initAttempts++;
                     setTimeout(() => {
                         initializeAI();
                     }, 3000);
                 } else {
-                    updateAIStatus('❌ Failed - Refresh page', '#dc3545');
+                    updateAIStatus('⚠️ Refresh page', '#dc3545');
                 }
                 return false;
             }
         }
 
+        // ============================================================
+        // SUBMIT TEST
+        // ============================================================
         async function submitTest() {
             if (!aiInitialized || !window.aiEmployee) {
                 updateAIStatus('⏳ Loading... Please wait', '#ffc107');
@@ -308,13 +654,22 @@
             }
         }
 
+        // ============================================================
+        // PAGE LOAD
+        // ============================================================
         document.addEventListener('DOMContentLoaded', async function() {
-            await loadQuestions();
+            loadPassages();
             
             firebase.auth().onAuthStateChanged(async function(user) {
                 if (user) {
                     await checkUserPlan(user);
-                    await loadQuestions();
+                    renderPassageButtons();
+                    
+                    // Select first available passage
+                    const { passageLimit } = getTierLimits();
+                    if (allPassages.length > 0) {
+                        selectPassage(allPassages[0].id);
+                    }
                     
                     setTimeout(async () => {
                         await initializeAI();
@@ -325,6 +680,9 @@
             });
         });
 
+        // ============================================================
+        // LOGOUT
+        // ============================================================
         function logout() {
             firebase.auth().signOut().then(() => {
                 window.location.href = 'index.html';
@@ -334,4 +692,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-    </html>
+</html>
