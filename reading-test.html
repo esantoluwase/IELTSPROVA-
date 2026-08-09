@@ -6,44 +6,30 @@
     <title>IELTSProva - Reading Test</title>
     <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
         .test-container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .passage-selector { background: #f8f5ff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #e8e0f0; }
-        .passage-selector h5 { color: #2d1b69; margin-bottom: 12px; }
-        .passage-btn { padding: 10px 20px; margin: 5px; border: 2px solid #ddd; border-radius: 8px; background: white; transition: all 0.3s; cursor: pointer; }
-        .passage-btn:hover { border-color: #6c63ff; }
-        .passage-btn.active { border-color: #6c63ff; background: #f0edff; }
-        .passage-btn.locked { opacity: 0.5; cursor: not-allowed; }
-        .passage-btn.free { border-color: #28a745; }
-        .passage-btn.pro { border-color: #ffd700; }
-        .passage-btn.proplus { border-color: #6c63ff; }
         .passage-box { background: #f0edff; padding: 20px; border-radius: 10px; border-left: 4px solid #6c63ff; margin-bottom: 30px; }
         .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #f0edff; }
         .question-number { color: #6c63ff; font-weight: bold; }
         .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
         .submit-btn:hover { transform: scale(1.05); }
-        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; margin-top: 20px; display: none; }
-        #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; text-align: center; display: none; }
-        .spinner-border { width: 3rem; height: 3rem; }
-        .premium-lock { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
-        .premium-lock.free { background: #28a745; color: white; }
-        .premium-lock.pro { background: #ffd700; color: #2d1b69; }
-        .premium-lock.proplus { background: #6c63ff; color: white; }
-        #ai-status { background: #f8f9fa; padding: 10px 16px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; font-weight: 500; }
-        #ai-status .status-ready { color: #28a745; }
-        #ai-status .status-loading { color: #ffc107; }
-        #ai-status .status-error { color: #dc3545; }
-        .upgrade-banner { background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 15px 20px; border-radius: 10px; margin: 15px 0; text-align: center; }
-        .upgrade-banner a { color: #ffd700; font-weight: bold; }
+        .results-box { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; margin-top: 20px; display: none; }
+        .results-box .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        .results-box ul { list-style: none; padding: 0; }
+        .results-box ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .premium-lock { background: #ffd700; color: #2d1b69; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
         nav { background: #2d1b69 !important; padding: 10px 0; }
         nav a { color: white !important; }
         nav .navbar-brand span { color: #ffd700; }
         .form-check { padding: 4px 0; }
-        .form-check-input { margin-top: 6px; }
         .options { padding-left: 10px; }
-        .admin-badge { background: #ffd700; color: #2d1b69; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .passage-selector { background: #f8f5ff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #e8e0f0; }
+        .passage-btn { padding: 8px 16px; margin: 4px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s; }
+        .passage-btn:hover { border-color: #6c63ff; }
+        .passage-btn.active { border-color: #6c63ff; background: #f0edff; }
+        .passage-btn.locked { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -68,143 +54,76 @@
     </nav>
 
     <div class="container test-container">
-        <h1 class="text-center mb-3">📖 Reading Test</h1>
-        
-        <!-- AI Status -->
-        <div id="ai-status">
-            🤖 AI System: <span id="ai-status-text" style="color: #ffc107;">Initializing...</span>
-        </div>
+        <h1 class="text-center mb-4">📖 Reading Test</h1>
 
-        <div id="access-message" class="text-center mb-3"></div>
+        <div id="access-message" class="text-center mb-3">
+            <span class="premium-lock">🔓 Free Access: 1 Passage (20 questions)</span>
+        </div>
 
         <!-- Passage Selector -->
         <div class="passage-selector">
             <h5>📚 Select a Reading Passage</h5>
             <div id="passageButtons"></div>
-            <div id="upgradeBanner" class="upgrade-banner" style="display: none;">
-                ⭐ <strong>Upgrade to Pro or Pro+</strong> to unlock more passages!
-                <a href="checkout.html">Upgrade Now →</a>
+            <div id="upgradeBanner" style="display: none; background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 10px 15px; border-radius: 8px; margin-top: 10px; text-align: center;">
+                ⭐ <strong>Upgrade to Pro</strong> to unlock all passages! <a href="checkout.html" style="color: #ffd700; font-weight: bold;">Upgrade Now →</a>
             </div>
         </div>
 
-        <!-- Passage Display -->
-        <div id="passage-container" class="passage-box">
+        <!-- Passage -->
+        <div class="passage-box">
             <h5>📄 Reading Passage</h5>
             <div id="passage-content">
-                <p class="text-muted">Select a passage above to begin.</p>
+                <p>Loading passage...</p>
             </div>
         </div>
 
         <p class="text-center text-muted">Answer all questions. You have 60 minutes.</p>
         
-        <div id="test-questions">
-            <p class="text-muted text-center">Select a passage to load questions.</p>
-        </div>
+        <div id="test-questions"></div>
 
         <div class="text-center mt-4">
             <button onclick="submitTest()" class="submit-btn" id="submitBtn" disabled>Submit Test 🚀</button>
         </div>
 
-        <div id="test-results"></div>
-        <div id="loader">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p id="loader-text" style="color: #6c63ff; font-weight: bold; margin-top: 10px;">🤖 Grading your test...</p>
-        </div>
+        <div id="results" class="results-box"></div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- SCRIPTS - CORRECT ORDER!                                   -->
+    <!-- SCRIPTS - NO AI! Just Firebase + Questions                   -->
     <!-- ============================================================ -->
-    <!-- 1. Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- 2. Firebase Config (IN js/ FOLDER) -->
     <script src="js/firebase-config.js"></script>
-    
-    <!-- 3. Questions Bank (IN ROOT FOLDER) -->
     <script src="questions.js"></script>
-    
-    <!-- 4. AI System (IN js/ FOLDER) -->
-    <script src="js/ai-employee.js"></script>
-    <script src="js/memory-manager.js"></script>
-    <script src="js/auto-grader.js"></script>
 
     <script>
         // ============================================================
-        // MAIN APPLICATION CODE
+        // SIMPLE WORKING VERSION - NO AI
         // ============================================================
-        console.log('🚀 Reading Test loaded');
-        
-        // State
         let allPassages = [];
         let questions = [];
-        let userTier = 'free';
-        let aiInitialized = false;
-        let initAttempts = 0;
         let selectedPassageId = null;
-        let currentUser = null;
-
-        // DOM refs
-        const passageButtonsEl = document.getElementById('passageButtons');
-        const passageContentEl = document.getElementById('passage-content');
-        const testQuestionsEl = document.getElementById('test-questions');
-        const submitBtn = document.getElementById('submitBtn');
-        const upgradeBannerEl = document.getElementById('upgradeBanner');
-        const accessMessageEl = document.getElementById('access-message');
-        const statusTextEl = document.getElementById('ai-status-text');
-
-        // ============================================================
-        // UPDATE AI STATUS
-        // ============================================================
-        function updateAIStatus(status, color = '#ffc107') {
-            if (statusTextEl) {
-                statusTextEl.textContent = status;
-                statusTextEl.style.color = color;
-                statusTextEl.className = '';
-                if (color === '#28a745') statusTextEl.className = 'status-ready';
-                else if (color === '#ffc107') statusTextEl.className = 'status-loading';
-                else if (color === '#dc3545') statusTextEl.className = 'status-error';
-            }
-            console.log('🤖 AI Status:', status);
-        }
+        let userTier = 'free';
 
         // ============================================================
         // CHECK USER PLAN
         // ============================================================
         async function checkUserPlan(user) {
-            if (!user) return 'free';
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 if (doc.exists) {
                     const plan = doc.data().plan || 'free';
                     userTier = (plan === 'pro' || plan === 'Pro') ? 'pro' : 
-                               (plan === 'pro+' || plan === 'Pro+' || plan === 'proplus') ? 'proplus' : 'free';
-                } else {
-                    userTier = 'free';
+                               (plan === 'pro+' || plan === 'Pro+') ? 'proplus' : 'free';
                 }
-                console.log('📊 User tier:', userTier.toUpperCase());
+                console.log('📊 User tier:', userTier);
                 return userTier;
             } catch (error) {
                 console.error('Failed to check plan:', error);
                 userTier = 'free';
                 return 'free';
             }
-        }
-
-        // ============================================================
-        // GET TIER LIMITS
-        // ============================================================
-        function getTierLimits() {
-            const total = allPassages.length;
-            let passageLimit, questionLimit;
-            if (userTier === 'free') { passageLimit = 1; questionLimit = 20; }
-            else if (userTier === 'pro') { passageLimit = Math.max(1, Math.ceil(total * 0.5)); questionLimit = 30; }
-            else if (userTier === 'proplus') { passageLimit = total; questionLimit = 40; }
-            return { passageLimit, questionLimit };
         }
 
         // ============================================================
@@ -216,85 +135,111 @@
                 allPassages = window.readingPassages;
                 console.log('📚 Passages loaded from questions.js:', allPassages.length);
             } else {
-                // Fallback passages
+                // Fallback passages with questions
                 allPassages = [
-                    { id: 1, title: 'The Future of Education', text: 'Technology is transforming education. Online learning platforms, AI tutors, and virtual classrooms are making education more accessible than ever before.', questions: [] },
-                    { id: 2, title: 'Climate Change and Society', text: 'Climate change affects every aspect of our lives. Rising temperatures, extreme weather events, and sea-level rise are just some of the consequences.', questions: [] },
-                    { id: 3, title: 'The Impact of Social Media', text: 'Social media has revolutionized how we communicate and share information. While it connects people across the globe, it also raises concerns about privacy and mental health.', questions: [] },
-                    { id: 4, title: 'Artificial Intelligence in Healthcare', text: 'Artificial intelligence is revolutionizing healthcare. From diagnostic tools to personalized treatment plans, AI is helping doctors make better decisions.', questions: [] },
-                    { id: 5, title: 'The Rise of Remote Work', text: 'The COVID-19 pandemic accelerated the shift to remote work. Companies around the world have embraced flexible work arrangements.', questions: [] }
-                ];
-                // Generate questions for each passage
-                allPassages.forEach((p) => {
-                    p.questions = [];
-                    for (let i = 0; i < 40; i++) {
-                        p.questions.push({
-                            id: i + 1,
-                            text: `Question ${i + 1}: Based on the passage, which statement is true?`,
-                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-                            correct: 'A',
-                            type: 'multiple-choice'
-                        });
+                    { 
+                        id: 1, 
+                        title: 'The Future of Education', 
+                        text: 'Technology is transforming education. Online learning platforms, AI tutors, and virtual classrooms are making education more accessible than ever before. However, traditional classroom settings still offer unique benefits that technology cannot fully replicate.',
+                        questions: generateQuestions('Education')
+                    },
+                    { 
+                        id: 2, 
+                        title: 'Climate Change and Society', 
+                        text: 'Climate change affects every aspect of our lives. Rising temperatures, extreme weather events, and sea-level rise are just some of the consequences. Governments and individuals must work together to reduce carbon emissions and adapt to a changing world.',
+                        questions: generateQuestions('Climate')
+                    },
+                    { 
+                        id: 3, 
+                        title: 'The Impact of Social Media', 
+                        text: 'Social media has revolutionized how we communicate and share information. While it connects people across the globe, it also raises concerns about privacy, mental health, and the spread of misinformation. Finding a balance is essential.',
+                        questions: generateQuestions('Social Media')
+                    },
+                    { 
+                        id: 4, 
+                        title: 'Artificial Intelligence in Healthcare', 
+                        text: 'Artificial intelligence is revolutionizing healthcare. From diagnostic tools to personalized treatment plans, AI is helping doctors make better decisions and improve patient outcomes. However, ethical concerns and data privacy remain significant challenges.',
+                        questions: generateQuestions('AI Healthcare')
+                    },
+                    { 
+                        id: 5, 
+                        title: 'The Rise of Remote Work', 
+                        text: 'The COVID-19 pandemic accelerated the shift to remote work. Companies around the world have embraced flexible work arrangements, leading to increased productivity and employee satisfaction. However, challenges remain in maintaining company culture and collaboration.',
+                        questions: generateQuestions('Remote Work')
                     }
-                });
+                ];
                 console.log('📚 Using fallback passages');
             }
             renderPassageButtons();
         }
 
         // ============================================================
+        // GENERATE QUESTIONS (Fallback)
+        // ============================================================
+        function generateQuestions(topic) {
+            const types = ['Main Idea', 'Detail', 'Inference', 'Vocabulary', 'Purpose'];
+            const qs = [];
+            for (let i = 0; i < 40; i++) {
+                const type = types[i % types.length];
+                qs.push({
+                    id: i + 1,
+                    text: `${type} question ${i + 1}: Based on the passage about ${topic}, which statement is true?`,
+                    options: [
+                        `${topic} has a significant impact on daily life`,
+                        `${topic} is not mentioned in the passage`,
+                        `${topic} is the main focus of the author`,
+                        `${topic} has both positive and negative effects`
+                    ],
+                    correct: 0
+                });
+            }
+            return qs;
+        }
+
+        // ============================================================
         // RENDER PASSAGE BUTTONS
         // ============================================================
         function renderPassageButtons() {
-            const { passageLimit, questionLimit } = getTierLimits();
+            const maxPassages = userTier === 'free' ? 1 : (userTier === 'pro' ? Math.ceil(allPassages.length / 2) : allPassages.length);
+            const container = document.getElementById('passageButtons');
             let html = '';
             
             allPassages.forEach((passage, index) => {
-                const isLocked = index >= passageLimit;
+                const isLocked = index >= maxPassages;
                 const isActive = selectedPassageId === passage.id;
-                let statusClass = 'free';
-                if (isLocked) statusClass = 'locked';
-                else if (userTier === 'proplus') statusClass = 'proplus';
-                else if (userTier === 'pro') statusClass = 'pro';
-                else statusClass = 'free';
-                
-                const label = isLocked ? '🔒' : (userTier === 'proplus' ? '🚀' : (userTier === 'pro' ? '⭐' : '🆓'));
-                
                 html += `
-                    <button class="passage-btn ${statusClass} ${isActive ? 'active' : ''}"
+                    <button class="passage-btn ${isLocked ? 'locked' : ''} ${isActive ? 'active' : ''}"
                             onclick="${isLocked ? '' : `selectPassage(${passage.id})`}"
                             ${isLocked ? 'disabled' : ''}>
-                        ${label} ${passage.title} ${isLocked ? '🔒' : ''}
+                        ${isLocked ? '🔒 ' : ''}${passage.title}
                     </button>
                 `;
             });
 
-            passageButtonsEl.innerHTML = html;
+            container.innerHTML = html;
 
-            // Update access message
-            let messageText = '';
-            if (userTier === 'free') messageText = `🆓 Free: ${passageLimit} Passage (${questionLimit} questions)`;
-            else if (userTier === 'pro') messageText = `⭐ Pro: ${passageLimit}/${allPassages.length} Passages (${questionLimit} questions)`;
-            else if (userTier === 'proplus') messageText = `🚀 Pro+: All ${allPassages.length} Passages (${questionLimit} questions)`;
-            
-            const tierClass = userTier === 'free' ? 'free' : (userTier === 'pro' ? 'pro' : 'proplus');
-            accessMessageEl.innerHTML = `<span class="premium-lock ${tierClass}">${messageText}</span>
-                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
-                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}`;
-
-            // Upgrade banner
-            if (userTier === 'free') {
-                upgradeBannerEl.innerHTML = `⭐ <strong>Upgrade to Pro</strong> to access 50% of passages and questions! <a href="checkout.html">Upgrade Now →</a>`;
-                upgradeBannerEl.style.display = 'block';
-            } else if (userTier === 'pro') {
-                upgradeBannerEl.innerHTML = `🚀 <strong>Upgrade to Pro+</strong> to access ALL passages and questions! <a href="checkout.html">Upgrade Now →</a>`;
-                upgradeBannerEl.style.display = 'block';
+            // Show upgrade banner
+            const banner = document.getElementById('upgradeBanner');
+            if (userTier === 'free' && allPassages.length > 1) {
+                banner.style.display = 'block';
+            } else if (userTier === 'pro' && allPassages.length > maxPassages) {
+                banner.innerHTML = '🚀 <strong>Upgrade to Pro+</strong> to access ALL passages! <a href="checkout.html" style="color: #ffd700; font-weight: bold;">Upgrade Now →</a>';
+                banner.style.display = 'block';
             } else {
-                upgradeBannerEl.style.display = 'none';
+                banner.style.display = 'none';
             }
 
-            // Auto-select first available passage
-            if (!selectedPassageId || selectedPassageId >= passageLimit) {
+            // Update access message
+            const questionLimit = userTier === 'free' ? 20 : (userTier === 'pro' ? 30 : 40);
+            const passageMsg = userTier === 'free' ? `${maxPassages} Passage` : (userTier === 'pro' ? `${maxPassages}/${allPassages.length} Passages` : `All ${allPassages.length} Passages`);
+            document.getElementById('access-message').innerHTML = `
+                <span class="premium-lock">${userTier === 'free' ? '🆓' : userTier === 'pro' ? '⭐' : '🚀'} ${userTier.toUpperCase()}: ${passageMsg} (${questionLimit} questions)</span>
+                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
+                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}
+            `;
+
+            // Auto-select first passage
+            if (!selectedPassageId || selectedPassageId >= maxPassages) {
                 if (allPassages.length > 0) selectPassage(allPassages[0].id);
             }
         }
@@ -305,46 +250,50 @@
         function selectPassage(passageId) {
             const passage = allPassages.find(p => p.id === passageId);
             if (!passage) return;
-            
+
+            const maxPassages = userTier === 'free' ? 1 : (userTier === 'pro' ? Math.ceil(allPassages.length / 2) : allPassages.length);
             const index = allPassages.indexOf(passage);
-            const { passageLimit } = getTierLimits();
-            if (index >= passageLimit) {
-                alert(userTier === 'free' ? '⭐ Upgrade to Pro to access more passages!' : '🚀 Upgrade to Pro+ to access all passages!');
+            if (index >= maxPassages) {
+                alert('⭐ Upgrade to Pro to access more passages!');
                 return;
             }
 
             selectedPassageId = passageId;
             
-            // Update button states
+            // Update buttons
             document.querySelectorAll('.passage-btn').forEach((btn, i) => {
                 btn.classList.toggle('active', i === index);
             });
 
             // Display passage
-            passageContentEl.innerHTML = `<h6>${passage.title}</h6><p>${passage.text}</p>`;
+            document.getElementById('passage-content').innerHTML = `
+                <h6>${passage.title}</h6>
+                <p>${passage.text}</p>
+            `;
 
             // Load questions
-            const { questionLimit } = getTierLimits();
+            const questionLimit = userTier === 'free' ? 20 : (userTier === 'pro' ? 30 : 40);
             const allQ = passage.questions || [];
-            let shuffled = allQ.sort(() => Math.random() - 0.5);
+            const shuffled = [...allQ].sort(() => Math.random() - 0.5);
             questions = shuffled.slice(0, questionLimit);
             
             displayQuestions();
-            submitBtn.disabled = false;
+            document.getElementById('submitBtn').disabled = false;
         }
 
         // ============================================================
         // DISPLAY QUESTIONS
         // ============================================================
         function displayQuestions() {
+            const container = document.getElementById('test-questions');
             if (!questions || questions.length === 0) {
-                testQuestionsEl.innerHTML = '<p class="text-muted text-center">No questions available.</p>';
+                container.innerHTML = '<p class="text-muted text-center">No questions available.</p>';
                 return;
             }
-            
+
             let html = `<p class="text-muted">Showing ${questions.length} questions</p>`;
             questions.forEach((q, index) => {
-                const options = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
+                const options = q.options || ['A', 'B', 'C', 'D'];
                 html += `
                     <div class="question-card">
                         <p class="question-number">Question ${index + 1}</p>
@@ -352,15 +301,15 @@
                         <div class="options">
                             ${options.map((opt, i) => `
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="q${index}" value="${String.fromCharCode(65 + i)}" id="q${index}${String.fromCharCode(65 + i)}">
-                                    <label class="form-check-label" for="q${index}${String.fromCharCode(65 + i)}">${String.fromCharCode(65 + i)}. ${opt}</label>
+                                    <input class="form-check-input" type="radio" name="q${index}" value="${i}" id="q${index}${i}">
+                                    <label class="form-check-label" for="q${index}${i}">${String.fromCharCode(65 + i)}. ${opt}</label>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
                 `;
             });
-            testQuestionsEl.innerHTML = html;
+            container.innerHTML = html;
         }
 
         // ============================================================
@@ -370,121 +319,97 @@
             const answers = [];
             questions.forEach((q, index) => {
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                answers.push(selected ? selected.value : '');
+                answers.push(selected ? parseInt(selected.value) : -1);
             });
             return answers;
         }
 
         // ============================================================
-        // INITIALIZE AI (WITH RETRY)
+        // GRADE TEST (SIMPLE - NO AI)
         // ============================================================
-        async function initializeAI() {
-            try {
-                const user = firebase.auth().currentUser;
-                if (!user) {
-                    updateAIStatus('Not logged in', '#dc3545');
-                    return false;
-                }
+        function gradeTest(answers) {
+            let correct = 0;
+            let wrongAnswers = [];
 
-                updateAIStatus('Connecting...', '#ffc107');
-                
-                // Check if AIEmployee class exists
-                if (typeof AIEmployee === 'undefined') {
-                    console.error('❌ AIEmployee class not loaded');
-                    updateAIStatus('Error: AI not loaded', '#dc3545');
-                    return false;
+            questions.forEach((q, index) => {
+                const userAnswer = answers[index];
+                if (userAnswer === q.correct) {
+                    correct++;
+                } else if (userAnswer !== -1) {
+                    wrongAnswers.push({
+                        question: q.text,
+                        yourAnswer: q.options[userAnswer] || 'Not answered',
+                        correctAnswer: q.options[q.correct]
+                    });
                 }
+            });
 
-                const employee = new AIEmployee(user.uid);
-                await employee.loadMemory(user.uid);
-                window.aiEmployee = employee;
-                aiInitialized = true;
-                
-                updateAIStatus('✅ Ready', '#28a745');
-                console.log('🤖 AI Employee ready!');
-                return true;
-            } catch (error) {
-                console.error('❌ AI init failed:', error);
-                updateAIStatus('Retrying...', '#ffc107');
-                
-                if (initAttempts < 5) {
-                    initAttempts++;
-                    setTimeout(() => {
-                        initializeAI();
-                    }, 3000);
-                } else {
-                    updateAIStatus('⚠️ Refresh page', '#dc3545');
-                }
-                return false;
-            }
+            const percentage = Math.round((correct / questions.length) * 100);
+            let bandScore = 0;
+            if (percentage >= 90) bandScore = 9;
+            else if (percentage >= 80) bandScore = 8;
+            else if (percentage >= 70) bandScore = 7;
+            else if (percentage >= 60) bandScore = 6;
+            else if (percentage >= 50) bandScore = 5;
+            else if (percentage >= 40) bandScore = 4;
+            else bandScore = 3.5;
+
+            return {
+                correct,
+                total: questions.length,
+                percentage,
+                bandScore,
+                wrongAnswers
+            };
         }
 
         // ============================================================
         // SUBMIT TEST
         // ============================================================
-        async function submitTest() {
-            // Check if AI is ready
-            if (!aiInitialized || !window.aiEmployee) {
-                updateAIStatus('⏳ Loading...', '#ffc107');
-                const initialized = await initializeAI();
-                if (!initialized) {
-                    alert('🤖 AI system is loading... Please wait 5 seconds and try again.');
-                    return;
-                }
-                // Wait a moment then retry
-                setTimeout(() => submitTest(), 1000);
-                return;
-            }
-
+        function submitTest() {
             const answers = collectAnswers();
-            const unanswered = answers.filter(a => a === '').length;
-            
+            const unanswered = answers.filter(a => a === -1).length;
+
             if (unanswered > 0) {
                 alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`);
                 return;
             }
 
-            try {
-                updateAIStatus('⏳ Grading...', '#ffc107');
-                const loader = document.getElementById('loader');
-                const loaderText = document.getElementById('loader-text');
-                if (loader) loader.style.display = 'block';
-                if (loaderText) loaderText.textContent = '🤖 Grading your test...';
-                
-                const result = await window.aiEmployee.gradeTest('reading', answers, questions);
-                
-                // Hide loader
-                if (loader) loader.style.display = 'none';
-                
-                // Show results
-                const resultsDiv = document.getElementById('test-results');
-                if (resultsDiv) {
-                    resultsDiv.style.display = 'block';
-                    resultsDiv.innerHTML = `
-                        <h2>📊 Test Results</h2>
-                        <div class="score-card" style="background:rgba(255,255,255,0.15);padding:15px;border-radius:10px;margin:10px 0;">
-                            <h3>Score: ${result.score}/${result.total}</h3>
-                            <p>Band Score: ${result.bandScore || 'Calculating...'}</p>
-                            <p>Percentage: ${result.percentage || 0}%</p>
-                        </div>
-                        <div class="feedback-section" style="background:rgba(255,255,255,0.1);padding:15px;border-radius:10px;">
-                            <h3>📝 Feedback</h3>
-                            <ul style="list-style:none;padding:0;">
-                                ${result.weaknesses && result.weaknesses.length > 0 ? result.weaknesses.map(w => `<li>⚠️ ${w}</li>`).join('') : '<li>✅ Great job!</li>'}
-                                ${result.feedback ? result.feedback.map(f => `<li>${f}</li>`).join('') : ''}
-                            </ul>
-                        </div>
-                        ${result.needsApproval ? '<div style="background:rgba(255,215,0,0.2);padding:10px;border-radius:8px;margin-top:10px;">🔄 This test needs admin review. You\'ll receive feedback shortly.</div>' : ''}
-                    `;
-                }
-                
-                updateAIStatus('✅ Grading Complete', '#28a745');
-            } catch (error) {
-                console.error('❌ Grading failed:', error);
-                document.getElementById('loader').style.display = 'none';
-                updateAIStatus('❌ Error', '#dc3545');
-                alert('❌ Failed to grade test. Please try again.');
+            const result = gradeTest(answers);
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+
+            let wrongHtml = '';
+            if (result.wrongAnswers.length > 0) {
+                wrongHtml = `
+                    <h4>❌ Incorrect Answers</h4>
+                    <ul>
+                        ${result.wrongAnswers.map(w => `
+                            <li><strong>${w.question}</strong><br>
+                            Your answer: ${w.yourAnswer}<br>
+                            Correct answer: ${w.correctAnswer}</li>
+                        `).join('')}
+                    </ul>
+                `;
+            } else {
+                wrongHtml = '<p>🎉 All answers correct! Excellent work!</p>';
             }
+
+            resultsDiv.innerHTML = `
+                <h2>📊 Test Results</h2>
+                <div class="score-card">
+                    <h3>Score: ${result.correct}/${result.total}</h3>
+                    <p>Band Score: ${result.bandScore}</p>
+                    <p>Percentage: ${result.percentage}%</p>
+                </div>
+                <div>
+                    ${wrongHtml}
+                </div>
+                <button onclick="document.getElementById('results').style.display='none'" class="btn btn-light mt-3">Close</button>
+            `;
+
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
         // ============================================================
@@ -500,43 +425,18 @@
         // PAGE LOAD
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 Page loaded');
-            
-            // Load passages first
             loadPassages();
             
-            // Check auth state
             firebase.auth().onAuthStateChanged(async function(user) {
-                console.log('🔐 Auth state changed:', user ? 'Logged in' : 'Not logged in');
-                
                 if (user) {
-                    currentUser = user;
                     await checkUserPlan(user);
                     renderPassageButtons();
                     if (allPassages.length > 0) selectPassage(allPassages[0].id);
-                    
-                    // Initialize AI after 2 seconds
-                    setTimeout(async () => {
-                        await initializeAI();
-                    }, 2000);
                 } else {
-                    // Not logged in - redirect to login
                     window.location.href = 'login.html';
                 }
             });
         });
-
-        // ============================================================
-        // FALLBACK: If AI still not ready after 10 seconds
-        // ============================================================
-        setTimeout(async function() {
-            if (!aiInitialized && firebase.auth().currentUser) {
-                console.log('⚠️ Fallback: Forcing AI initialization...');
-                await initializeAI();
-            }
-        }, 10000);
-
-        console.log('✅ Reading Test ready');
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
