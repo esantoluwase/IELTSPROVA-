@@ -11,10 +11,10 @@
     <style>
         body { background: #f8f9fa; }
         .test-container { max-width: 900px; margin: 30px auto; padding: 20px; }
+        .audio-player { background: #2d1b69; padding: 20px; border-radius: 10px; color: white; margin-bottom: 30px; }
         .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .question-card:hover { box-shadow: 0 4px 20px rgba(108,99,255,0.15); }
         .question-number { color: #6c63ff; font-weight: bold; }
-        .audio-player { background: #2d1b69; padding: 15px; border-radius: 10px; color: white; margin-bottom: 20px; }
         .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
         .submit-btn:hover { transform: scale(1.05); color: white; }
         #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
@@ -24,6 +24,8 @@
         #test-results ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
         #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
         .spinner-border { width: 3rem; height: 3rem; }
+        .premium-lock { background: #ffd700; color: #2d1b69; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
+        .transcript-box { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -49,17 +51,27 @@
 
     <div class="container test-container">
         <h1 class="text-center mb-4">🎧 Listening Test</h1>
-        <p class="text-center text-muted">Listen carefully and answer all questions.</p>
         
+        <div id="access-message" class="text-center mb-3">
+            <span class="premium-lock">🔓 Free Access: 20 questions</span>
+        </div>
+
         <div class="audio-player text-center">
             <h5>🎵 Audio Player</h5>
             <audio controls style="width: 100%; max-width: 500px;">
                 <source src="assets/audio/sample.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
-            <p class="mt-2"><small>Note: In production, audio files will be loaded here</small></p>
+            <p class="mt-2"><small>Listen carefully and answer the questions below</small></p>
+            
+            <div class="transcript-box text-start">
+                <h6>📝 Audio Transcript (Preview)</h6>
+                <p class="text-muted" style="color: #ddd !important;">"Welcome to the IELTS listening test. You will hear a series of recordings..."</p>
+            </div>
         </div>
 
+        <p class="text-center text-muted">Answer all questions based on what you hear.</p>
+        
         <div id="test-questions"></div>
 
         <div class="text-center mt-4">
@@ -86,22 +98,60 @@
 
     <script>
         let questions = [];
+        let isPremium = false;
+        let aiInitialized = false;
+
+        async function checkUserPlan(user) {
+            try {
+                const doc = await firebase.firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                
+                if (doc.exists) {
+                    const data = doc.data();
+                    isPremium = data.plan === 'pro' || data.plan === 'pro+';
+                }
+                return isPremium;
+            } catch (error) {
+                console.error('Failed to check plan:', error);
+                return false;
+            }
+        }
 
         async function loadQuestions() {
             try {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    await checkUserPlan(user);
+                }
+
                 const allQuestions = window.listeningQuestions || [];
+                let questionLimit = isPremium ? 40 : 20;
+                
                 if (allQuestions.length === 0) {
-                    for (let i = 0; i < 20; i++) {
+                    const topics = ['Conversation', 'Lecture', 'Interview', 'News', 'Discussion'];
+                    for (let i = 0; i < questionLimit; i++) {
+                        const topic = topics[i % topics.length];
                         allQuestions.push({
                             id: i + 1,
-                            text: `Listening question ${i + 1}`,
-                            options: ['A', 'B', 'C', 'D'],
+                            text: `${topic} listening question ${i + 1}: What is the speaker's main point?`,
+                            options: [`Option A for ${topic}`, `Option B for ${topic}`, `Option C for ${topic}`, `Option D for ${topic}`],
                             correct: 'A',
                             type: 'multiple-choice'
                         });
                     }
                 }
-                questions = allQuestions.sort(() => Math.random() - 0.5).slice(0, 20);
+
+                questions = allQuestions
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, questionLimit);
+
+                document.getElementById('access-message').innerHTML = `
+                    <span class="premium-lock">${isPremium ? '⭐ Premium: All questions unlocked' : '🔓 Free Access: 20 questions'}</span>
+                    ${!isPremium ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro for more questions →</a></small>' : ''}
+                `;
+
                 displayQuestions();
             } catch (error) {
                 console.error('Failed to load questions:', error);
@@ -111,11 +161,14 @@
         function displayQuestions() {
             const container = document.getElementById('test-questions');
             let html = '';
+            
+            html += `<p class="text-muted">Showing ${questions.length} questions</p>`;
+            
             questions.forEach((q, index) => {
                 html += `
                     <div class="question-card">
                         <p class="question-number">Question ${index + 1}</p>
-                        <p>${q.text || q.question || `Listening question ${index + 1}`}</p>
+                        <p>${q.text || q.question || `Question ${index + 1}`}</p>
                         <div class="options">
                             ${q.options ? q.options.map((opt, i) => `
                                 <div class="form-check">
@@ -125,6 +178,8 @@
                             `).join('') : `
                                 <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="A" id="q${index}A"><label class="form-check-label" for="q${index}A">A. Option A</label></div>
                                 <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="B" id="q${index}B"><label class="form-check-label" for="q${index}B">B. Option B</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="C" id="q${index}C"><label class="form-check-label" for="q${index}C">C. Option C</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="D" id="q${index}D"><label class="form-check-label" for="q${index}D">D. Option D</label></div>
                             `}
                         </div>
                     </div>
@@ -142,17 +197,39 @@
             return answers;
         }
 
+        async function initializeAI() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) return false;
+
+                const employee = new AIEmployee(user.uid);
+                await employee.loadMemory(user.uid);
+                window.aiEmployee = employee;
+                aiInitialized = true;
+                console.log('🤖 AI Employee ready for Listening Test!');
+                return true;
+            } catch (error) {
+                console.error('AI Employee init failed:', error);
+                return false;
+            }
+        }
+
         async function submitTest() {
+            if (!aiInitialized || !window.aiEmployee) {
+                const initialized = await initializeAI();
+                if (!initialized) {
+                    alert('🤖 AI system is loading... Please wait 5 seconds and try again.');
+                    return;
+                }
+            }
+
             const answers = collectAnswers();
             const unanswered = answers.filter(a => a === '').length;
             if (unanswered > 0) {
                 alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`);
                 return;
             }
-            if (!window.aiEmployee) {
-                alert('🤖 AI system is loading... Please wait a moment and try again.');
-                return;
-            }
+
             try {
                 await submitTestForGrading('listening', answers, questions);
             } catch (error) {
@@ -161,18 +238,14 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadQuestions();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadQuestions();
+            
             firebase.auth().onAuthStateChanged(async function(user) {
                 if (user) {
-                    try {
-                        const employee = new AIEmployee(user.uid);
-                        await employee.loadMemory(user.uid);
-                        window.aiEmployee = employee;
-                        console.log('🤖 AI Employee ready for Listening Test!');
-                    } catch (error) {
-                        console.error('AI Employee init failed:', error);
-                    }
+                    await checkUserPlan(user);
+                    await loadQuestions();
+                    await initializeAI();
                 } else {
                     window.location.href = 'login.html';
                 }
@@ -188,4 +261,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-                        </html>
+                    </html>
