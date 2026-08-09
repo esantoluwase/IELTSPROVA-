@@ -1292,6 +1292,32 @@ body.dark-mode .leaderboard-link:hover {
         location.reload();
     }
 </script>
+<!-- AI Employee System -->
+<script src="js/ai-employee.js"></script>
+<script src="js/memory-manager.js"></script>
+<script src="js/auto-grader.js"></script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    firebase.auth().onAuthStateChanged(async function(user) {
+        if (user) {
+            const employee = new AIEmployee(user.uid);
+            await employee.loadMemory(user.uid);
+            window.aiEmployee = employee;
+            console.log('🤖 AI Employee ready!');
+        }
+    });
+});
+
+async function submitWriting() {
+    const essayText = document.getElementById('essay-input').value;
+    if (!window.aiEmployee) {
+        alert('AI system loading... Please wait.');
+        return;
+    }
+    const result = await submitTestForGrading('writing', essayText, writingQuestions);
+}
+</script>
+    
 </body>
     </html>
