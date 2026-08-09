@@ -39,4 +39,209 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reading-test.html">Reading</a></li>
+                    <li class="nav-item"><a class="nav-link" href="listening-test.html">Listening</a></li>
+                    <li class="nav-item"><a class="nav-link" href="writing-test.html">Writing</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="speaking-test.html">Speaking</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container test-container">
+        <h1 class="text-center mb-4">🎤 Speaking Test</h1>
+        <p class="text-center text-muted">Record your response or type your transcript. <span class="admin-badge">🔄 Admin Review Required</span></p>
+
+        <div class="question-card">
+            <h5 id="task-title">Part 1: Introduction</h5>
+            <p id="task-description">Describe a memorable event in your life. What happened and why was it memorable?</p>
+            
+            <div class="text-center my-3">
+                <button id="record-btn" class="record-btn" onclick="toggleRecording()">
+                    🎙️ Start Recording
+                </button>
+                <p class="text-muted mt-2"><small>Or type your response below</small></p>
+            </div>
+
+            <textarea id="speech-transcript" class="transcript-area" placeholder="Your response will appear here..."></textarea>
+            
+            <div class="mt-2">
+                <span class="word-count">📝 Words: <span id="word-count">0</span></span>
+                <span class="word-count ms-3">⏱️ Time: <span id="timer">15:00</span></span>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button onclick="submitSpeaking()" class="submit-btn">Submit Response 🚀</button>
+        </div>
+
+        <div id="test-results" style="display: none; margin-top: 30px;"></div>
+        <div id="loader" style="display: none; text-align: center; margin: 20px;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p id="loader-text" style="color: #6c63ff; font-weight: bold; margin-top: 10px;">🤖 Evaluating your speaking...</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/ai-employee.js"></script>
+    <script src="js/memory-manager.js"></script>
+    <script src="js/auto-grader.js"></script>
+
+    <script>
+        let speakingQuestions = [];
+        let timerInterval;
+        let timeSeconds = 900;
+        let isRecording = false;
+        let recognition = null;
+
+        function updateWordCount() {
+            const text = document.getElementById('speech-transcript').value;
+            const words = text.trim().split(/\s+/).length;
+            document.getElementById('word-count').textContent = text.trim() === '' ? 0 : words;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeSeconds--;
+                const minutes = Math.floor(timeSeconds / 60);
+                const seconds = timeSeconds % 60;
+                document.getElementById('timer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                if (timeSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert('⏰ Time is up! Please submit your response.');
+                }
+            }, 1000);
+        }
+
+        function toggleRecording() {
+            if (!recognition) {
+                // Initialize Web Speech API
+                if ('webkitSpeechRecognition' in window) {
+                    recognition = new webkitSpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    recognition.lang = 'en-US';
+                    
+                    recognition.onresult = function(event) {
+                        let transcript = '';
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            transcript += event.results[i][0].transcript;
+                        }
+                        const textarea = document.getElementById('speech-transcript');
+                        textarea.value += transcript;
+                        updateWordCount();
+                    };
+
+                    recognition.onerror = function(event) {
+                        console.error('Speech recognition error:', event.error);
+                        alert('⚠️ Speech recognition error. Please type your response instead.');
+                        document.getElementById('record-btn').textContent = '🎙️ Start Recording';
+                        document.getElementById('record-btn').classList.remove('recording');
+                        isRecording = false;
+                    };
+                } else {
+                    alert('⚠️ Speech recognition not supported in this browser. Please type your response.');
+                    return;
+                }
+            }
+
+            if (isRecording) {
+                recognition.stop();
+                document.getElementById('record-btn').textContent = '🎙️ Start Recording';
+                document.getElementById('record-btn').classList.remove('recording');
+                isRecording = false;
+            } else {
+                recognition.start();
+                document.getElementById('record-btn').textContent = '⏹️ Stop Recording';
+                document.getElementById('record-btn').classList.add('recording');
+                isRecording = true;
+            }
+        }
+
+        function loadSpeakingQuestions() {
+            try {
+                speakingQuestions = window.speakingQuestions || [];
+                if (speakingQuestions.length === 0) {
+                    speakingQuestions = [
+                        { id: 1, text: 'Describe a memorable event in your life. What happened and why was it memorable?', part: 'Part 1' },
+                        { id: 2, text: 'What are the advantages and disadvantages of living in a big city?', part: 'Part 2' }
+                    ];
+                }
+                const randomIndex = Math.floor(Math.random() * speakingQuestions.length);
+                const question = speakingQuestions[randomIndex];
+                document.getElementById('task-title').textContent = `${question.part || 'Part 1'}: Speaking Topic`;
+                document.getElementById('task-description').textContent = question.text || question.question;
+            } catch (error) {
+                console.error('Failed to load speaking questions:', error);
+            }
+        }
+
+        async function submitSpeaking() {
+            const transcript = document.getElementById('speech-transcript').value;
+            const wordCount = transcript.trim().split(/\s+/).length;
+            
+            if (wordCount < 50) {
+                alert(`⚠️ Please provide a more detailed response. You have written ${wordCount} words.`);
+                return;
+            }
+
+            if (!window.aiEmployee) {
+                alert('🤖 AI system is loading... Please wait a moment and try again.');
+                return;
+            }
+
+            const currentQuestion = document.getElementById('task-description').textContent;
+            const questions = [{ text: currentQuestion }];
+
+            try {
+                const result = await submitTestForGrading('speaking', transcript, questions);
+                if (result.needsApproval) {
+                    alert('📝 Your speaking response has been submitted for review. You will receive feedback shortly.');
+                }
+            } catch (error) {
+                console.error('Grading failed:', error);
+                alert('❌ Failed to submit response. Please try again.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSpeakingQuestions();
+            startTimer();
+            
+            // Update word count on input
+            document.getElementById('speech-transcript').addEventListener('input', updateWordCount);
+            
+            firebase.auth().onAuthStateChanged(async function(user) {
+                if (user) {
+                    try {
+                        const employee = new AIEmployee(user.uid);
+                        await employee.loadMemory(user.uid);
+                        window.aiEmployee = employee;
+                        console.log('🤖 AI Employee ready for Speaking Test!');
+                    } catch (error) {
+                        console.error('AI Employee init failed:', error);
+                    }
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+            </html>
