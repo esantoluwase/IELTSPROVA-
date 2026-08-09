@@ -27,9 +27,9 @@
         .loading .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #6c63ff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .error-msg { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
-        .success-msg { color: #155724; background: #d4edda; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
         .currency-badge { background: #2d1b69; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px; margin-left: 8px; }
         .plan-code { font-size: 11px; color: #888; margin-top: 4px; }
+        .btn-pay.tapped { transform: scale(0.95); } /* Visual feedback for mobile */
     </style>
 </head>
 <body>
@@ -54,7 +54,6 @@
         <p class="text-center text-muted">Choose a plan that works for you.</p>
 
         <div id="errorMsg" class="error-msg"></div>
-        <div id="successMsg" class="success-msg"></div>
 
         <div id="planSelection">
             <div class="plan-card" data-plan="pro" onclick="selectPlan('pro')">
@@ -87,7 +86,8 @@
             <p>Total: <strong id="selectedPlanPrice"></strong></p>
         </div>
 
-        <button id="payBtn" class="btn-pay mt-3" disabled onclick="initializePayment()">
+        <!-- BUTTON - NO ONCLICK ATTRIBUTE (Using JavaScript event listener) -->
+        <button id="payBtn" class="btn-pay mt-3" disabled>
             💳 Pay Now
         </button>
 
@@ -114,24 +114,18 @@
 
     <script>
         // ============================================================
-        // 🔐 PAYSTACK CONFIG - UPDATED WITH YOUR PLAN CODES & NGN PRICES
+        // 🔐 PAYSTACK CONFIG
         // ============================================================
         const CONFIG = {
             PAYSTACK_PUBLIC_KEY: 'pk_live_745c9817e91e0698cb32aea110be95eadbe68eda',
-            
-            // ✅ YOUR PLAN CODES FROM PAYSTACK
             PLANS: {
-                pro: 'PLN_dzdxu8wpq6x4jbl',        // Pro plan code
-                proplus: 'PLN_8uydr5l3vasjmxm'     // Pro+ plan code
+                pro: 'PLN_dzdxu8wpq6x4jbl',
+                proplus: 'PLN_8uydr5l3vasjmxm'
             },
-            
-            // ✅ NGN PRICES (in kobo - 1 NGN = 100 kobo)
             PRICES: {
-                pro: 1230000,    // ₦12,300
-                proplus: 2603000 // ₦26,030
+                pro: 1230000,
+                proplus: 2603000
             },
-            
-            // Display prices for UI
             DISPLAY_PRICES: {
                 pro: '₦12,300',
                 proplus: '₦26,030'
@@ -165,8 +159,6 @@
             payBtn.textContent = `💳 Pay ${CONFIG.DISPLAY_PRICES[plan]}`;
             
             console.log('✅ Plan selected:', plan);
-            console.log('💰 Price:', CONFIG.DISPLAY_PRICES[plan]);
-            console.log('🔑 Plan Code:', CONFIG.PLANS[plan]);
         }
 
         // ============================================================
@@ -194,11 +186,9 @@
             const reference = 'PROVA-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7);
 
             console.log('📧 Email:', userEmail);
-            console.log('💰 Amount (kobo):', amount);
             console.log('💰 Amount (NGN):', amount / 100);
             console.log('📋 Plan:', planName);
             console.log('🔑 Plan Code:', planCode);
-            console.log('🔑 Reference:', reference);
 
             document.getElementById('loadingIndicator').style.display = 'block';
             document.getElementById('payBtn').disabled = true;
@@ -209,16 +199,13 @@
                     throw new Error('Paystack library not loaded. Please check your internet connection.');
                 }
 
-                // ============================================================
-                // ✅ PAYSTACK PAYMENT - USING PLAN CODE
-                // ============================================================
                 const handler = PaystackPop.setup({
                     key: CONFIG.PAYSTACK_PUBLIC_KEY,
                     email: userEmail,
                     amount: amount,
-                    currency: 'NGN',  // ✅ Nigerian Naira
+                    currency: 'NGN',
                     ref: reference,
-                    plan: planCode,   // ✅ Using your Paystack plan code
+                    plan: planCode,
                     metadata: {
                         custom_fields: [
                             {
@@ -263,6 +250,7 @@
             const errorEl = document.getElementById('errorMsg');
             errorEl.textContent = '⚠️ ' + message;
             errorEl.style.display = 'block';
+            setTimeout(() => { errorEl.style.display = 'none'; }, 5000);
         }
 
         // ============================================================
@@ -276,7 +264,6 @@
                     return;
                 }
 
-                // ✅ Update user's plan in Firebase
                 await firebase.firestore()
                     .collection('users')
                     .doc(user.uid)
@@ -285,13 +272,11 @@
                         planUpdatedAt: new Date().toISOString(),
                         paymentReference: response.reference,
                         paymentStatus: 'completed',
-                        // Store the plan code for reference
                         planCode: CONFIG.PLANS[selectedPlan]
                     });
 
                 console.log('✅ User plan updated to:', planName);
                 alert(`🎉 Success! You are now on the ${planName} plan!`);
-                
                 window.location.href = 'dashboard.html';
 
             } catch (error) {
@@ -310,20 +295,26 @@
         }
 
         // ============================================================
-        // PAGE LOAD
+        // MOBILE-FRIENDLY CLICK HANDLER - FIX FOR VIVO Y15S!
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Checkout page loaded');
             console.log('🔐 Paystack Public Key:', CONFIG.PAYSTACK_PUBLIC_KEY.substring(0, 20) + '...');
             console.log('📋 Plans configured:', CONFIG.PLANS);
-            console.log('💰 Prices:', CONFIG.DISPLAY_PRICES);
             
             if (typeof PaystackPop !== 'undefined') {
                 console.log('✅ Paystack library loaded');
             } else {
                 console.warn('⚠️ Paystack library not loaded yet');
+                // Retry loading Paystack
+                setTimeout(function() {
+                    if (typeof PaystackPop !== 'undefined') {
+                        console.log('✅ Paystack library loaded (after retry)');
+                    }
+                }, 3000);
             }
 
+            // Check user
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     console.log('✅ User logged in:', user.email);
@@ -332,9 +323,48 @@
                     console.log('❌ No user logged in');
                 }
             });
+
+            // ============================================================
+            // ✅ MOBILE CLICK FIX - Works on Vivo Y15S!
+            // ============================================================
+            const payBtn = document.getElementById('payBtn');
+            
+            // Remove any existing onclick
+            payBtn.removeAttribute('onclick');
+            
+            // Click handler
+            payBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🖱️ Button clicked!');
+                this.classList.add('tapped');
+                
+                if (!this.disabled) {
+                    initializePayment();
+                } else {
+                    console.log('⚠️ Button is disabled');
+                }
+                
+                setTimeout(() => {
+                    this.classList.remove('tapped');
+                }, 200);
+            });
+            
+            // Touch handler for mobile
+            payBtn.addEventListener('touchstart', function(e) {
+                console.log('📱 Touch started on button');
+                this.classList.add('tapped');
+            }, { passive: true });
+            
+            payBtn.addEventListener('touchend', function(e) {
+                console.log('📱 Touch ended on button');
+                this.classList.remove('tapped');
+            }, { passive: true });
+
+            console.log('✅ Mobile-friendly click handler installed');
         });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-    </html>
+                                                </html>
