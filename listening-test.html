@@ -4,52 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IELTSProva - Listening Test</title>
-    <meta name="description" content="Practice IELTS Listening with AI-powered grading">
     <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        body { background: #f8f9fa; }
-        .test-container { max-width: 900px; margin: 30px auto; padding: 20px; }
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .test-container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
         .audio-player { background: #2d1b69; padding: 20px; border-radius: 10px; color: white; margin-bottom: 30px; }
-        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .question-card:hover { box-shadow: 0 4px 20px rgba(108,99,255,0.15); }
+        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #f0edff; }
         .question-number { color: #6c63ff; font-weight: bold; }
         .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
-        .submit-btn:hover { transform: scale(1.05); color: white; }
-        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
-        #test-results .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
-        #test-results .feedback-section { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; }
-        #test-results ul { list-style: none; padding: 0; }
-        #test-results ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
-        .spinner-border { width: 3rem; height: 3rem; }
-        .premium-lock { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
-        .premium-lock.free { background: #28a745; color: white; }
-        .premium-lock.pro { background: #ffd700; color: #2d1b69; }
-        .premium-lock.proplus { background: #6c63ff; color: white; }
-        #ai-status { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; }
-        .passage-selector { background: white; padding: 20px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .passage-btn { padding: 10px 20px; margin: 5px; border: 2px solid #ddd; border-radius: 8px; background: white; transition: all 0.3s; cursor: pointer; }
+        .submit-btn:hover { transform: scale(1.05); }
+        .results-box { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; margin-top: 20px; display: none; }
+        .results-box .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        .results-box ul { list-style: none; padding: 0; }
+        .results-box ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .premium-lock { background: #ffd700; color: #2d1b69; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
+        nav { background: #2d1b69 !important; padding: 10px 0; }
+        nav a { color: white !important; }
+        nav .navbar-brand span { color: #ffd700; }
+        .form-check { padding: 4px 0; }
+        .options { padding-left: 10px; }
+        .passage-selector { background: #f8f5ff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #e8e0f0; }
+        .passage-btn { padding: 8px 16px; margin: 4px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s; }
         .passage-btn:hover { border-color: #6c63ff; }
         .passage-btn.active { border-color: #6c63ff; background: #f0edff; }
         .passage-btn.locked { opacity: 0.5; cursor: not-allowed; }
-        .passage-btn.locked::after { content: ' 🔒'; color: #dc3545; }
-        .passage-btn.free::after { content: ' 🆓'; color: #28a745; }
-        .passage-btn.pro::after { content: ' ⭐'; color: #ffd700; }
-        .passage-btn.proplus::after { content: ' 🚀'; color: #6c63ff; }
-        .upgrade-banner { background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 15px 20px; border-radius: 10px; margin: 15px 0; text-align: center; }
-        .upgrade-banner a { color: #ffd700; font-weight: bold; }
         .transcript-box { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 15px; }
-        .passage-box { background: #f0edff; padding: 20px; border-radius: 10px; border-left: 4px solid #6c63ff; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #2d1b69;">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html"><span style="color: #ffd700;">IELTS</span>Prova</a>
+            <a class="navbar-brand" href="index.html"><span>IELTS</span>Prova</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -68,26 +56,25 @@
 
     <div class="container test-container">
         <h1 class="text-center mb-4">🎧 Listening Test</h1>
-        
-        <div id="ai-status">
-            🤖 AI System: <span id="ai-status-text" style="color: #ffc107;">Initializing...</span>
+
+        <div id="access-message" class="text-center mb-3">
+            <span class="premium-lock">🔓 Free Access: 1 Audio (20 questions)</span>
         </div>
 
-        <div id="access-message" class="text-center mb-3"></div>
-
-        <div class="passage-selector" id="audioSelector">
+        <!-- Audio Selector -->
+        <div class="passage-selector">
             <h5>🎵 Select a Listening Audio</h5>
             <div id="audioButtons"></div>
-            <div id="upgradeBanner" class="upgrade-banner" style="display: none;">
-                ⭐ <strong>Upgrade to Pro or Pro+</strong> to unlock more audios and questions!
-                <a href="checkout.html">Upgrade Now →</a>
+            <div id="upgradeBanner" style="display: none; background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 10px 15px; border-radius: 8px; margin-top: 10px; text-align: center;">
+                ⭐ <strong>Upgrade to Pro</strong> to unlock all audios! <a href="checkout.html" style="color: #ffd700; font-weight: bold;">Upgrade Now →</a>
             </div>
         </div>
 
+        <!-- Audio Player -->
         <div class="audio-player text-center">
             <h5>🎵 Audio Player</h5>
-            <audio controls style="width: 100%; max-width: 500px;" id="audioPlayer">
-                <source src="" type="audio/mpeg">
+            <audio controls style="width: 100%; max-width: 500px;">
+                <source src="assets/audio/sample.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
             <div class="transcript-box text-start">
@@ -96,71 +83,34 @@
             </div>
         </div>
 
-        <div id="passage-container" class="passage-box">
-            <h5>📄 Audio Description</h5>
-            <div id="passage-content">
-                <p>Select an audio above to begin.</p>
-            </div>
-        </div>
-
         <p class="text-center text-muted">Answer all questions based on what you hear.</p>
         
-        <div id="test-questions">
-            <p class="text-muted text-center">Select an audio to load questions.</p>
-        </div>
+        <div id="test-questions"></div>
 
         <div class="text-center mt-4">
             <button onclick="submitTest()" class="submit-btn" id="submitBtn" disabled>Submit Test 🚀</button>
         </div>
 
-        <div id="test-results" style="display: none; margin-top: 30px;"></div>
-        <div id="loader" style="display: none; text-align: center; margin: 20px;">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p id="loader-text" style="color: #6c63ff; font-weight: bold; margin-top: 10px;">🤖 Grading your test...</p>
-        </div>
+        <div id="results" class="results-box"></div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- FIXED SCRIPT PATHS - CORRECT!                              -->
+    <!-- SCRIPTS - NO AI!                                            -->
     <!-- ============================================================ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="questions.js"></script>
-    <script src="js/ai-employee.js"></script>
-    <script src="js/memory-manager.js"></script>
-    <script src="js/auto-grader.js"></script>
 
     <script>
-        const TIERS = {
-            free: { name: 'Free', passageLimit: 1, questionLimit: 20, badge: '🆓 Free', badgeClass: 'free' },
-            pro: { name: 'Pro', passageLimit: 0.5, questionLimit: 0.5, badge: '⭐ Pro', badgeClass: 'pro' },
-            proplus: { name: 'Pro+', passageLimit: 1, questionLimit: 1, badge: '🚀 Pro+', badgeClass: 'proplus' }
-        };
-
+        // ============================================================
+        // SIMPLE WORKING VERSION - NO AI
+        // ============================================================
         let allAudios = [];
         let questions = [];
-        let userTier = 'free';
-        let aiInitialized = false;
-        let initAttempts = 0;
         let selectedAudioId = null;
-
-        const audioButtonsEl = document.getElementById('audioButtons');
-        const passageContentEl = document.getElementById('passage-content');
-        const testQuestionsEl = document.getElementById('test-questions');
-        const submitBtn = document.getElementById('submitBtn');
-        const upgradeBannerEl = document.getElementById('upgradeBanner');
-        const accessMessageEl = document.getElementById('access-message');
-        const transcriptTextEl = document.getElementById('transcriptText');
-        const audioPlayerEl = document.getElementById('audioPlayer');
-
-        function updateAIStatus(status, color = '#ffc107') {
-            const statusText = document.getElementById('ai-status-text');
-            if (statusText) { statusText.textContent = status; statusText.style.color = color; }
-        }
+        let userTier = 'free';
 
         async function checkUserPlan(user) {
             try {
@@ -168,85 +118,92 @@
                 if (doc.exists) {
                     const plan = doc.data().plan || 'free';
                     userTier = (plan === 'pro' || plan === 'Pro') ? 'pro' : 
-                               (plan === 'pro+' || plan === 'Pro+' || plan === 'proplus') ? 'proplus' : 'free';
-                } else { userTier = 'free'; }
-                console.log('📊 User tier:', userTier.toUpperCase());
+                               (plan === 'pro+' || plan === 'Pro+') ? 'proplus' : 'free';
+                }
+                console.log('📊 User tier:', userTier);
                 return userTier;
-            } catch (error) { console.error('Failed to check plan:', error); userTier = 'free'; return 'free'; }
+            } catch (error) {
+                console.error('Failed to check plan:', error);
+                userTier = 'free';
+                return 'free';
+            }
         }
 
-        function getTierLimits() {
-            const total = allAudios.length;
-            let passageLimit, questionLimit;
-            if (userTier === 'free') { passageLimit = 1; questionLimit = 20; }
-            else if (userTier === 'pro') { passageLimit = Math.max(1, Math.ceil(total * 0.5)); questionLimit = 30; }
-            else if (userTier === 'proplus') { passageLimit = total; questionLimit = 40; }
-            return { passageLimit, questionLimit };
+        function generateQuestions(topic) {
+            const types = ['Main Idea', 'Detail', 'Inference', 'Vocabulary', 'Purpose'];
+            const qs = [];
+            for (let i = 0; i < 40; i++) {
+                const type = types[i % types.length];
+                qs.push({
+                    id: i + 1,
+                    text: `${type} question ${i + 1}: Based on the audio about ${topic}, which statement is true?`,
+                    options: [
+                        `${topic} has a significant impact`,
+                        `${topic} is not mentioned`,
+                        `${topic} is the main focus`,
+                        `${topic} has both positive and negative effects`
+                    ],
+                    correct: 0
+                });
+            }
+            return qs;
         }
 
         function loadAudios() {
             if (window.listeningPassages && window.listeningPassages.length > 0) {
                 allAudios = window.listeningPassages;
+                console.log('📚 Audios loaded from questions.js:', allAudios.length);
             } else {
                 allAudios = [
-                    { id: 1, title: 'University Lecture', text: 'A professor discusses climate change impacts.', transcript: 'Welcome to today\'s lecture...', audio: 'assets/audio/lecture1.mp3', questions: [] },
-                    { id: 2, title: 'Job Interview', text: 'A candidate interviews for a marketing position.', transcript: 'Interviewer: Tell me about yourself...', audio: 'assets/audio/interview1.mp3', questions: [] },
-                    { id: 3, title: 'News Report', text: 'A news anchor reports on the latest technology trends.', transcript: 'Good evening, tonight we look at AI...', audio: 'assets/audio/news1.mp3', questions: [] },
-                    { id: 4, title: 'Conversation', text: 'Two friends discuss their travel experiences.', transcript: 'Person A: How was your trip?', audio: 'assets/audio/conversation1.mp3', questions: [] },
-                    { id: 5, title: 'Academic Presentation', text: 'A researcher presents findings on renewable energy.', transcript: 'Good morning everyone...', audio: 'assets/audio/presentation1.mp3', questions: [] }
+                    { id: 1, title: 'University Lecture', text: 'A professor discusses climate change impacts on coastal communities.', transcript: 'Welcome to today\'s lecture on climate science...', questions: generateQuestions('Lecture') },
+                    { id: 2, title: 'Job Interview', text: 'A candidate interviews for a marketing position at a tech company.', transcript: 'Interviewer: Tell me about yourself...', questions: generateQuestions('Interview') },
+                    { id: 3, title: 'News Report', text: 'A news anchor reports on the latest technology trends.', transcript: 'Good evening, tonight we look at the rise of AI...', questions: generateQuestions('News') },
+                    { id: 4, title: 'Conversation', text: 'Two friends discuss their travel experiences in Europe.', transcript: 'Person A: How was your trip to Paris?', questions: generateQuestions('Travel') },
+                    { id: 5, title: 'Academic Presentation', text: 'A researcher presents findings on renewable energy sources.', transcript: 'Good morning everyone. Today I\'ll be presenting...', questions: generateQuestions('Renewable Energy') }
                 ];
-                allAudios.forEach((a) => {
-                    a.questions = [];
-                    for (let i = 0; i < 40; i++) {
-                        a.questions.push({
-                            id: i + 1,
-                            text: `Listening question ${i + 1}: What is the main topic?`,
-                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-                            correct: 'A',
-                            type: 'multiple-choice'
-                        });
-                    }
-                });
+                console.log('📚 Using fallback audios');
             }
             renderAudioButtons();
         }
 
         function renderAudioButtons() {
-            const { passageLimit, questionLimit } = getTierLimits();
+            const maxAudios = userTier === 'free' ? 1 : (userTier === 'pro' ? Math.ceil(allAudios.length / 2) : allAudios.length);
+            const container = document.getElementById('audioButtons');
             let html = '';
+            
             allAudios.forEach((audio, index) => {
-                const isLocked = index >= passageLimit;
+                const isLocked = index >= maxAudios;
                 const isActive = selectedAudioId === audio.id;
-                let statusClass = isLocked ? 'locked' : (userTier === 'proplus' ? 'proplus' : (userTier === 'pro' ? 'pro' : 'free'));
                 html += `
-                    <button class="passage-btn ${statusClass} ${isActive ? 'active' : ''}"
+                    <button class="passage-btn ${isLocked ? 'locked' : ''} ${isActive ? 'active' : ''}"
                             onclick="${isLocked ? '' : `selectAudio(${audio.id})`}"
                             ${isLocked ? 'disabled' : ''}>
-                        ${audio.title} ${isLocked ? '🔒' : ''}
+                        ${isLocked ? '🔒 ' : ''}${audio.title}
                     </button>
                 `;
             });
-            audioButtonsEl.innerHTML = html;
 
-            const tierInfo = TIERS[userTier];
-            let messageText = userTier === 'free' ? `🆓 Free: ${passageLimit} Audio (${questionLimit} questions)` :
-                             userTier === 'pro' ? `⭐ Pro: ${passageLimit}/${allAudios.length} Audios (${questionLimit} questions)` :
-                             `🚀 Pro+: All ${allAudios.length} Audios (${questionLimit} questions)`;
-            accessMessageEl.innerHTML = `<span class="premium-lock ${tierInfo.badgeClass}">${messageText}</span>
-                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
-                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}`;
+            container.innerHTML = html;
 
-            if (userTier === 'free') {
-                upgradeBannerEl.innerHTML = `⭐ <strong>Upgrade to Pro</strong> to access 50% of audios and questions! <a href="checkout.html">Upgrade Now →</a>`;
-                upgradeBannerEl.style.display = 'block';
-            } else if (userTier === 'pro') {
-                upgradeBannerEl.innerHTML = `🚀 <strong>Upgrade to Pro+</strong> to access ALL audios and questions! <a href="checkout.html">Upgrade Now →</a>`;
-                upgradeBannerEl.style.display = 'block';
+            const banner = document.getElementById('upgradeBanner');
+            if (userTier === 'free' && allAudios.length > 1) {
+                banner.style.display = 'block';
+            } else if (userTier === 'pro' && allAudios.length > maxAudios) {
+                banner.innerHTML = '🚀 <strong>Upgrade to Pro+</strong> to access ALL audios! <a href="checkout.html" style="color: #ffd700; font-weight: bold;">Upgrade Now →</a>';
+                banner.style.display = 'block';
             } else {
-                upgradeBannerEl.style.display = 'none';
+                banner.style.display = 'none';
             }
 
-            if (!selectedAudioId || selectedAudioId >= passageLimit) {
+            const questionLimit = userTier === 'free' ? 20 : (userTier === 'pro' ? 30 : 40);
+            const passageMsg = userTier === 'free' ? `${maxAudios} Audio` : (userTier === 'pro' ? `${maxAudios}/${allAudios.length} Audios` : `All ${allAudios.length} Audios`);
+            document.getElementById('access-message').innerHTML = `
+                <span class="premium-lock">${userTier === 'free' ? '🆓' : userTier === 'pro' ? '⭐' : '🚀'} ${userTier.toUpperCase()}: ${passageMsg} (${questionLimit} questions)</span>
+                ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
+                ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}
+            `;
+
+            if (!selectedAudioId || selectedAudioId >= maxAudios) {
                 if (allAudios.length > 0) selectAudio(allAudios[0].id);
             }
         }
@@ -254,122 +211,153 @@
         function selectAudio(audioId) {
             const audio = allAudios.find(a => a.id === audioId);
             if (!audio) return;
+
+            const maxAudios = userTier === 'free' ? 1 : (userTier === 'pro' ? Math.ceil(allAudios.length / 2) : allAudios.length);
             const index = allAudios.indexOf(audio);
-            const { passageLimit } = getTierLimits();
-            if (index >= passageLimit) {
-                alert(userTier === 'free' ? '⭐ Upgrade to Pro to access more audios!' : '🚀 Upgrade to Pro+ to access all audios!');
+            if (index >= maxAudios) {
+                alert('⭐ Upgrade to Pro to access more audios!');
                 return;
             }
 
             selectedAudioId = audioId;
             document.querySelectorAll('.passage-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
-            passageContentEl.innerHTML = `<h6>${audio.title}</h6><p>${audio.text}</p>`;
-            transcriptTextEl.textContent = audio.transcript || 'Transcript not available.';
-            if (audio.audio) audioPlayerEl.src = audio.audio;
 
-            const { questionLimit } = getTierLimits();
+            document.getElementById('transcriptText').textContent = audio.transcript || 'Transcript not available.';
+
+            const questionLimit = userTier === 'free' ? 20 : (userTier === 'pro' ? 30 : 40);
             const allQ = audio.questions || [];
-            let shuffled = allQ.sort(() => Math.random() - 0.5);
-            questions = userTier === 'free' ? shuffled.slice(0, 20) :
-                       userTier === 'pro' ? shuffled.slice(0, 30) :
-                       shuffled.slice(0, 40);
+            const shuffled = [...allQ].sort(() => Math.random() - 0.5);
+            questions = shuffled.slice(0, questionLimit);
+            
             displayQuestions();
-            submitBtn.disabled = false;
+            document.getElementById('submitBtn').disabled = false;
         }
 
         function displayQuestions() {
+            const container = document.getElementById('test-questions');
             if (!questions || questions.length === 0) {
-                testQuestionsEl.innerHTML = '<p class="text-muted text-center">No questions available.</p>';
+                container.innerHTML = '<p class="text-muted text-center">No questions available.</p>';
                 return;
             }
+
             let html = `<p class="text-muted">Showing ${questions.length} questions</p>`;
             questions.forEach((q, index) => {
+                const options = q.options || ['A', 'B', 'C', 'D'];
                 html += `
                     <div class="question-card">
                         <p class="question-number">Question ${index + 1}</p>
-                        <p>${q.text || q.question || `Question ${index + 1}`}</p>
+                        <p>${q.text}</p>
                         <div class="options">
-                            ${q.options ? q.options.map((opt, i) => `
+                            ${options.map((opt, i) => `
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="q${index}" value="${String.fromCharCode(65 + i)}" id="q${index}${String.fromCharCode(65 + i)}">
-                                    <label class="form-check-label" for="q${index}${String.fromCharCode(65 + i)}">${String.fromCharCode(65 + i)}. ${opt}</label>
+                                    <input class="form-check-input" type="radio" name="q${index}" value="${i}" id="q${index}${i}">
+                                    <label class="form-check-label" for="q${index}${i}">${String.fromCharCode(65 + i)}. ${opt}</label>
                                 </div>
-                            `).join('') : `
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="A" id="q${index}A"><label class="form-check-label" for="q${index}A">A. Option A</label></div>
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="B" id="q${index}B"><label class="form-check-label" for="q${index}B">B. Option B</label></div>
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="C" id="q${index}C"><label class="form-check-label" for="q${index}C">C. Option C</label></div>
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="D" id="q${index}D"><label class="form-check-label" for="q${index}D">D. Option D</label></div>
-                            `}
+                            `).join('')}
                         </div>
                     </div>
                 `;
             });
-            testQuestionsEl.innerHTML = html;
+            container.innerHTML = html;
         }
 
         function collectAnswers() {
             const answers = [];
             questions.forEach((q, index) => {
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                answers.push(selected ? selected.value : '');
+                answers.push(selected ? parseInt(selected.value) : -1);
             });
             return answers;
         }
 
-        async function initializeAI() {
-            try {
-                const user = firebase.auth().currentUser;
-                if (!user) { updateAIStatus('Not logged in', '#dc3545'); return false; }
-                updateAIStatus('Connecting...', '#ffc107');
-                const employee = new AIEmployee(user.uid);
-                await employee.loadMemory(user.uid);
-                window.aiEmployee = employee;
-                aiInitialized = true;
-                updateAIStatus('✅ Ready', '#28a745');
-                return true;
-            } catch (error) {
-                console.error('AI init failed:', error);
-                updateAIStatus('Connecting... Retrying', '#ffc107');
-                if (initAttempts < 5) { initAttempts++; setTimeout(initializeAI, 3000); } 
-                else { updateAIStatus('⚠️ Refresh page', '#dc3545'); }
-                return false;
-            }
+        function gradeTest(answers) {
+            let correct = 0;
+            let wrongAnswers = [];
+
+            questions.forEach((q, index) => {
+                const userAnswer = answers[index];
+                if (userAnswer === q.correct) {
+                    correct++;
+                } else if (userAnswer !== -1) {
+                    wrongAnswers.push({
+                        question: q.text,
+                        yourAnswer: q.options[userAnswer] || 'Not answered',
+                        correctAnswer: q.options[q.correct]
+                    });
+                }
+            });
+
+            const percentage = Math.round((correct / questions.length) * 100);
+            let bandScore = 0;
+            if (percentage >= 90) bandScore = 9;
+            else if (percentage >= 80) bandScore = 8;
+            else if (percentage >= 70) bandScore = 7;
+            else if (percentage >= 60) bandScore = 6;
+            else if (percentage >= 50) bandScore = 5;
+            else if (percentage >= 40) bandScore = 4;
+            else bandScore = 3.5;
+
+            return { correct, total: questions.length, percentage, bandScore, wrongAnswers };
         }
 
-        async function submitTest() {
-            if (!aiInitialized || !window.aiEmployee) {
-                updateAIStatus('⏳ Loading...', '#ffc107');
-                const initialized = await initializeAI();
-                if (!initialized) { alert('🤖 AI system is loading... Please wait 5 seconds and try again.'); return; }
-                setTimeout(submitTest, 1000); return;
-            }
+        function submitTest() {
             const answers = collectAnswers();
-            const unanswered = answers.filter(a => a === '').length;
-            if (unanswered > 0) { alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`); return; }
-            try {
-                updateAIStatus('⏳ Grading...', '#ffc107');
-                await submitTestForGrading('listening', answers, questions);
-                updateAIStatus('✅ Grading Complete', '#28a745');
-            } catch (error) {
-                console.error('Grading failed:', error);
-                updateAIStatus('❌ Error', '#dc3545');
-                alert('❌ Failed to grade test. Please try again.');
+            const unanswered = answers.filter(a => a === -1).length;
+
+            if (unanswered > 0) {
+                alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`);
+                return;
             }
+
+            const result = gradeTest(answers);
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+
+            let wrongHtml = '';
+            if (result.wrongAnswers.length > 0) {
+                wrongHtml = `
+                    <h4>❌ Incorrect Answers</h4>
+                    <ul>
+                        ${result.wrongAnswers.map(w => `
+                            <li><strong>${w.question}</strong><br>
+                            Your answer: ${w.yourAnswer}<br>
+                            Correct answer: ${w.correctAnswer}</li>
+                        `).join('')}
+                    </ul>
+                `;
+            } else {
+                wrongHtml = '<p>🎉 All answers correct! Excellent work!</p>';
+            }
+
+            resultsDiv.innerHTML = `
+                <h2>📊 Test Results</h2>
+                <div class="score-card">
+                    <h3>Score: ${result.correct}/${result.total}</h3>
+                    <p>Band Score: ${result.bandScore}</p>
+                    <p>Percentage: ${result.percentage}%</p>
+                </div>
+                <div>${wrongHtml}</div>
+                <button onclick="document.getElementById('results').style.display='none'" class="btn btn-light mt-3">Close</button>
+            `;
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
+        function logout() {
+            firebase.auth().signOut().then(() => { window.location.href = 'index.html'; });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
             loadAudios();
             firebase.auth().onAuthStateChanged(async function(user) {
                 if (user) {
                     await checkUserPlan(user);
                     renderAudioButtons();
                     if (allAudios.length > 0) selectAudio(allAudios[0].id);
-                    setTimeout(async () => { await initializeAI(); }, 2000);
-                } else { window.location.href = 'login.html'; }
+                } else {
+                    window.location.href = 'login.html';
+                }
             });
         });
-
-        function logout() { firebase.auth().signOut().then(() => { window.location.href = 'index.html'; }); }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
