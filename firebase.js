@@ -1,5 +1,5 @@
 // ============================================================
-// FIREBASE CONFIGURATION - DO NOT REMOVE
+// 🔥 FIREBASE CONFIGURATION
 // ============================================================
 
 const firebaseConfig = {
@@ -17,4 +17,13 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Firestore
 const db = firebase.firestore();
 
-console.log('🔥 Firebase initialized successfully');
+// ============================================================
+// 🔐 PAYSTACK CONFIG - PUBLIC KEY ONLY (Safe for frontend)
+// ============================================================
+const PAYSTACK_CONFIG = {
+    publicKey: 'pk_live_745c9817e91e0698cb32aea110be95eadbe68eda'
+    // ✅ NO SECRET KEY HERE - IT STAYS ON THE SERVER!
+};
+
+console.log('🔥 Firebase initialized');
+console.log('🔐 Paystack Public Key loaded');
