@@ -25,7 +25,9 @@
         #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
         .spinner-border { width: 3rem; height: 3rem; }
         .premium-lock { background: #ffd700; color: #2d1b69; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
-        .transcript-box { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #ddd; }
+        .transcript-box { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 15px; }
+        #ai-status { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; }
+        #ai-status-text { font-weight: bold; }
     </style>
 </head>
 <body>
@@ -52,6 +54,11 @@
     <div class="container test-container">
         <h1 class="text-center mb-4">🎧 Listening Test</h1>
         
+        <!-- AI Status Indicator -->
+        <div id="ai-status">
+            🤖 AI System: <span id="ai-status-text" style="color: #ffc107;">Initializing...</span>
+        </div>
+
         <div id="access-message" class="text-center mb-3">
             <span class="premium-lock">🔓 Free Access: 20 questions</span>
         </div>
@@ -66,7 +73,7 @@
             
             <div class="transcript-box text-start">
                 <h6>📝 Audio Transcript (Preview)</h6>
-                <p class="text-muted" style="color: #ddd !important;">"Welcome to the IELTS listening test. You will hear a series of recordings..."</p>
+                <p style="color: #ddd !important;">"Welcome to the IELTS listening test. You will hear a series of recordings..."</p>
             </div>
         </div>
 
@@ -100,6 +107,15 @@
         let questions = [];
         let isPremium = false;
         let aiInitialized = false;
+        let initAttempts = 0;
+
+        function updateAIStatus(status, color = '#ffc107') {
+            const statusText = document.getElementById('ai-status-text');
+            if (statusText) {
+                statusText.textContent = status;
+                statusText.style.color = color;
+            }
+        }
 
         async function checkUserPlan(user) {
             try {
@@ -147,10 +163,13 @@
                     .sort(() => Math.random() - 0.5)
                     .slice(0, questionLimit);
 
-                document.getElementById('access-message').innerHTML = `
-                    <span class="premium-lock">${isPremium ? '⭐ Premium: All questions unlocked' : '🔓 Free Access: 20 questions'}</span>
-                    ${!isPremium ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro for more questions →</a></small>' : ''}
-                `;
+                const accessMsg = document.getElementById('access-message');
+                if (accessMsg) {
+                    accessMsg.innerHTML = `
+                        <span class="premium-lock">${isPremium ? '⭐ Premium: All questions unlocked' : '🔓 Free Access: 20 questions'}</span>
+                        ${!isPremium ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro for more questions →</a></small>' : ''}
+                    `;
+                }
 
                 displayQuestions();
             } catch (error) {
@@ -160,9 +179,9 @@
 
         function displayQuestions() {
             const container = document.getElementById('test-questions');
-            let html = '';
+            if (!container) return;
             
-            html += `<p class="text-muted">Showing ${questions.length} questions</p>`;
+            let html = `<p class="text-muted">Showing ${questions.length} questions</p>`;
             
             questions.forEach((q, index) => {
                 html += `
@@ -200,40 +219,68 @@
         async function initializeAI() {
             try {
                 const user = firebase.auth().currentUser;
-                if (!user) return false;
+                if (!user) {
+                    updateAIStatus('Not logged in', '#dc3545');
+                    return false;
+                }
 
+                updateAIStatus('Connecting...', '#ffc107');
+                
                 const employee = new AIEmployee(user.uid);
                 await employee.loadMemory(user.uid);
                 window.aiEmployee = employee;
                 aiInitialized = true;
-                console.log('🤖 AI Employee ready for Listening Test!');
+                
+                updateAIStatus('✅ Ready', '#28a745');
+                console.log('🤖 AI Employee ready!');
                 return true;
             } catch (error) {
                 console.error('AI Employee init failed:', error);
+                updateAIStatus('❌ Error - Retrying...', '#dc3545');
+                
+                if (initAttempts < 3) {
+                    initAttempts++;
+                    setTimeout(() => {
+                        initializeAI();
+                    }, 3000);
+                } else {
+                    updateAIStatus('❌ Failed - Refresh page', '#dc3545');
+                }
                 return false;
             }
         }
 
         async function submitTest() {
             if (!aiInitialized || !window.aiEmployee) {
+                updateAIStatus('⏳ Loading... Please wait', '#ffc107');
+                
                 const initialized = await initializeAI();
                 if (!initialized) {
                     alert('🤖 AI system is loading... Please wait 5 seconds and try again.');
                     return;
                 }
+                
+                setTimeout(() => {
+                    submitTest();
+                }, 1000);
+                return;
             }
 
             const answers = collectAnswers();
             const unanswered = answers.filter(a => a === '').length;
+            
             if (unanswered > 0) {
                 alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`);
                 return;
             }
 
             try {
+                updateAIStatus('⏳ Grading...', '#ffc107');
                 await submitTestForGrading('listening', answers, questions);
+                updateAIStatus('✅ Grading Complete', '#28a745');
             } catch (error) {
                 console.error('Grading failed:', error);
+                updateAIStatus('❌ Error', '#dc3545');
                 alert('❌ Failed to grade test. Please try again.');
             }
         }
@@ -245,7 +292,10 @@
                 if (user) {
                     await checkUserPlan(user);
                     await loadQuestions();
-                    await initializeAI();
+                    
+                    setTimeout(async () => {
+                        await initializeAI();
+                    }, 2000);
                 } else {
                     window.location.href = 'login.html';
                 }
@@ -261,4 +311,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-                    </html>
+</html>
