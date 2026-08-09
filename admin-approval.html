@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Employee - Admin Approval</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .approval-card { 
+            border: 2px solid #6c63ff; 
+            border-radius: 15px; 
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .approval-card:hover { transform: translateY(-5px); }
+        .badge-pending { background: #ffc107; color: #000; }
+        .badge-approved { background: #28a745; color: #fff; }
+        .badge-rejected { background: #dc3545; color: #fff; }
+        .admin-header {
+            background: linear-gradient(135deg, #6c63ff, #ffd700);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="admin-header text-white">
+            <h1>🤖 AI Employee - Admin Dashboard</h1>
+            <p>Review drafts and approve high-stakes tasks</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="pending-count">0</h3>
+                        <p>Pending Reviews</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="approved-count">0</h3>
+                        <p>Approved</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="rejected-count">0</h3>
+                        <p>Rejected</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="total-tests">0</h3>
+                        <p>Total Tests Graded</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-3">
+            <button class="btn btn-primary" onclick="filterQueue('pending')">Pending</button>
+            <button class="btn btn-success" onclick="filterQueue('approved')">Approved</button>
+            <button class="btn btn-danger" onclick="filterQueue('rejected')">Rejected</button>
+            <button class="btn btn-secondary" onclick="filterQueue('all')">All</button>
+        </div>
+
+        <!-- Queue -->
+        <div id="approval-queue">
+            <div class="text-center text-muted">
+                <p>Loading approval queue...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Admin check
+        const ADMIN_UID = '76h6NtId0UM6aMySKfNIT09ubLe2';
+
+        firebase.auth().onAuthStateChanged(async function(user) {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (user.uid !== ADMIN_UID) {
+                document.body.innerHTML = '<h2 class="text-center text-danger mt-5">⛔ Access Denied</h2>';
+                return;
+            }
+
+            console.log('✅ Admin authenticated');
+            loadQueue();
+        });
+
+        async function loadQueue(filter = 'pending') {
+            const queueDiv = document.getElementById('approval-queue');
+            queueDiv.innerHTML = '<div class="text-center">Loading...</div>';
+
+            try {
+                let query = db.collection('adminQueue').orderBy('createdAt', 'desc');
+                
+                if (filter !== 'all') {
+                    query = query.where('status', '==', filter);
+                }
+
+                const snapshot = await query.get();
+                
+                if (snapshot.empty) {
+                    queueDiv.innerHTML = '<div class="text-center text-muted">No items in queue</div>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const date = data.createdAt?.toDate?.() || new Date();
+                    
+                    html += `
+                        <div class="card approval-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5>${data.testType.toUpperCase()} Test</h5>
+                                        <p class="mb-1">
+                                            <strong>User:</strong> ${data.userId.substring(0, 12)}...
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Band Score:</strong> ${data.result.bandScore || 'N/A'}
+                                        </p>
+                                        <p class="mb-1">
+                                            <strong>Date:</strong> ${date.toLocaleDateString()}
+                                        </p>
+                                        <div class="mt-2">
+                                            ${data.result.feedback ? data.result.feedback.map(f => 
+                                                `<span class="badge bg-info me-1">${f}</span>`
+                                            ).join('') : ''}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <span class="badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'approved' ? 'badge-approved' : 'badge-rejected'}">
+                                            ${data.status.toUpperCase()}
+                                        </span>
+                                        ${data.status === 'pending' ? `
+                                            <div class="mt-2">
+                                                <button class="btn btn-success btn-sm" onclick="approveTest('${doc.id}')">
+                                                    ✅ Approve
+                                                </button>
+                                                <button class="btn btn-danger btn-sm" onclick="rejectTest('${doc.id}')">
+                                                    ❌ Reject
+                                                </button>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                queueDiv.innerHTML = html;
+                updateStats();
+
+            } catch (error) {
+                console.error('Queue load failed:', error);
+                queueDiv.innerHTML = '<div class="text-center text-danger">Failed to load queue</div>';
+            }
+        }
+
+        async function approveTest(docId) {
+            if (confirm('Approve this draft?')) {
+                try {
+                    await db.collection('adminQueue').doc(docId).update({
+                        status: 'approved',
+                        approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    loadQueue();
+                } catch (error) {
+                    console.error('Approval failed:', error);
+                }
+            }
+        }
+
+        async function rejectTest(docId) {
+            const reason = prompt('Why are you rejecting this?');
+            if (reason !== null) {
+                try {
+                    await db.collection('adminQueue').doc(docId).update({
+                        status: 'rejected',
+                        rejectionReason: reason,
+                        rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    loadQueue();
+                } catch (error) {
+                    console.error('Rejection failed:', error);
+                }
+            }
+        }
+
+        function filterQueue(filter) {
+            loadQueue(filter);
+        }
+
+        async function updateStats() {
+            try {
+                const pending = await db.collection('adminQueue').where('status', '==', 'pending').get();
+                const approved = await db.collection('adminQueue').where('status', '==', 'approved').get();
+                const rejected = await db.collection('adminQueue').where('status', '==', 'rejected').get();
+                const all = await db.collection('adminQueue').get();
+
+                document.getElementById('pending-count').textContent = pending.size;
+                document.getElementById('approved-count').textContent = approved.size;
+                document.getElementById('rejected-count').textContent = rejected.size;
+                document.getElementById('total-tests').textContent = all.size;
+            } catch (error) {
+                console.error('Stats update failed:', error);
+            }
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => loadQueue('pending'), 30000);
+    </script>
+</body>
+              </html>
