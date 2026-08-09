@@ -7,18 +7,32 @@
     <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .plan-card { background: #f8f5ff; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 2px solid #e8e0f0; cursor: pointer; transition: all 0.3s; }
-        .plan-card:hover { border-color: #6c63ff; }
+        * { box-sizing: border-box; }
+        body { background: #f5f0ff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: #2d1b69; font-weight: 800; }
+        .plan-card { background: #f8f5ff; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 2px solid #e8e0f0; cursor: pointer; transition: all 0.3s; -webkit-tap-highlight-color: transparent; }
+        .plan-card:active { transform: scale(0.98); }
         .plan-card.selected { border-color: #6c63ff; background: #f0edff; }
         .plan-card .price { font-size: 2rem; font-weight: 800; color: #2d1b69; }
         .plan-card .price small { font-size: 1rem; font-weight: 400; color: #888; }
         .plan-card ul { list-style: none; padding: 0; margin: 10px 0; }
         .plan-card ul li { padding: 4px 0; }
         .plan-card ul li::before { content: '✅ '; color: #28a745; }
-        .btn-pay { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; width: 100%; font-size: 1.1rem; cursor: pointer; }
-        .btn-pay:hover { transform: scale(1.02); }
+        .btn-pay { 
+            background: linear-gradient(135deg, #6c63ff, #ffd700); 
+            border: none; 
+            padding: 16px 40px; 
+            font-weight: 700; 
+            color: white; 
+            border-radius: 50px; 
+            width: 100%; 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-pay:active { transform: scale(0.96); }
         .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         nav { background: #2d1b69 !important; padding: 10px 0; }
         nav a { color: white !important; }
@@ -29,7 +43,8 @@
         .error-msg { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
         .currency-badge { background: #2d1b69; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px; margin-left: 8px; }
         .plan-code { font-size: 11px; color: #888; margin-top: 4px; }
-        .btn-pay.tapped { transform: scale(0.95); } /* Visual feedback for mobile */
+        #selectedPlanDisplay { background: #f0edff; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .status-bar { background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; }
     </style>
 </head>
 <body>
@@ -43,54 +58,59 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="logoutUser()">Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container">
+
         <h1 class="text-center">💳 Upgrade Your Plan</h1>
         <p class="text-center text-muted">Choose a plan that works for you.</p>
 
+        <div id="statusBar" class="status-bar"></div>
         <div id="errorMsg" class="error-msg"></div>
 
-        <div id="planSelection">
-            <div class="plan-card" data-plan="pro" onclick="selectPlan('pro')">
-                <h3>⭐ Pro <span class="currency-badge">NGN</span></h3>
-                <div class="price">₦12,300 <small>/month</small></div>
-                <ul>
-                    <li>50% of passages and questions</li>
-                    <li>All 4 modules</li>
-                    <li>2 mock exams/month</li>
-                    <li>Detailed feedback</li>
-                </ul>
-                <div class="plan-code">Plan Code: PLN_dzdxu8wpq6x4jbl</div>
-            </div>
-            <div class="plan-card" data-plan="proplus" onclick="selectPlan('proplus')">
-                <h3>🚀 Pro+ <span class="currency-badge">NGN</span></h3>
-                <div class="price">₦26,030 <small>/month</small></div>
-                <ul>
-                    <li>All passages and questions</li>
-                    <li>All 4 modules</li>
-                    <li>Unlimited mock exams</li>
-                    <li>AI writing evaluation</li>
-                    <li>Priority support</li>
-                </ul>
-                <div class="plan-code">Plan Code: PLN_8uydr5l3vasjmxm</div>
-            </div>
+        <!-- Pro Plan -->
+        <div class="plan-card" data-plan="pro" onclick="selectPlan('pro')">
+            <h3>⭐ Pro <span class="currency-badge">NGN</span></h3>
+            <div class="price">₦12,300 <small>/month</small></div>
+            <ul>
+                <li>50% of passages and questions</li>
+                <li>All 4 modules</li>
+                <li>2 mock exams/month</li>
+                <li>Detailed feedback</li>
+            </ul>
+            <div class="plan-code">Plan: PLN_dzdxu8wpq6x4jbl</div>
         </div>
 
-        <div id="selectedPlanDisplay" class="text-center" style="display: none;">
+        <!-- Pro+ Plan -->
+        <div class="plan-card" data-plan="proplus" onclick="selectPlan('proplus')">
+            <h3>🚀 Pro+ <span class="currency-badge">NGN</span></h3>
+            <div class="price">₦26,030 <small>/month</small></div>
+            <ul>
+                <li>All passages and questions</li>
+                <li>All 4 modules</li>
+                <li>Unlimited mock exams</li>
+                <li>AI writing evaluation</li>
+                <li>Priority support</li>
+            </ul>
+            <div class="plan-code">Plan: PLN_8uydr5l3vasjmxm</div>
+        </div>
+
+        <!-- Selected Plan Display -->
+        <div id="selectedPlanDisplay" style="display: none;">
             <p><strong>Selected Plan:</strong> <span id="selectedPlanName"></span></p>
-            <p>Total: <strong id="selectedPlanPrice"></strong></p>
+            <p><strong>Total:</strong> <span id="selectedPlanPrice"></span></p>
         </div>
 
-        <!-- BUTTON - NO ONCLICK ATTRIBUTE (Using JavaScript event listener) -->
-        <button id="payBtn" class="btn-pay mt-3" disabled>
-            💳 Pay Now
+        <!-- PAY NOW BUTTON -->
+        <button id="payBtn" class="btn-pay" disabled>
+            💳 Select a Plan Above
         </button>
 
+        <!-- Loading Indicator -->
         <div id="loadingIndicator" class="loading">
             <div class="spinner"></div>
             <p class="mt-2">Processing your payment...</p>
@@ -102,19 +122,23 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- PAYSTACK SCRIPT                                              -->
+    <!-- SCRIPTS - LOADED IN THE CORRECT ORDER                      -->
     <!-- ============================================================ -->
+    
+    <!-- 1. Paystack Script (LOAD FIRST) -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
-
-    <!-- Firebase -->
+    
+    <!-- 2. Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- 3. Your Firebase Config -->
     <script src="js/firebase-config.js"></script>
 
     <script>
         // ============================================================
-        // 🔐 PAYSTACK CONFIG
+        // 🔐 PAYSTACK CONFIG - YOUR LIVE KEYS
         // ============================================================
         const CONFIG = {
             PAYSTACK_PUBLIC_KEY: 'pk_live_745c9817e91e0698cb32aea110be95eadbe68eda',
@@ -137,11 +161,53 @@
         // ============================================================
         let selectedPlan = null;
         let userEmail = '';
+        let userUid = '';
+        let paystackLoaded = false;
+
+        // ============================================================
+        // CHECK PAYSTACK LOADED
+        // ============================================================
+        function checkPaystackLoaded() {
+            if (typeof PaystackPop !== 'undefined') {
+                paystackLoaded = true;
+                console.log('✅ Paystack loaded');
+                showStatus('✅ Paystack ready', '#e8f5e9');
+                return true;
+            } else {
+                console.warn('⚠️ Paystack not loaded yet');
+                showStatus('⏳ Loading Paystack...', '#fff3e0');
+                // Try again in 2 seconds
+                setTimeout(function() {
+                    if (typeof PaystackPop !== 'undefined') {
+                        paystackLoaded = true;
+                        console.log('✅ Paystack loaded (retry)');
+                        showStatus('✅ Paystack ready', '#e8f5e9');
+                    } else {
+                        showStatus('⚠️ Please refresh and try again', '#ffebee');
+                    }
+                }, 2000);
+                return false;
+            }
+        }
+
+        // ============================================================
+        // SHOW STATUS
+        // ============================================================
+        function showStatus(message, bgColor = '#e8f5e9') {
+            const bar = document.getElementById('statusBar');
+            bar.textContent = message;
+            bar.style.display = 'block';
+            bar.style.background = bgColor;
+            setTimeout(() => {
+                bar.style.display = 'none';
+            }, 5000);
+        }
 
         // ============================================================
         // SELECT PLAN
         // ============================================================
         function selectPlan(plan) {
+            console.log('📋 Plan selected:', plan);
             selectedPlan = plan;
             
             document.querySelectorAll('.plan-card').forEach(card => {
@@ -158,20 +224,31 @@
             payBtn.disabled = false;
             payBtn.textContent = `💳 Pay ${CONFIG.DISPLAY_PRICES[plan]}`;
             
-            console.log('✅ Plan selected:', plan);
+            showStatus(`✅ Selected: ${planNames[plan]} - ${CONFIG.DISPLAY_PRICES[plan]}`, '#e8f5e9');
         }
 
         // ============================================================
-        // INITIALIZE PAYMENT
+        // INITIALIZE PAYMENT - Called when button is clicked
         // ============================================================
         function initializePayment() {
-            console.log('💳 initializePayment() called');
+            console.log('💳 initializePayment() STARTED');
             
+            // Check if plan selected
             if (!selectedPlan) {
                 showError('Please select a plan first.');
                 return;
             }
 
+            // Check if Paystack is loaded
+            if (!paystackLoaded) {
+                checkPaystackLoaded();
+                if (!paystackLoaded) {
+                    showError('Paystack is loading. Please wait a moment and try again.');
+                    return;
+                }
+            }
+
+            // Get current user
             const user = firebase.auth().currentUser;
             if (!user) {
                 showError('Please log in first.');
@@ -180,6 +257,7 @@
             }
 
             userEmail = user.email;
+            userUid = user.uid;
             const amount = CONFIG.PRICES[selectedPlan];
             const planName = selectedPlan === 'pro' ? 'Pro' : 'Pro+';
             const planCode = CONFIG.PLANS[selectedPlan];
@@ -189,16 +267,17 @@
             console.log('💰 Amount (NGN):', amount / 100);
             console.log('📋 Plan:', planName);
             console.log('🔑 Plan Code:', planCode);
+            console.log('🔑 Reference:', reference);
 
+            // Show loading
             document.getElementById('loadingIndicator').style.display = 'block';
             document.getElementById('payBtn').disabled = true;
             document.getElementById('errorMsg').style.display = 'none';
 
             try {
-                if (typeof PaystackPop === 'undefined') {
-                    throw new Error('Paystack library not loaded. Please check your internet connection.');
-                }
-
+                // ============================================================
+                // ✅ PAYSTACK PAYMENT
+                // ============================================================
                 const handler = PaystackPop.setup({
                     key: CONFIG.PAYSTACK_PUBLIC_KEY,
                     email: userEmail,
@@ -216,7 +295,7 @@
                             {
                                 display_name: "User ID",
                                 variable_name: "user_id",
-                                value: user.uid
+                                value: userUid
                             }
                         ]
                     },
@@ -229,6 +308,7 @@
                         console.log('❌ Payment cancelled');
                         document.getElementById('loadingIndicator').style.display = 'none';
                         document.getElementById('payBtn').disabled = false;
+                        document.getElementById('payBtn').textContent = `💳 Pay ${CONFIG.DISPLAY_PRICES[selectedPlan]}`;
                         alert('Payment cancelled. You can try again anytime.');
                     }
                 });
@@ -239,6 +319,7 @@
                 console.error('❌ Payment initialization failed:', error);
                 document.getElementById('loadingIndicator').style.display = 'none';
                 document.getElementById('payBtn').disabled = false;
+                document.getElementById('payBtn').textContent = `💳 Pay ${CONFIG.DISPLAY_PRICES[selectedPlan]}`;
                 showError('Failed to initialize payment: ' + error.message);
             }
         }
@@ -250,7 +331,7 @@
             const errorEl = document.getElementById('errorMsg');
             errorEl.textContent = '⚠️ ' + message;
             errorEl.style.display = 'block';
-            setTimeout(() => { errorEl.style.display = 'none'; }, 5000);
+            setTimeout(() => { errorEl.style.display = 'none'; }, 6000);
         }
 
         // ============================================================
@@ -288,83 +369,75 @@
         // ============================================================
         // LOGOUT
         // ============================================================
-        function logout() {
+        function logoutUser() {
             firebase.auth().signOut().then(() => {
                 window.location.href = 'index.html';
             });
         }
 
         // ============================================================
-        // MOBILE-FRIENDLY CLICK HANDLER - FIX FOR VIVO Y15S!
+        // SETUP BUTTON CLICK HANDLER - Works on ALL Devices!
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Checkout page loaded');
-            console.log('🔐 Paystack Public Key:', CONFIG.PAYSTACK_PUBLIC_KEY.substring(0, 20) + '...');
-            console.log('📋 Plans configured:', CONFIG.PLANS);
-            
-            if (typeof PaystackPop !== 'undefined') {
-                console.log('✅ Paystack library loaded');
-            } else {
-                console.warn('⚠️ Paystack library not loaded yet');
-                // Retry loading Paystack
-                setTimeout(function() {
-                    if (typeof PaystackPop !== 'undefined') {
-                        console.log('✅ Paystack library loaded (after retry)');
-                    }
-                }, 3000);
-            }
-
-            // Check user
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    console.log('✅ User logged in:', user.email);
-                    userEmail = user.email;
-                } else {
-                    console.log('❌ No user logged in');
-                }
-            });
-
-            // ============================================================
-            // ✅ MOBILE CLICK FIX - Works on Vivo Y15S!
-            // ============================================================
+        function setupButton() {
             const payBtn = document.getElementById('payBtn');
             
-            // Remove any existing onclick
-            payBtn.removeAttribute('onclick');
+            // Remove any existing event listeners
+            const newBtn = payBtn.cloneNode(true);
+            payBtn.parentNode.replaceChild(newBtn, payBtn);
             
-            // Click handler
-            payBtn.addEventListener('click', function(e) {
+            // Add click handler
+            newBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 console.log('🖱️ Button clicked!');
-                this.classList.add('tapped');
+                console.log('📊 Button disabled?', this.disabled);
+                console.log('📊 Selected plan:', selectedPlan);
                 
                 if (!this.disabled) {
                     initializePayment();
                 } else {
-                    console.log('⚠️ Button is disabled');
+                    showError('Please select a plan first.');
                 }
-                
-                setTimeout(() => {
-                    this.classList.remove('tapped');
-                }, 200);
             });
             
-            // Touch handler for mobile
-            payBtn.addEventListener('touchstart', function(e) {
-                console.log('📱 Touch started on button');
-                this.classList.add('tapped');
+            // Add touch handler for mobile
+            newBtn.addEventListener('touchstart', function(e) {
+                console.log('📱 Touch started');
             }, { passive: true });
             
-            payBtn.addEventListener('touchend', function(e) {
-                console.log('📱 Touch ended on button');
-                this.classList.remove('tapped');
-            }, { passive: true });
+            console.log('✅ Button handler installed');
+        }
 
-            console.log('✅ Mobile-friendly click handler installed');
+        // ============================================================
+        // PAGE LOAD
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Checkout page loaded');
+            
+            // Check Paystack
+            checkPaystackLoaded();
+            
+            // Setup the button
+            setupButton();
+
+            // Check Firebase auth
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    console.log('✅ User logged in:', user.email);
+                    userEmail = user.email;
+                    userUid = user.uid;
+                    showStatus('✅ Logged in as ' + user.email, '#e8f5e9');
+                } else {
+                    console.log('❌ No user logged in');
+                    showStatus('⚠️ Please log in to upgrade', '#fff3e0');
+                }
+            });
         });
+
+        console.log('🔐 Paystack Public Key:', CONFIG.PAYSTACK_PUBLIC_KEY.substring(0, 20) + '...');
+        console.log('📋 Plans:', CONFIG.PLANS);
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-                                                </html>
+                                                                               </html>
