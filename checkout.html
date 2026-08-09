@@ -43,8 +43,10 @@
         .error-msg { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
         .currency-badge { background: #2d1b69; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px; margin-left: 8px; }
         .plan-code { font-size: 11px; color: #888; margin-top: 4px; }
-        #selectedPlanDisplay { background: #f0edff; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        #selectedPlanDisplay { background: #f0edff; padding: 15px; border-radius: 10px; margin: 15px 0; display: none; }
         .status-bar { background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; }
+        /* Mobile tap feedback */
+        .btn-pay.tapped { transform: scale(0.95); opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -100,13 +102,15 @@
         </div>
 
         <!-- Selected Plan Display -->
-        <div id="selectedPlanDisplay" style="display: none;">
+        <div id="selectedPlanDisplay">
             <p><strong>Selected Plan:</strong> <span id="selectedPlanName"></span></p>
             <p><strong>Total:</strong> <span id="selectedPlanPrice"></span></p>
         </div>
 
-        <!-- PAY NOW BUTTON -->
-        <button id="payBtn" class="btn-pay" disabled>
+        <!-- ============================================================ -->
+        <!-- ✅ PAY BUTTON - USING ONCLICK DIRECTLY (MOST RELIABLE)     -->
+        <!-- ============================================================ -->
+        <button id="payBtn" class="btn-pay" disabled onclick="initializePayment()">
             💳 Select a Plan Above
         </button>
 
@@ -122,10 +126,10 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- SCRIPTS - LOADED IN THE CORRECT ORDER                      -->
+    <!-- SCRIPTS                                                      -->
     <!-- ============================================================ -->
     
-    <!-- 1. Paystack Script (LOAD FIRST) -->
+    <!-- 1. Paystack Script -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
     
     <!-- 2. Firebase SDKs -->
@@ -176,7 +180,6 @@
             } else {
                 console.warn('⚠️ Paystack not loaded yet');
                 showStatus('⏳ Loading Paystack...', '#fff3e0');
-                // Try again in 2 seconds
                 setTimeout(function() {
                     if (typeof PaystackPop !== 'undefined') {
                         paystackLoaded = true;
@@ -228,10 +231,10 @@
         }
 
         // ============================================================
-        // INITIALIZE PAYMENT - Called when button is clicked
+        // ✅ INITIALIZE PAYMENT - Using ONCLICK (WORKS ON ALL DEVICES)
         // ============================================================
         function initializePayment() {
-            console.log('💳 initializePayment() STARTED');
+            console.log('💳 initializePayment() CALLED - Button clicked!');
             
             // Check if plan selected
             if (!selectedPlan) {
@@ -267,7 +270,6 @@
             console.log('💰 Amount (NGN):', amount / 100);
             console.log('📋 Plan:', planName);
             console.log('🔑 Plan Code:', planCode);
-            console.log('🔑 Reference:', reference);
 
             // Show loading
             document.getElementById('loadingIndicator').style.display = 'block';
@@ -376,39 +378,6 @@
         }
 
         // ============================================================
-        // SETUP BUTTON CLICK HANDLER - Works on ALL Devices!
-        // ============================================================
-        function setupButton() {
-            const payBtn = document.getElementById('payBtn');
-            
-            // Remove any existing event listeners
-            const newBtn = payBtn.cloneNode(true);
-            payBtn.parentNode.replaceChild(newBtn, payBtn);
-            
-            // Add click handler
-            newBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('🖱️ Button clicked!');
-                console.log('📊 Button disabled?', this.disabled);
-                console.log('📊 Selected plan:', selectedPlan);
-                
-                if (!this.disabled) {
-                    initializePayment();
-                } else {
-                    showError('Please select a plan first.');
-                }
-            });
-            
-            // Add touch handler for mobile
-            newBtn.addEventListener('touchstart', function(e) {
-                console.log('📱 Touch started');
-            }, { passive: true });
-            
-            console.log('✅ Button handler installed');
-        }
-
-        // ============================================================
         // PAGE LOAD
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
@@ -416,9 +385,6 @@
             
             // Check Paystack
             checkPaystackLoaded();
-            
-            // Setup the button
-            setupButton();
 
             // Check Firebase auth
             firebase.auth().onAuthStateChanged(function(user) {
@@ -436,8 +402,9 @@
 
         console.log('🔐 Paystack Public Key:', CONFIG.PAYSTACK_PUBLIC_KEY.substring(0, 20) + '...');
         console.log('📋 Plans:', CONFIG.PLANS);
+        console.log('✅ initializePayment function is ready');
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-                                                                               </html>
+            </html>
