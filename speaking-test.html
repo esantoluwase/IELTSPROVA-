@@ -74,7 +74,6 @@
 
         <div id="access-message" class="text-center mb-3"></div>
 
-        <!-- Speaking Topic Selector -->
         <div class="passage-selector" id="topicSelector">
             <h5>🗣️ Select a Speaking Topic</h5>
             <div id="topicButtons"></div>
@@ -118,19 +117,19 @@
         </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- FIXED SCRIPT PATHS - CORRECT!                              -->
+    <!-- ============================================================ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
-    <script src="js/questions.js"></script>
+    <script src="questions.js"></script>
     <script src="js/ai-employee.js"></script>
     <script src="js/memory-manager.js"></script>
     <script src="js/auto-grader.js"></script>
 
     <script>
-        // ============================================================
-        // TIER CONFIGURATION
-        // ============================================================
         const TIERS = {
             free: { name: 'Free', passageLimit: 1, questionLimit: 20, badge: '🆓 Free', badgeClass: 'free' },
             pro: { name: 'Pro', passageLimit: 0.5, questionLimit: 0.5, badge: '⭐ Pro', badgeClass: 'pro' },
@@ -253,9 +252,7 @@
 
         function renderTopicButtons() {
             const { passageLimit } = getTierLimits();
-            const tierInfo = TIERS[userTier];
             let html = '';
-            
             allTopics.forEach((topic, index) => {
                 const isLocked = index >= passageLimit;
                 const isActive = selectedTopicId === topic.id;
@@ -268,16 +265,13 @@
                     </button>
                 `;
             });
-
             topicButtonsEl.innerHTML = html;
 
-            const tierBadge = tierInfo.badge;
-            const tierClass = tierInfo.badgeClass;
+            const tierInfo = TIERS[userTier];
             let messageText = userTier === 'free' ? `🆓 Free: ${passageLimit} Topic` :
                              userTier === 'pro' ? `⭐ Pro: ${passageLimit}/${allTopics.length} Topics` :
                              `🚀 Pro+: All ${allTopics.length} Topics`;
-            
-            accessMessageEl.innerHTML = `<span class="premium-lock ${tierClass}">${messageText}</span>
+            accessMessageEl.innerHTML = `<span class="premium-lock ${tierInfo.badgeClass}">${messageText}</span>
                 ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
                 ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}`;
 
@@ -308,7 +302,6 @@
 
             selectedTopicId = topicId;
             document.querySelectorAll('.passage-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
-
             document.getElementById('task-title').textContent = `🗣️ ${topic.part || 'Part 1'}: Speaking Topic`;
             document.getElementById('task-description').textContent = topic.text;
             submitBtn.disabled = false;
@@ -383,4 +376,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-    </html>
+</html>
