@@ -4,56 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IELTSProva - Reading Test</title>
-    <meta name="description" content="Practice IELTS Reading with AI-powered grading">
     <meta name="google-site-verification" content="XOXi-f20RDZxDCBM8hRzcJSoeVBTUPBZU8luGgoW8Gw">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
     <style>
-        body { background: #f8f9fa; }
-        .test-container { max-width: 900px; margin: 30px auto; padding: 20px; }
-        .passage-selector { background: white; padding: 20px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .test-container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .passage-selector { background: #f8f5ff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #e8e0f0; }
         .passage-selector h5 { color: #2d1b69; margin-bottom: 12px; }
         .passage-btn { padding: 10px 20px; margin: 5px; border: 2px solid #ddd; border-radius: 8px; background: white; transition: all 0.3s; cursor: pointer; }
         .passage-btn:hover { border-color: #6c63ff; }
         .passage-btn.active { border-color: #6c63ff; background: #f0edff; }
         .passage-btn.locked { opacity: 0.5; cursor: not-allowed; }
-        .passage-btn.locked::after { content: ' 🔒'; color: #dc3545; }
-        .passage-btn.free::after { content: ' 🆓'; color: #28a745; }
-        .passage-btn.pro::after { content: ' ⭐'; color: #ffd700; }
-        .passage-btn.proplus::after { content: ' 🚀'; color: #6c63ff; }
+        .passage-btn.free { border-color: #28a745; }
+        .passage-btn.pro { border-color: #ffd700; }
+        .passage-btn.proplus { border-color: #6c63ff; }
         .passage-box { background: #f0edff; padding: 20px; border-radius: 10px; border-left: 4px solid #6c63ff; margin-bottom: 30px; }
-        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .question-card:hover { box-shadow: 0 4px 20px rgba(108,99,255,0.15); }
+        .question-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #f0edff; }
         .question-number { color: #6c63ff; font-weight: bold; }
         .submit-btn { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; }
-        .submit-btn:hover { transform: scale(1.05); color: white; }
+        .submit-btn:hover { transform: scale(1.05); }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
-        #test-results .score-card { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; }
-        #test-results .feedback-section { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; }
-        #test-results ul { list-style: none; padding: 0; }
-        #test-results ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; }
+        #test-results { background: linear-gradient(135deg, #6c63ff, #ffd700); padding: 25px; border-radius: 15px; color: white; margin-top: 20px; display: none; }
+        #loader { background: rgba(108,99,255,0.1); padding: 30px; border-radius: 15px; text-align: center; display: none; }
         .spinner-border { width: 3rem; height: 3rem; }
         .premium-lock { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
         .premium-lock.free { background: #28a745; color: white; }
         .premium-lock.pro { background: #ffd700; color: #2d1b69; }
         .premium-lock.proplus { background: #6c63ff; color: white; }
-        #ai-status { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; }
-        #ai-status-text { font-weight: bold; }
+        #ai-status { background: #f8f9fa; padding: 10px 16px; border-radius: 8px; border: 1px solid #ddd; text-align: center; margin-bottom: 15px; font-weight: 500; }
+        #ai-status .status-ready { color: #28a745; }
+        #ai-status .status-loading { color: #ffc107; }
+        #ai-status .status-error { color: #dc3545; }
         .upgrade-banner { background: linear-gradient(135deg, #2d1b69, #6c63ff); color: white; padding: 15px 20px; border-radius: 10px; margin: 15px 0; text-align: center; }
         .upgrade-banner a { color: #ffd700; font-weight: bold; }
-        .tier-badge { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-left: 8px; }
-        .tier-badge.free { background: #28a745; color: white; }
-        .tier-badge.pro { background: #ffd700; color: #2d1b69; }
-        .tier-badge.proplus { background: #6c63ff; color: white; }
+        nav { background: #2d1b69 !important; padding: 10px 0; }
+        nav a { color: white !important; }
+        nav .navbar-brand span { color: #ffd700; }
+        .form-check { padding: 4px 0; }
+        .form-check-input { margin-top: 6px; }
+        .options { padding-left: 10px; }
+        .admin-badge { background: #ffd700; color: #2d1b69; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #2d1b69;">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html"><span style="color: #ffd700;">IELTS</span>Prova</a>
+            <a class="navbar-brand" href="index.html"><span>IELTS</span>Prova</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -71,7 +68,7 @@
     </nav>
 
     <div class="container test-container">
-        <h1 class="text-center mb-4">📖 Reading Test</h1>
+        <h1 class="text-center mb-3">📖 Reading Test</h1>
         
         <!-- AI Status -->
         <div id="ai-status">
@@ -81,11 +78,11 @@
         <div id="access-message" class="text-center mb-3"></div>
 
         <!-- Passage Selector -->
-        <div class="passage-selector" id="passageSelector">
+        <div class="passage-selector">
             <h5>📚 Select a Reading Passage</h5>
             <div id="passageButtons"></div>
             <div id="upgradeBanner" class="upgrade-banner" style="display: none;">
-                ⭐ <strong>Upgrade to Pro or Pro+</strong> to unlock more passages and questions!
+                ⭐ <strong>Upgrade to Pro or Pro+</strong> to unlock more passages!
                 <a href="checkout.html">Upgrade Now →</a>
             </div>
         </div>
@@ -94,7 +91,7 @@
         <div id="passage-container" class="passage-box">
             <h5>📄 Reading Passage</h5>
             <div id="passage-content">
-                <p>Select a passage above to begin.</p>
+                <p class="text-muted">Select a passage above to begin.</p>
             </div>
         </div>
 
@@ -108,8 +105,8 @@
             <button onclick="submitTest()" class="submit-btn" id="submitBtn" disabled>Submit Test 🚀</button>
         </div>
 
-        <div id="test-results" style="display: none; margin-top: 30px;"></div>
-        <div id="loader" style="display: none; text-align: center; margin: 20px;">
+        <div id="test-results"></div>
+        <div id="loader">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
@@ -118,59 +115,89 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- FIXED SCRIPT PATHS - CORRECT!                              -->
+    <!-- SCRIPTS - CORRECT ORDER!                                   -->
     <!-- ============================================================ -->
+    <!-- 1. Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- 2. Firebase Config (IN js/ FOLDER) -->
     <script src="js/firebase-config.js"></script>
+    
+    <!-- 3. Questions Bank (IN ROOT FOLDER) -->
     <script src="questions.js"></script>
+    
+    <!-- 4. AI System (IN js/ FOLDER) -->
     <script src="js/ai-employee.js"></script>
     <script src="js/memory-manager.js"></script>
     <script src="js/auto-grader.js"></script>
 
     <script>
         // ============================================================
-        // TIER CONFIGURATION
+        // MAIN APPLICATION CODE
         // ============================================================
-        const TIERS = {
-            free: { name: 'Free', passageLimit: 1, questionLimit: 20, badge: '🆓 Free', badgeClass: 'free' },
-            pro: { name: 'Pro', passageLimit: 0.5, questionLimit: 0.5, badge: '⭐ Pro', badgeClass: 'pro' },
-            proplus: { name: 'Pro+', passageLimit: 1, questionLimit: 1, badge: '🚀 Pro+', badgeClass: 'proplus' }
-        };
-
+        console.log('🚀 Reading Test loaded');
+        
+        // State
         let allPassages = [];
         let questions = [];
         let userTier = 'free';
         let aiInitialized = false;
         let initAttempts = 0;
         let selectedPassageId = null;
+        let currentUser = null;
 
+        // DOM refs
         const passageButtonsEl = document.getElementById('passageButtons');
         const passageContentEl = document.getElementById('passage-content');
         const testQuestionsEl = document.getElementById('test-questions');
         const submitBtn = document.getElementById('submitBtn');
         const upgradeBannerEl = document.getElementById('upgradeBanner');
         const accessMessageEl = document.getElementById('access-message');
+        const statusTextEl = document.getElementById('ai-status-text');
 
+        // ============================================================
+        // UPDATE AI STATUS
+        // ============================================================
         function updateAIStatus(status, color = '#ffc107') {
-            const statusText = document.getElementById('ai-status-text');
-            if (statusText) { statusText.textContent = status; statusText.style.color = color; }
+            if (statusTextEl) {
+                statusTextEl.textContent = status;
+                statusTextEl.style.color = color;
+                statusTextEl.className = '';
+                if (color === '#28a745') statusTextEl.className = 'status-ready';
+                else if (color === '#ffc107') statusTextEl.className = 'status-loading';
+                else if (color === '#dc3545') statusTextEl.className = 'status-error';
+            }
+            console.log('🤖 AI Status:', status);
         }
 
+        // ============================================================
+        // CHECK USER PLAN
+        // ============================================================
         async function checkUserPlan(user) {
+            if (!user) return 'free';
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 if (doc.exists) {
                     const plan = doc.data().plan || 'free';
                     userTier = (plan === 'pro' || plan === 'Pro') ? 'pro' : 
                                (plan === 'pro+' || plan === 'Pro+' || plan === 'proplus') ? 'proplus' : 'free';
-                } else { userTier = 'free'; }
+                } else {
+                    userTier = 'free';
+                }
                 console.log('📊 User tier:', userTier.toUpperCase());
                 return userTier;
-            } catch (error) { console.error('Failed to check plan:', error); userTier = 'free'; return 'free'; }
+            } catch (error) {
+                console.error('Failed to check plan:', error);
+                userTier = 'free';
+                return 'free';
+            }
         }
 
+        // ============================================================
+        // GET TIER LIMITS
+        // ============================================================
         function getTierLimits() {
             const total = allPassages.length;
             let passageLimit, questionLimit;
@@ -180,17 +207,24 @@
             return { passageLimit, questionLimit };
         }
 
+        // ============================================================
+        // LOAD PASSAGES
+        // ============================================================
         function loadPassages() {
+            // Try to get passages from questions.js
             if (window.readingPassages && window.readingPassages.length > 0) {
                 allPassages = window.readingPassages;
+                console.log('📚 Passages loaded from questions.js:', allPassages.length);
             } else {
+                // Fallback passages
                 allPassages = [
-                    { id: 1, title: 'The Future of Education', text: 'Technology is transforming education...', questions: [] },
-                    { id: 2, title: 'Climate Change and Society', text: 'Climate change affects every aspect of our lives...', questions: [] },
-                    { id: 3, title: 'The Impact of Social Media', text: 'Social media has revolutionized how we communicate...', questions: [] },
-                    { id: 4, title: 'Artificial Intelligence in Healthcare', text: 'Artificial intelligence is revolutionizing healthcare...', questions: [] },
-                    { id: 5, title: 'The Rise of Remote Work', text: 'The COVID-19 pandemic accelerated the shift to remote work...', questions: [] }
+                    { id: 1, title: 'The Future of Education', text: 'Technology is transforming education. Online learning platforms, AI tutors, and virtual classrooms are making education more accessible than ever before.', questions: [] },
+                    { id: 2, title: 'Climate Change and Society', text: 'Climate change affects every aspect of our lives. Rising temperatures, extreme weather events, and sea-level rise are just some of the consequences.', questions: [] },
+                    { id: 3, title: 'The Impact of Social Media', text: 'Social media has revolutionized how we communicate and share information. While it connects people across the globe, it also raises concerns about privacy and mental health.', questions: [] },
+                    { id: 4, title: 'Artificial Intelligence in Healthcare', text: 'Artificial intelligence is revolutionizing healthcare. From diagnostic tools to personalized treatment plans, AI is helping doctors make better decisions.', questions: [] },
+                    { id: 5, title: 'The Rise of Remote Work', text: 'The COVID-19 pandemic accelerated the shift to remote work. Companies around the world have embraced flexible work arrangements.', questions: [] }
                 ];
+                // Generate questions for each passage
                 allPassages.forEach((p) => {
                     p.questions = [];
                     for (let i = 0; i < 40; i++) {
@@ -203,10 +237,14 @@
                         });
                     }
                 });
+                console.log('📚 Using fallback passages');
             }
             renderPassageButtons();
         }
 
+        // ============================================================
+        // RENDER PASSAGE BUTTONS
+        // ============================================================
         function renderPassageButtons() {
             const { passageLimit, questionLimit } = getTierLimits();
             let html = '';
@@ -214,27 +252,37 @@
             allPassages.forEach((passage, index) => {
                 const isLocked = index >= passageLimit;
                 const isActive = selectedPassageId === passage.id;
-                let statusClass = isLocked ? 'locked' : (userTier === 'proplus' ? 'proplus' : (userTier === 'pro' ? 'pro' : 'free'));
+                let statusClass = 'free';
+                if (isLocked) statusClass = 'locked';
+                else if (userTier === 'proplus') statusClass = 'proplus';
+                else if (userTier === 'pro') statusClass = 'pro';
+                else statusClass = 'free';
+                
+                const label = isLocked ? '🔒' : (userTier === 'proplus' ? '🚀' : (userTier === 'pro' ? '⭐' : '🆓'));
+                
                 html += `
                     <button class="passage-btn ${statusClass} ${isActive ? 'active' : ''}"
                             onclick="${isLocked ? '' : `selectPassage(${passage.id})`}"
                             ${isLocked ? 'disabled' : ''}>
-                        ${passage.title} ${isLocked ? '🔒' : ''}
+                        ${label} ${passage.title} ${isLocked ? '🔒' : ''}
                     </button>
                 `;
             });
 
             passageButtonsEl.innerHTML = html;
 
-            const tierInfo = TIERS[userTier];
-            let messageText = userTier === 'free' ? `🆓 Free: ${passageLimit} Passage (${questionLimit} questions)` :
-                             userTier === 'pro' ? `⭐ Pro: ${passageLimit}/${allPassages.length} Passages (${questionLimit} questions)` :
-                             `🚀 Pro+: All ${allPassages.length} Passages (${questionLimit} questions)`;
+            // Update access message
+            let messageText = '';
+            if (userTier === 'free') messageText = `🆓 Free: ${passageLimit} Passage (${questionLimit} questions)`;
+            else if (userTier === 'pro') messageText = `⭐ Pro: ${passageLimit}/${allPassages.length} Passages (${questionLimit} questions)`;
+            else if (userTier === 'proplus') messageText = `🚀 Pro+: All ${allPassages.length} Passages (${questionLimit} questions)`;
             
-            accessMessageEl.innerHTML = `<span class="premium-lock ${tierInfo.badgeClass}">${messageText}</span>
+            const tierClass = userTier === 'free' ? 'free' : (userTier === 'pro' ? 'pro' : 'proplus');
+            accessMessageEl.innerHTML = `<span class="premium-lock ${tierClass}">${messageText}</span>
                 ${userTier === 'free' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro →</a></small>' : ''}
                 ${userTier === 'pro' ? ' <small><a href="checkout.html" style="color: #6c63ff;">Upgrade to Pro+ for full access →</a></small>' : ''}`;
 
+            // Upgrade banner
             if (userTier === 'free') {
                 upgradeBannerEl.innerHTML = `⭐ <strong>Upgrade to Pro</strong> to access 50% of passages and questions! <a href="checkout.html">Upgrade Now →</a>`;
                 upgradeBannerEl.style.display = 'block';
@@ -245,14 +293,19 @@
                 upgradeBannerEl.style.display = 'none';
             }
 
+            // Auto-select first available passage
             if (!selectedPassageId || selectedPassageId >= passageLimit) {
                 if (allPassages.length > 0) selectPassage(allPassages[0].id);
             }
         }
 
+        // ============================================================
+        // SELECT PASSAGE
+        // ============================================================
         function selectPassage(passageId) {
             const passage = allPassages.find(p => p.id === passageId);
             if (!passage) return;
+            
             const index = allPassages.indexOf(passage);
             const { passageLimit } = getTierLimits();
             if (index >= passageLimit) {
@@ -261,43 +314,48 @@
             }
 
             selectedPassageId = passageId;
-            document.querySelectorAll('.passage-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
+            
+            // Update button states
+            document.querySelectorAll('.passage-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
 
+            // Display passage
             passageContentEl.innerHTML = `<h6>${passage.title}</h6><p>${passage.text}</p>`;
 
+            // Load questions
             const { questionLimit } = getTierLimits();
             const allQ = passage.questions || [];
             let shuffled = allQ.sort(() => Math.random() - 0.5);
-            questions = userTier === 'free' ? shuffled.slice(0, 20) :
-                       userTier === 'pro' ? shuffled.slice(0, 30) :
-                       shuffled.slice(0, 40);
+            questions = shuffled.slice(0, questionLimit);
+            
             displayQuestions();
             submitBtn.disabled = false;
         }
 
+        // ============================================================
+        // DISPLAY QUESTIONS
+        // ============================================================
         function displayQuestions() {
             if (!questions || questions.length === 0) {
                 testQuestionsEl.innerHTML = '<p class="text-muted text-center">No questions available.</p>';
                 return;
             }
+            
             let html = `<p class="text-muted">Showing ${questions.length} questions</p>`;
             questions.forEach((q, index) => {
+                const options = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
                 html += `
                     <div class="question-card">
                         <p class="question-number">Question ${index + 1}</p>
-                        <p>${q.text || q.question || `Question ${index + 1}`}</p>
+                        <p>${q.text}</p>
                         <div class="options">
-                            ${q.options ? q.options.map((opt, i) => `
+                            ${options.map((opt, i) => `
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="q${index}" value="${String.fromCharCode(65 + i)}" id="q${index}${String.fromCharCode(65 + i)}">
                                     <label class="form-check-label" for="q${index}${String.fromCharCode(65 + i)}">${String.fromCharCode(65 + i)}. ${opt}</label>
                                 </div>
-                            `).join('') : `
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="A" id="q${index}A"><label class="form-check-label" for="q${index}A">A. Option A</label></div>
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="B" id="q${index}B"><label class="form-check-label" for="q${index}B">B. Option B</label></div>
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="C" id="q${index}C"><label class="form-check-label" for="q${index}C">C. Option C</label></div>
-                                <div class="form-check"><input class="form-check-input" type="radio" name="q${index}" value="D" id="q${index}D"><label class="form-check-label" for="q${index}D">D. Option D</label></div>
-                            `}
+                            `).join('')}
                         </div>
                     </div>
                 `;
@@ -305,6 +363,9 @@
             testQuestionsEl.innerHTML = html;
         }
 
+        // ============================================================
+        // COLLECT ANSWERS
+        // ============================================================
         function collectAnswers() {
             const answers = [];
             questions.forEach((q, index) => {
@@ -314,60 +375,168 @@
             return answers;
         }
 
+        // ============================================================
+        // INITIALIZE AI (WITH RETRY)
+        // ============================================================
         async function initializeAI() {
             try {
                 const user = firebase.auth().currentUser;
-                if (!user) { updateAIStatus('Not logged in', '#dc3545'); return false; }
+                if (!user) {
+                    updateAIStatus('Not logged in', '#dc3545');
+                    return false;
+                }
+
                 updateAIStatus('Connecting...', '#ffc107');
+                
+                // Check if AIEmployee class exists
+                if (typeof AIEmployee === 'undefined') {
+                    console.error('❌ AIEmployee class not loaded');
+                    updateAIStatus('Error: AI not loaded', '#dc3545');
+                    return false;
+                }
+
                 const employee = new AIEmployee(user.uid);
                 await employee.loadMemory(user.uid);
                 window.aiEmployee = employee;
                 aiInitialized = true;
+                
                 updateAIStatus('✅ Ready', '#28a745');
+                console.log('🤖 AI Employee ready!');
                 return true;
             } catch (error) {
-                console.error('AI init failed:', error);
-                updateAIStatus('Connecting... Retrying', '#ffc107');
-                if (initAttempts < 5) { initAttempts++; setTimeout(initializeAI, 3000); } 
-                else { updateAIStatus('⚠️ Refresh page', '#dc3545'); }
+                console.error('❌ AI init failed:', error);
+                updateAIStatus('Retrying...', '#ffc107');
+                
+                if (initAttempts < 5) {
+                    initAttempts++;
+                    setTimeout(() => {
+                        initializeAI();
+                    }, 3000);
+                } else {
+                    updateAIStatus('⚠️ Refresh page', '#dc3545');
+                }
                 return false;
             }
         }
 
+        // ============================================================
+        // SUBMIT TEST
+        // ============================================================
         async function submitTest() {
+            // Check if AI is ready
             if (!aiInitialized || !window.aiEmployee) {
                 updateAIStatus('⏳ Loading...', '#ffc107');
                 const initialized = await initializeAI();
-                if (!initialized) { alert('🤖 AI system is loading... Please wait 5 seconds and try again.'); return; }
-                setTimeout(submitTest, 1000); return;
+                if (!initialized) {
+                    alert('🤖 AI system is loading... Please wait 5 seconds and try again.');
+                    return;
+                }
+                // Wait a moment then retry
+                setTimeout(() => submitTest(), 1000);
+                return;
             }
+
             const answers = collectAnswers();
             const unanswered = answers.filter(a => a === '').length;
-            if (unanswered > 0) { alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`); return; }
+            
+            if (unanswered > 0) {
+                alert(`⚠️ Please answer all ${questions.length} questions. You have ${unanswered} unanswered.`);
+                return;
+            }
+
             try {
                 updateAIStatus('⏳ Grading...', '#ffc107');
-                await submitTestForGrading('reading', answers, questions);
+                const loader = document.getElementById('loader');
+                const loaderText = document.getElementById('loader-text');
+                if (loader) loader.style.display = 'block';
+                if (loaderText) loaderText.textContent = '🤖 Grading your test...';
+                
+                const result = await window.aiEmployee.gradeTest('reading', answers, questions);
+                
+                // Hide loader
+                if (loader) loader.style.display = 'none';
+                
+                // Show results
+                const resultsDiv = document.getElementById('test-results');
+                if (resultsDiv) {
+                    resultsDiv.style.display = 'block';
+                    resultsDiv.innerHTML = `
+                        <h2>📊 Test Results</h2>
+                        <div class="score-card" style="background:rgba(255,255,255,0.15);padding:15px;border-radius:10px;margin:10px 0;">
+                            <h3>Score: ${result.score}/${result.total}</h3>
+                            <p>Band Score: ${result.bandScore || 'Calculating...'}</p>
+                            <p>Percentage: ${result.percentage || 0}%</p>
+                        </div>
+                        <div class="feedback-section" style="background:rgba(255,255,255,0.1);padding:15px;border-radius:10px;">
+                            <h3>📝 Feedback</h3>
+                            <ul style="list-style:none;padding:0;">
+                                ${result.weaknesses && result.weaknesses.length > 0 ? result.weaknesses.map(w => `<li>⚠️ ${w}</li>`).join('') : '<li>✅ Great job!</li>'}
+                                ${result.feedback ? result.feedback.map(f => `<li>${f}</li>`).join('') : ''}
+                            </ul>
+                        </div>
+                        ${result.needsApproval ? '<div style="background:rgba(255,215,0,0.2);padding:10px;border-radius:8px;margin-top:10px;">🔄 This test needs admin review. You\'ll receive feedback shortly.</div>' : ''}
+                    `;
+                }
+                
                 updateAIStatus('✅ Grading Complete', '#28a745');
             } catch (error) {
-                console.error('Grading failed:', error);
+                console.error('❌ Grading failed:', error);
+                document.getElementById('loader').style.display = 'none';
                 updateAIStatus('❌ Error', '#dc3545');
                 alert('❌ Failed to grade test. Please try again.');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
+        // ============================================================
+        // LOGOUT
+        // ============================================================
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+
+        // ============================================================
+        // PAGE LOAD
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 Page loaded');
+            
+            // Load passages first
             loadPassages();
+            
+            // Check auth state
             firebase.auth().onAuthStateChanged(async function(user) {
+                console.log('🔐 Auth state changed:', user ? 'Logged in' : 'Not logged in');
+                
                 if (user) {
+                    currentUser = user;
                     await checkUserPlan(user);
                     renderPassageButtons();
                     if (allPassages.length > 0) selectPassage(allPassages[0].id);
-                    setTimeout(async () => { await initializeAI(); }, 2000);
-                } else { window.location.href = 'login.html'; }
+                    
+                    // Initialize AI after 2 seconds
+                    setTimeout(async () => {
+                        await initializeAI();
+                    }, 2000);
+                } else {
+                    // Not logged in - redirect to login
+                    window.location.href = 'login.html';
+                }
             });
         });
 
-        function logout() { firebase.auth().signOut().then(() => { window.location.href = 'index.html'; }); }
+        // ============================================================
+        // FALLBACK: If AI still not ready after 10 seconds
+        // ============================================================
+        setTimeout(async function() {
+            if (!aiInitialized && firebase.auth().currentUser) {
+                console.log('⚠️ Fallback: Forcing AI initialization...');
+                await initializeAI();
+            }
+        }, 10000);
+
+        console.log('✅ Reading Test ready');
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
