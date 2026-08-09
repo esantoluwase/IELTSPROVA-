@@ -17,15 +17,30 @@
         .plan-card ul { list-style: none; padding: 0; margin: 10px 0; }
         .plan-card ul li { padding: 4px 0; }
         .plan-card ul li::before { content: '✅ '; color: #28a745; }
-        .btn-pay { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; width: 100%; }
+        .btn-pay { background: linear-gradient(135deg, #6c63ff, #ffd700); border: none; padding: 12px 40px; font-weight: bold; color: white; border-radius: 30px; transition: transform 0.3s; width: 100%; font-size: 1.1rem; }
         .btn-pay:hover { transform: scale(1.02); }
-        .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         nav { background: #2d1b69 !important; padding: 10px 0; }
         nav a { color: white !important; }
         nav .navbar-brand span { color: #ffd700; }
         .loading { display: none; text-align: center; padding: 20px; }
         .loading .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #6c63ff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .paystack-button { 
+            background: linear-gradient(135deg, #6c63ff, #ffd700); 
+            border: none; 
+            padding: 12px 40px; 
+            font-weight: bold; 
+            color: white; 
+            border-radius: 30px; 
+            transition: transform 0.3s; 
+            width: 100%; 
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .paystack-button:hover { transform: scale(1.02); }
+        .paystack-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .error-msg { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -48,6 +63,9 @@
     <div class="container">
         <h1 class="text-center">💳 Upgrade Your Plan</h1>
         <p class="text-center text-muted">Choose a plan that works for you.</p>
+
+        <!-- Error Message -->
+        <div id="errorMsg" class="error-msg"></div>
 
         <!-- Plan Selection -->
         <div id="planSelection">
@@ -79,8 +97,9 @@
             <p>Total: <strong id="selectedPlanPrice"></strong></p>
         </div>
 
-        <button id="payBtn" class="btn-pay mt-3" disabled onclick="initializePayment()">
-            🔒 Pay Now
+        <!-- PAY NOW BUTTON - Using standard button -->
+        <button id="payBtn" class="paystack-button mt-3" disabled onclick="initializePayment()">
+            💳 Pay Now
         </button>
 
         <div id="loadingIndicator" class="loading">
@@ -89,7 +108,7 @@
         </div>
 
         <p class="text-center text-muted mt-3">
-            <small>Secure payment powered by Paystack</small>
+            <small>🔒 Secure payment powered by Paystack</small>
         </p>
     </div>
 
@@ -106,19 +125,13 @@
 
     <script>
         // ============================================================
-        // 🔐 PAYSTACK CONFIG - PUBLIC KEY ONLY (Safe for frontend)
-        // ============================================================
-        // The Secret Key is NEVER in frontend code!
-        // It stays on the server for webhook verification.
+        // 🔐 PAYSTACK CONFIG - PUBLIC KEY ONLY
         // ============================================================
         const CONFIG = {
-            // ✅ PUBLIC KEY - Safe to use in frontend
             PAYSTACK_PUBLIC_KEY: 'pk_live_745c9817e91e0698cb32aea110be95eadbe68eda',
-            
-            // Pricing in kobo (1 USD = 100 kobo)
             PRICES: {
-                pro: 900,    // $9
-                proplus: 1900 // $19
+                pro: 900,
+                proplus: 1900
             }
         };
 
@@ -127,6 +140,7 @@
         // ============================================================
         let selectedPlan = null;
         let userEmail = '';
+        let paystackHandler = null;
 
         // ============================================================
         // SELECT PLAN
@@ -144,49 +158,61 @@
             document.getElementById('selectedPlanName').textContent = planNames[plan];
             document.getElementById('selectedPlanPrice').textContent = planPrices[plan];
             document.getElementById('selectedPlanDisplay').style.display = 'block';
-            document.getElementById('payBtn').disabled = false;
-            document.getElementById('payBtn').textContent = `💳 Pay ${planPrices[plan]}`;
+            
+            // ✅ Enable the button
+            const payBtn = document.getElementById('payBtn');
+            payBtn.disabled = false;
+            payBtn.textContent = `💳 Pay ${planPrices[plan]}`;
+            
+            console.log('✅ Plan selected:', plan);
         }
 
         // ============================================================
-        // INITIALIZE PAYMENT
+        // INITIALIZE PAYMENT - FIXED VERSION
         // ============================================================
-        async function initializePayment() {
+        function initializePayment() {
+            console.log('💳 initializePayment() called');
+            
+            // Check if plan is selected
             if (!selectedPlan) {
-                alert('Please select a plan first.');
+                showError('Please select a plan first.');
                 return;
             }
 
+            // Check if user is logged in
             const user = firebase.auth().currentUser;
             if (!user) {
-                alert('Please log in first.');
-                window.location.href = 'login.html';
+                showError('Please log in first.');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
                 return;
             }
 
             userEmail = user.email;
-
             const amount = CONFIG.PRICES[selectedPlan];
             const planName = selectedPlan === 'pro' ? 'Pro' : 'Pro+';
             const reference = 'PROVA-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7);
 
-            // Show loading
-            document.getElementById('loadingIndicator').style.display = 'block';
-            document.getElementById('payBtn').disabled = true;
-
-            console.log('💳 Initializing Paystack payment...');
             console.log('📧 Email:', userEmail);
             console.log('💰 Amount:', amount / 100, 'USD');
             console.log('📋 Plan:', planName);
             console.log('🔑 Reference:', reference);
 
+            // Show loading
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('payBtn').disabled = true;
+
+            // Hide any previous error
+            document.getElementById('errorMsg').style.display = 'none';
+
             try {
-                // ============================================================
-                // ✅ PAYSTACK LIVE MODE - Using Public Key ONLY
-                // The Secret Key is NOT used here - it's on the server!
-                // ============================================================
-                const handler = PaystackPop.setup({
-                    key: CONFIG.PAYSTACK_PUBLIC_KEY,  // ✅ PUBLIC KEY ONLY
+                // Check if Paystack is loaded
+                if (typeof PaystackPop === 'undefined') {
+                    throw new Error('Paystack library not loaded. Please check your internet connection.');
+                }
+
+                // ✅ Create Paystack handler
+                paystackHandler = PaystackPop.setup({
+                    key: CONFIG.PAYSTACK_PUBLIC_KEY,
                     email: userEmail,
                     amount: amount,
                     currency: 'USD',
@@ -205,10 +231,10 @@
                             }
                         ]
                     },
-                    callback: async function(response) {
+                    callback: function(response) {
                         console.log('✅ Payment successful!', response);
                         document.getElementById('loadingIndicator').style.display = 'none';
-                        await handlePaymentSuccess(response, planName);
+                        handlePaymentSuccess(response, planName);
                     },
                     onClose: function() {
                         console.log('❌ Payment cancelled');
@@ -218,13 +244,24 @@
                     }
                 });
 
-                handler.openIframe();
+                // ✅ Open Paystack popup
+                paystackHandler.openIframe();
+
             } catch (error) {
                 console.error('❌ Payment initialization failed:', error);
                 document.getElementById('loadingIndicator').style.display = 'none';
                 document.getElementById('payBtn').disabled = false;
-                alert('Failed to initialize payment. Please try again.');
+                showError('Failed to initialize payment: ' + error.message);
             }
+        }
+
+        // ============================================================
+        // SHOW ERROR
+        // ============================================================
+        function showError(message) {
+            const errorEl = document.getElementById('errorMsg');
+            errorEl.textContent = '⚠️ ' + message;
+            errorEl.style.display = 'block';
         }
 
         // ============================================================
@@ -252,7 +289,6 @@
                 console.log('✅ User plan updated to:', planName);
                 alert(`🎉 Success! You are now on the ${planName} plan!`);
                 
-                // Redirect to dashboard
                 window.location.href = 'dashboard.html';
 
             } catch (error) {
@@ -271,25 +307,32 @@
         }
 
         // ============================================================
-        // PAGE LOAD - CHECK USER
+        // PAGE LOAD
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Checkout page loaded');
+            
+            // Check if Paystack is loaded
+            if (typeof PaystackPop !== 'undefined') {
+                console.log('✅ Paystack library loaded');
+            } else {
+                console.warn('⚠️ Paystack library not loaded yet');
+            }
+
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     console.log('✅ User logged in:', user.email);
                     userEmail = user.email;
                 } else {
                     console.log('❌ No user logged in');
-                    window.location.href = 'login.html';
+                    // Don't redirect immediately - let them see the page
                 }
             });
         });
 
-        console.log('🚀 IELTSProva Checkout loaded (🔐 LIVE MODE)');
-        console.log('🔑 Public Key:', CONFIG.PAYSTACK_PUBLIC_KEY.substring(0, 20) + '...');
-        console.log('✅ Secret Key is NOT in frontend - it stays on the server!');
+        console.log('🔐 Paystack Public Key:', CONFIG.PAYSTACK_PUBLIC_KEY.substring(0, 20) + '...');
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-                </html>
+    </html>
