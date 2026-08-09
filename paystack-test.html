@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paystack Test</title>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+    <h1>Paystack Test</h1>
+    <button onclick="pay()">Pay</button>
+    <script>
+        function pay() {
+            alert('Button clicked!');
+            var handler = PaystackPop.setup({
+                key: 'pk_live_745c9817e91e0698cb32aea110be95eadbe68eda',
+                email: 'test@email.com',
+                amount: 1000,
+                currency: 'NGN',
+                callback: function() { alert('Success!'); }
+            });
+            handler.openIframe();
+        }
+    </script>
+</body>
+</html>
