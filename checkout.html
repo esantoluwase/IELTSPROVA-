@@ -11,7 +11,16 @@
         body { background: #f5f0ff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
         .container { max-width: 600px; margin: 20px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
         h1 { color: #2d1b69; font-weight: 800; }
-        .plan-card { background: #f8f5ff; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 2px solid #e8e0f0; cursor: pointer; transition: all 0.3s; -webkit-tap-highlight-color: transparent; }
+        .plan-card { 
+            background: #f8f5ff; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            border: 2px solid #e8e0f0; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            -webkit-tap-highlight-color: transparent;
+        }
         .plan-card:active { transform: scale(0.98); }
         .plan-card.selected { border-color: #6c63ff; background: #f0edff; }
         .plan-card .price { font-size: 2rem; font-weight: 800; color: #2d1b69; }
@@ -31,9 +40,15 @@
             cursor: pointer; 
             transition: all 0.3s;
             -webkit-tap-highlight-color: transparent;
+            margin-top: 20px;
         }
         .btn-pay:active { transform: scale(0.96); }
-        .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .btn-pay:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            transform: none !important; 
+        }
+        .btn-pay.visible { display: block; }
         nav { background: #2d1b69 !important; padding: 10px 0; }
         nav a { color: white !important; }
         nav .navbar-brand span { color: #ffd700; }
@@ -44,6 +59,7 @@
         .currency-badge { background: #2d1b69; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px; margin-left: 8px; }
         #selectedPlanDisplay { background: #f0edff; padding: 15px; border-radius: 10px; margin: 15px 0; display: none; }
         .status-bar { background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; }
+        .plan-code { font-size: 11px; color: #888; margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -81,6 +97,7 @@
                 <li>2 mock exams/month</li>
                 <li>Detailed feedback</li>
             </ul>
+            <div class="plan-code">Plan ID: 165905</div>
         </div>
 
         <!-- Pro+ Plan -->
@@ -94,6 +111,7 @@
                 <li>AI writing evaluation</li>
                 <li>Priority support</li>
             </ul>
+            <div class="plan-code">Plan ID: 165906</div>
         </div>
 
         <!-- Selected Plan Display -->
@@ -102,8 +120,8 @@
             <p><strong>Total:</strong> <span id="selectedPlanPrice"></span></p>
         </div>
 
-        <!-- PAY BUTTON -->
-        <button id="payBtn" class="btn-pay" disabled onclick="initializePayment()">
+        <!-- ✅ PAY BUTTON - ALWAYS VISIBLE, DISABLED UNTIL PLAN SELECTED -->
+        <button id="payBtn" class="btn-pay" disabled>
             💳 Select a Plan Above
         </button>
 
@@ -137,21 +155,15 @@
         // 🔐 FLUTTERWAVE CONFIG - YOUR LIVE KEYS
         // ============================================================
         const CONFIG = {
-            // ✅ Your Live Client ID (this is your public key)
             FLUTTERWAVE_PUBLIC_KEY: '952c0b02-751d-48b9-bfc3-a4cb769cf76d',
-            
-            // ✅ Your Plan IDs from Flutterwave
             PLAN_IDS: {
                 pro: '165905',
                 proplus: '165906'
             },
-            
-            // Prices in NGN
             PRICES: {
                 pro: 12300,
                 proplus: 26030
             },
-            
             DISPLAY_PRICES: {
                 pro: '₦12,300',
                 proplus: '₦26,030'
@@ -189,22 +201,24 @@
         }
 
         // ============================================================
-        // SELECT PLAN
+        // SELECT PLAN - This enables the button
         // ============================================================
         function selectPlan(plan) {
             console.log('📋 Plan selected:', plan);
             selectedPlan = plan;
             
+            // Highlight selected plan
             document.querySelectorAll('.plan-card').forEach(card => {
                 card.classList.toggle('selected', card.dataset.plan === plan);
             });
 
+            // Update display
             const planNames = { pro: '⭐ Pro', proplus: '🚀 Pro+' };
-
             document.getElementById('selectedPlanName').textContent = planNames[plan];
             document.getElementById('selectedPlanPrice').textContent = CONFIG.DISPLAY_PRICES[plan];
             document.getElementById('selectedPlanDisplay').style.display = 'block';
             
+            // ✅ ENABLE THE BUTTON
             const payBtn = document.getElementById('payBtn');
             payBtn.disabled = false;
             payBtn.textContent = `💳 Pay ${CONFIG.DISPLAY_PRICES[plan]}`;
@@ -213,7 +227,7 @@
         }
 
         // ============================================================
-        // ✅ INITIALIZE PAYMENT - FLUTTERWAVE
+        // ✅ INITIALIZE PAYMENT
         // ============================================================
         function initializePayment() {
             console.log('💳 initializePayment() CALLED');
@@ -241,7 +255,6 @@
             console.log('📧 Email:', userEmail);
             console.log('📋 Plan:', planName);
             console.log('🔑 Plan ID:', planId);
-            console.log('🔑 Transaction Ref:', tx_ref);
 
             // Show loading
             document.getElementById('loadingIndicator').style.display = 'block';
@@ -249,14 +262,12 @@
             document.getElementById('errorMsg').style.display = 'none';
 
             try {
-                // ============================================================
-                // ✅ FLUTTERWAVE PAYMENT
-                // ============================================================
                 // Check if Flutterwave is loaded
                 if (typeof FlutterwaveCheckout === 'undefined') {
-                    throw new Error('Flutterwave library not loaded. Please check your internet connection.');
+                    throw new Error('Flutterwave not loaded. Please refresh and try again.');
                 }
 
+                // ✅ OPEN FLUTTERWAVE PAYMENT
                 FlutterwaveCheckout({
                     public_key: CONFIG.FLUTTERWAVE_PUBLIC_KEY,
                     tx_ref: tx_ref,
@@ -341,45 +352,54 @@
         }
 
         // ============================================================
-        // PAGE LOAD
+        // PAGE LOAD - CONNECT BUTTON TO FUNCTION
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Checkout page loaded');
-            console.log('🔑 Public Key:', CONFIG.FLUTTERWAVE_PUBLIC_KEY);
-            console.log('📋 Plans:', CONFIG.PLAN_IDS);
+            
+            // ✅ Connect the button to the payment function
+            const payBtn = document.getElementById('payBtn');
+            payBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🖱️ Button clicked via event listener');
+                
+                // If button is disabled, show message
+                if (this.disabled) {
+                    showError('Please select a plan first.');
+                    return;
+                }
+                
+                // Call the payment function
+                initializePayment();
+            });
 
-            // Check if Flutterwave loaded
+            // Check Flutterwave
             if (typeof FlutterwaveCheckout !== 'undefined') {
-                console.log('✅ Flutterwave loaded successfully');
+                console.log('✅ Flutterwave loaded');
                 showStatus('✅ Flutterwave ready', '#e8f5e9');
             } else {
-                console.warn('⚠️ Flutterwave not loaded yet');
+                console.warn('⚠️ Flutterwave not loaded');
                 showStatus('⏳ Loading Flutterwave...', '#fff3e0');
-                // Try again after 2 seconds
-                setTimeout(function() {
-                    if (typeof FlutterwaveCheckout !== 'undefined') {
-                        console.log('✅ Flutterwave loaded (retry)');
-                        showStatus('✅ Flutterwave ready', '#e8f5e9');
-                    } else {
-                        showStatus('⚠️ Please refresh and try again', '#ffebee');
-                    }
-                }, 2000);
             }
 
+            // Check Firebase auth
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     console.log('✅ User logged in:', user.email);
                     userEmail = user.email;
                     userUid = user.uid;
-                    showStatus('✅ Logged in as ' + user.email, '#e8f5e9');
                 } else {
                     console.log('❌ No user logged in');
                     showStatus('⚠️ Please log in to upgrade', '#fff3e0');
                 }
             });
         });
+
+        console.log('🔑 Public Key:', CONFIG.FLUTTERWAVE_PUBLIC_KEY);
+        console.log('📋 Plans:', CONFIG.PLAN_IDS);
+        console.log('✅ Checkout ready');
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+            </html>
