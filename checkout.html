@@ -35,13 +35,16 @@
             border-radius: 10px;
             cursor: pointer;
             background: white;
+            transition: all 0.3s;
         }
+        .plan:hover { border-color: #6c63ff; }
         .plan.selected {
             border-color: #6c63ff;
             background: #f0edff;
         }
-        .plan h3 { margin: 0 0 10px 0; }
         .plan .price { font-size: 28px; font-weight: bold; color: #2d1b69; }
+        .plan ul { text-align: left; list-style: none; padding: 0; }
+        .plan ul li { padding: 4px 0; }
         .btn-pay {
             background: linear-gradient(135deg, #6c63ff, #ffd700);
             border: none;
@@ -53,10 +56,13 @@
             width: 100%;
             cursor: pointer;
             margin-top: 20px;
+            transition: all 0.3s;
         }
+        .btn-pay:active { transform: scale(0.96); }
         .btn-pay:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
         }
         #status {
             padding: 10px;
@@ -68,6 +74,7 @@
         #status.error { background: #f8d7da; color: #721c24; display: block; }
         #status.loading { background: #fff3cd; color: #856404; display: block; }
         .hidden { display: none; }
+        .selected-display { background: #f0edff; padding: 15px; border-radius: 10px; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -81,10 +88,11 @@
     <div class="plan" data-plan="pro" onclick="selectPlan('pro')">
         <h3>⭐ Pro</h3>
         <div class="price">₦12,300 <small>/month</small></div>
-        <ul style="text-align: left; list-style: none; padding: 0;">
+        <ul>
             <li>✅ 50% of passages and questions</li>
             <li>✅ All 4 modules</li>
             <li>✅ 2 mock exams/month</li>
+            <li>✅ Detailed feedback</li>
         </ul>
     </div>
 
@@ -92,16 +100,17 @@
     <div class="plan" data-plan="proplus" onclick="selectPlan('proplus')">
         <h3>🚀 Pro+</h3>
         <div class="price">₦26,030 <small>/month</small></div>
-        <ul style="text-align: left; list-style: none; padding: 0;">
+        <ul>
             <li>✅ All passages and questions</li>
             <li>✅ All 4 modules</li>
             <li>✅ Unlimited mock exams</li>
             <li>✅ AI writing evaluation</li>
+            <li>✅ Priority support</li>
         </ul>
     </div>
 
-    <div id="selectedDisplay" class="hidden">
-        <p><strong>Selected:</strong> <span id="selectedName"></span></p>
+    <div id="selectedDisplay" class="hidden selected-display">
+        <p><strong>Selected Plan:</strong> <span id="selectedName"></span></p>
         <p><strong>Total:</strong> <span id="selectedPrice"></span></p>
     </div>
 
@@ -115,24 +124,33 @@
 
     <script>
         // ============================================================
-        // 🔐 CONFIGURATION - YOUR LIVE KEYS
+        // 🔐 FLUTTERWAVE CONFIG - FINAL WORKING VERSION
         // ============================================================
         const CONFIG = {
-            PUBLIC_KEY: '952c0b02-751d-48b9-bfc3-a4cb769cf76d',
+            // ✅ YOUR CORRECT PUBLIC KEY
+            PUBLIC_KEY: 'FLWPUBK-eae26ecddde2f001cb59dad37733eae5-X',
+            
+            // ✅ YOUR PLAN IDs
             PLAN_IDS: {
                 pro: '165905',
                 proplus: '165906'
             },
+            
+            // ✅ PRICES IN NGN
             PRICES: {
                 pro: 12300,
                 proplus: 26030
             },
+            
             DISPLAY: {
                 pro: '₦12,300',
                 proplus: '₦26,030'
             }
         };
 
+        // ============================================================
+        // STATE
+        // ============================================================
         let selectedPlan = null;
         let userEmail = '';
         let userUid = '';
@@ -158,7 +176,6 @@
             console.log('📋 Plan selected:', plan);
             selectedPlan = plan;
             
-            // Update UI
             document.querySelectorAll('.plan').forEach(el => {
                 el.classList.toggle('selected', el.dataset.plan === plan);
             });
@@ -168,16 +185,16 @@
             document.getElementById('selectedPrice').textContent = CONFIG.DISPLAY[plan];
             document.getElementById('selectedDisplay').classList.remove('hidden');
 
-            // Enable button
             const btn = document.getElementById('payBtn');
             btn.disabled = false;
             btn.textContent = `💳 Pay ${CONFIG.DISPLAY[plan]}`;
 
             showStatus(`✅ Selected: ${names[plan]} - ${CONFIG.DISPLAY[plan]}`, 'success');
+            setTimeout(hideStatus, 3000);
         }
 
         // ============================================================
-        // ✅ PAY NOW - SIMPLE VERSION
+        // ✅ PAY NOW
         // ============================================================
         function payNow() {
             console.log('💳 payNow() CALLED');
@@ -203,25 +220,22 @@
             console.log('📧 Email:', userEmail);
             console.log('📋 Plan:', planName);
             console.log('🔑 Plan ID:', planId);
-            console.log('🔑 Ref:', tx_ref);
+            console.log('🔑 Public Key:', CONFIG.PUBLIC_KEY);
 
-            // Show loading
             document.getElementById('payBtn').disabled = true;
             showStatus('⏳ Processing payment...', 'loading');
 
             try {
-                // ============================================================
-                // 🔥 CHECK IF FLUTTERWAVE IS LOADED
-                // ============================================================
+                // Check Flutterwave
                 if (typeof FlutterwaveCheckout === 'undefined') {
-                    throw new Error('Flutterwave not loaded. Please refresh and try again.');
+                    throw new Error('Flutterwave not loaded. Please refresh.');
                 }
 
                 // ============================================================
-                // ✅ OPEN FLUTTERWAVE
+                // ✅ OPEN FLUTTERWAVE WITH CORRECT PUBLIC KEY
                 // ============================================================
                 FlutterwaveCheckout({
-                    public_key: CONFIG.PUBLIC_KEY,
+                    public_key: CONFIG.PUBLIC_KEY,  // ✅ NOW CORRECT!
                     tx_ref: tx_ref,
                     amount: CONFIG.PRICES[selectedPlan],
                     currency: 'NGN',
@@ -232,7 +246,7 @@
                     },
                     customizations: {
                         title: 'IELTSProva',
-                        description: `${planName} Plan`,
+                        description: `${planName} Plan Subscription`,
                         logo: 'https://esantoluwase.github.io/IELTSPROVA-/favicon.ico',
                     },
                     meta: {
@@ -243,7 +257,7 @@
                     callback: function(response) {
                         console.log('✅ Payment success!', response);
                         document.getElementById('payBtn').disabled = false;
-                        showStatus('✅ Payment successful! Upgrading your plan...', 'success');
+                        showStatus('✅ Payment successful! Upgrading...', 'success');
                         handleSuccess(response, planName);
                     },
                     onclose: function() {
@@ -299,9 +313,10 @@
         // PAGE LOAD
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Page loaded');
+            console.log('🚀 Checkout page loaded');
+            console.log('🔑 Public Key:', CONFIG.PUBLIC_KEY);
+            console.log('📋 Plans:', CONFIG.PLAN_IDS);
             
-            // Check Flutterwave
             if (typeof FlutterwaveCheckout !== 'undefined') {
                 console.log('✅ Flutterwave loaded');
                 showStatus('✅ Flutterwave ready', 'success');
@@ -309,7 +324,6 @@
             } else {
                 console.warn('⚠️ Flutterwave not loaded');
                 showStatus('⏳ Loading Flutterwave...', 'loading');
-                // Try again after 3 seconds
                 setTimeout(function() {
                     if (typeof FlutterwaveCheckout !== 'undefined') {
                         console.log('✅ Flutterwave loaded (retry)');
@@ -321,7 +335,6 @@
                 }, 3000);
             }
 
-            // Check Firebase
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     console.log('✅ User logged in:', user.email);
@@ -331,11 +344,8 @@
                     console.log('❌ No user logged in');
                 }
             });
-
-            console.log('🔑 Public Key:', CONFIG.PUBLIC_KEY);
-            console.log('📋 Plans:', CONFIG.PLAN_IDS);
         });
     </script>
 
 </body>
-</html>
+    </html>
